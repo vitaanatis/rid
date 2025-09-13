@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubble Alpha</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+        :root {
+            --primary: #009CFC;
+            --secondary: #A0AAFF;
+            --accent: #C97FFD;
+            --background-light: #f7f8fa;
+            --star: #A0AAFF;
+            --planet: #C97FFD;
+            --text-light: #222;
+            --sidebar-bg-light: #f4f7ff;
+            --sidebar-border-light: #e0e6f7;
+            --sidebar-active-light: #e6f2ff;
+            --main-content-light: transparent;
+            --background-dark: #181e2a;
+            --sidebar-bg-dark: #232a3a;
+            --sidebar-border-dark: #2c3550;
+            --sidebar-active-dark: #232a3a;
+            --text-dark: #f7f8fa;
+            --main-content-dark: transparent;
+            --unavailable-light: #FFC107;
+            --unavailable-dark: #FF8F00;
+        }
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body[data-theme="light"] {
+            background: var(--background-light);
+            color: var(--text-light);
+        }
+        body[data-theme="dark"] {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(201,127,253,0.13) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(0,156,252,0.10) 0 5vw, transparent 8vw),
+                repeating-radial-gradient(circle at 30% 30%, #a2dbff 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, #A0AAFF 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 30% 30%, #fff 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(160,170,255,0.08) 0 60px, transparent 62px 100vw);
+            opacity: 0.22;
+        }
+        .topbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body[data-theme="dark"] .topbar {
+            background: #20263a;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+        }
+        .hubble-gradient {
+            font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            margin-left: 2.2rem;
+            letter-spacing: 2px;
+            -webkit-user-select: none;
+            user-select: none;
+            cursor: default;
+        }
+        .search-bar-custom {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            max-width: 40vw;
+            min-width: 200px;
+            height: 38px;
+            border-radius: 8px;
+            border: 1.5px solid var(--secondary);
+            font-size: 1.08rem;
+            padding: 0 1.1rem;
+            background: var(--background-light);
+            color: var(--text-light);
+            outline: none;
+            transition: border 0.18s, background 0.18s;
+            z-index: 10;
+            pointer-events: none;
+            cursor: not-allowed;
+            text-align: center;
+        }
+        .search-bar-custom:focus {
+            border: 1.5px solid var(--primary);
+            background: #eaf6ff;
+        }
+        body[data-theme="dark"] .search-bar-custom {
+            background: #232a3a;
+            color: #f7f8fa;
+            border: 1.5px solid var(--sidebar-border-dark);
+        }
+        body[data-theme="dark"] .search-bar-custom:focus {
+            background: #232a3a;
+        }
+        .profile-area {
+            display: flex;
+            align-items: center;
+            margin-right: 2.2rem;
+            gap: 0.7rem;
+            position: relative;
+        }
+        .profile-label {
+            color: inherit;
+            font-size: 1.08rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .profile-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            transition: transform 0.18s, box-shadow 0.18s;
+            position: relative;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .profile-icon::before {
+            content: attr(data-initial);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .profile-icon:hover {
+            transform: scale(1.08) rotate(-8deg);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 150px;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+        }
+        body[data-theme="dark"] .profile-dropdown {
+            background: #232a3a;
+            border-color: #2c3550;
+        }
+        .dropdown-item {
+            padding: 0.8rem 1rem;
+            color: #222222;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        body[data-theme="dark"] .dropdown-item {
+            color: #f7f8fa;
+        }
+        .dropdown-item:hover {
+            background: rgba(0, 156, 252, 0.1);
+        }
+        .dropdown-item.logout {
+            color: #d32f2f;
+        }
+        .dropdown-item.logout:hover {
+            background: rgba(211, 47, 47, 0.1);
+        }
+        .layout {
+            display: flex;
+            margin-top: 56px;
+            height: calc(100vh - 56px);
+        }
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: var(--main-content-light);
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+        }
+        body[data-theme="dark"] .main-content {
+            background: var(--main-content-dark);
+        }
+        
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            right: 2.2rem;
+            bottom: 2.2rem;
+            z-index: 100;
+            background: #fff;
+            color: #222;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+        }
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .theme-toggle:active {
+            transform: scale(0.9) rotate(0deg);
+            transition: all 0.1s ease-out;
+        }
+        body[data-theme="dark"] .theme-toggle {
+            background: #232a3a;
+            color: #f7f8fa;
+            border: 2px solid var(--sidebar-border-dark);
+        }
+        body[data-theme="dark"] .theme-toggle:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        
+        /* Help button */
+        .help-button {
+            position: fixed;
+            left: 2.2rem;
+            bottom: 2.2rem;
+            z-index: 100;
+            background: #fff;
+            color: #222;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+        }
+        .help-button:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1) rotate(-15deg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .help-button:active {
+            transform: scale(0.9) rotate(0deg);
+            transition: all 0.1s ease-out;
+        }
+        body[data-theme="dark"] .help-button {
+            background: #232a3a;
+            color: #f7f8fa;
+            border: 2px solid var(--sidebar-border-dark);
+        }
+        body[data-theme="dark"] .help-button:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1) rotate(-15deg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        
+        /* Hide buttons when game is open */
+        .game-fullscreen .theme-toggle,
+        .game-fullscreen .help-button {
+            display: none;
+        }
+        
+        /* Help Popup Styles */
+        .help-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            backdrop-filter: blur(5px);
+        }
+        
+        .help-popup {
+            background: var(--background-light);
+            color: var(--text-light);
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 2px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        body[data-theme="dark"] .help-popup {
+            background: var(--sidebar-bg-dark);
+            color: var(--text-dark);
+            border-color: var(--sidebar-border-dark);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .help-popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .help-popup-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        body[data-theme="dark"] .help-popup-text {
+            color: var(--text-dark);
+        }
+        
+        .help-popup-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .help-popup-btn {
+            padding: 0.9rem 1.8rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+        
+        .help-popup-btn.create {
+            background: linear-gradient(135deg, #009CFC, #0088e5);
+            box-shadow: 0 4px 15px rgba(0, 156, 252, 0.3);
+        }
+        
+        .help-popup-btn.create:hover {
+            background: linear-gradient(135deg, #0088e5, #0077d1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 156, 252, 0.4);
+        }
+        
+        .help-popup-btn.faq {
+            background: linear-gradient(135deg, #A0AAFF, #8b9cff);
+            box-shadow: 0 4px 15px rgba(160, 170, 255, 0.3);
+        }
+        
+        .help-popup-btn.faq:hover {
+            background: linear-gradient(135deg, #8b9cff, #7a8eff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(160, 170, 255, 0.4);
+        }
+        
+        .help-popup-close {
+            background: #1565C0;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(21, 101, 192, 0.3);
+        }
+        
+        .help-popup-close:hover {
+            background: #0D47A1;
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(13, 71, 161, 0.4);
+        }
+        
+        /* Ticket Creation Popup */
+        .ticket-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+            backdrop-filter: blur(5px);
+        }
+        
+        .ticket-popup {
+            background: var(--background-light);
+            color: var(--text-light);
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 2px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        body[data-theme="dark"] .ticket-popup {
+            background: var(--sidebar-bg-dark);
+            color: var(--text-dark);
+            border-color: var(--sidebar-border-dark);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .ticket-popup-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .ticket-form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .ticket-form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        
+        body[data-theme="dark"] .ticket-form-label {
+            color: var(--text-dark);
+        }
+        
+        .ticket-form-input,
+        .ticket-form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--background-light);
+            color: var(--text-light);
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        .ticket-form-input:focus,
+        .ticket-form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        body[data-theme="dark"] .ticket-form-input,
+        body[data-theme="dark"] .ticket-form-textarea {
+            background: var(--sidebar-bg-dark);
+            color: var(--text-dark);
+            border-color: var(--sidebar-border-dark);
+        }
+        
+        .ticket-form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .ticket-form-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .ticket-form-btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ticket-form-btn.send {
+            background: linear-gradient(135deg, #009CFC, #0088e5);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 156, 252, 0.3);
+        }
+        
+        .ticket-form-btn.send:hover {
+            background: linear-gradient(135deg, #0088e5, #0077d1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 156, 252, 0.4);
+        }
+        
+        .ticket-form-btn.cancel {
+            background: #6c757d;
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .ticket-form-btn.cancel:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+        
+        /* FAQ Popup */
+        .faq-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            backdrop-filter: blur(5px);
+        }
+        
+        .faq-popup {
+            background: var(--background-light);
+            color: var(--text-light);
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 2px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        body[data-theme="dark"] .faq-popup {
+            background: var(--sidebar-bg-dark);
+            color: var(--text-dark);
+            border-color: var(--sidebar-border-dark);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .faq-popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .faq-answer {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text-light);
+            padding-left: 1rem;
+        }
+        
+        body[data-theme="dark"] .faq-answer {
+            color: var(--text-dark);
+        }
+        
+        /* Games Section */
+        .games-container {
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 400px;
+            background: transparent;
+        }
+        
+        body[data-theme="dark"] .games-container {
+            background: transparent;
+        }
+        
+        .games-search-section {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            z-index: 50;
+            position: relative;
+        }
+        
+        .games-search-section.sticky {
+            position: fixed;
+            top: 56px;
+            z-index: 100;
+            background: var(--background-light);
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Create a placeholder element to maintain layout */
+        .games-search-placeholder {
+            height: 0;
+            transition: height 0.2s ease;
+            overflow: hidden;
+        }
+        
+        .games-search-placeholder.active {
+            height: 60px;
+        }
+        
+        body[data-theme="dark"] .games-search-section.sticky {
+            background: var(--background-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .games-search-bar {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem 1.5rem;
+            border: 3px solid transparent;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            background: 
+                linear-gradient(var(--background-light), var(--background-light)) padding-box,
+                linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%) border-box;
+            background-size: 100% 100%, 400% 100%;
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            box-shadow: 0 4px 15px rgba(201, 127, 253, 0.1);
+            animation: hubble-gradient-flow 12s linear infinite;
+            position: relative;
+        }
+        
+        @keyframes hubble-gradient-flow {
+            0% { background-position: 0% 0%, 0% 0%; }
+            100% { background-position: 0% 0%, 400% 0%; }
+        }
+        
+        .games-search-bar.paused {
+            animation-play-state: paused;
+        }
+        
+        .games-search-bar:focus {
+            box-shadow: 0 0 0 4px rgba(0, 156, 252, 0.15), 0 8px 25px rgba(201, 127, 253, 0.2);
+            transform: translateY(-2px);
+            background: 
+                linear-gradient(#ffffff, #f8fbff) padding-box,
+                linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%) border-box;
+        }
+        
+        .games-search-bar::placeholder {
+            color: var(--primary);
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        
+        body[data-theme="dark"] .games-search-bar {
+            background: 
+                linear-gradient(#232a3a, #1a1f2e) padding-box,
+                linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%) border-box;
+            background-size: 100% 100%, 400% 100%;
+            color: #f7f8fa;
+            box-shadow: 0 4px 15px rgba(201, 127, 253, 0.15);
+            animation: hubble-gradient-flow 12s linear infinite;
+        }
+        
+        body[data-theme="dark"] .games-search-bar:focus {
+            background: 
+                linear-gradient(#2a3142, #1e2332) padding-box,
+                linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%) border-box;
+            box-shadow: 0 0 0 4px rgba(0, 156, 252, 0.2), 0 8px 25px rgba(201, 127, 253, 0.25);
+        }
+        
+        body[data-theme="dark"] .games-search-bar::placeholder {
+            color: var(--accent);
+            opacity: 0.8;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+            min-height: 200px;
+        }
+        
+        .games-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            padding: 2rem;
+            font-style: italic;
+        }
+        
+        .game-card {
+            background: transparent;
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-2px);
+            box-shadow: none;
+        }
+        
+        body[data-theme="dark"] .game-card {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+        
+        body[data-theme="dark"] .game-card:hover {
+            box-shadow: none;
+        }
+        
+        .game-image {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 0.1rem;
+            background: var(--background-light);
+            border: 2px solid var(--secondary);
+            transition: border-color 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        body[data-theme="dark"] .game-image {
+            background: #232a3a;
+            border-color: #2c3550;
+        }
+        
+        .game-card:hover .game-image {
+            border-color: var(--primary);
+        }
+        
+        .game-name {
+            color: var(--text-light);
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+            line-height: 1.2;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body[data-theme="dark"] .game-name {
+            color: var(--text-dark);
+        }
+        
+        /* Game Fullscreen */
+        .game-fullscreen {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 56px);
+            background: var(--background-light);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .game-fullscreen.tab-fullscreen {
+            top: 0;
+            height: 100vh;
+        }
+        
+        body[data-theme="dark"] .game-fullscreen {
+            background: #1a1f2e;
+        }
+        
+        .game-content {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--background-light);
+        }
+        
+        body[data-theme="dark"] .game-content {
+            background: #1a1f2e;
+        }
+        
+        .topbar.game-mode .hubble-gradient {
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Game mode forces dark theme for header */
+        .topbar.game-mode {
+            background: #20263a;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+        }
+        
+        .topbar.game-mode .profile-label,
+        .topbar.game-mode .profile-icon {
+            color: #f7f8fa;
+        }
+        
+        .game-controls {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 1rem;
+            z-index: 1000;
+        }
+        
+        .game-fullscreen-btn {
+            width: 200px;
+            max-width: 20vw;
+            min-width: 120px;
+            border: 1.5px solid #1565C0;
+            border-radius: 25px;
+            font-size: 1.08rem;
+            padding: 0.5rem 1.1rem;
+            background: #1565C0;
+            color: white;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .game-fullscreen-btn:hover {
+            background: #0D47A1;
+            border-color: #0D47A1;
+            transform: scale(1.05);
+        }
+        
+        .game-fullscreen-btn.minimized {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+            transform: none;
+            z-index: 10000;
+        }
+        
+        .game-exit-btn {
+            width: 200px;
+            max-width: 20vw;
+            min-width: 120px;
+            border: 1.5px solid #f44336;
+            border-radius: 25px;
+            font-size: 1.08rem;
+            padding: 0.5rem 1.1rem;
+            background: #f44336;
+            color: white;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+        
+        .game-exit-btn:hover {
+            background: #d32f2f;
+            border-color: #d32f2f;
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 1200px) {
+            .games-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .main-content { 
+                padding: 1.2rem 0.7rem; 
+            }
+            .hubble-gradient { 
+                margin-left: 1rem; 
+                font-size: 1.3rem; 
+            }
+            .profile-area { 
+                margin-right: 1rem; 
+            }
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .search-bar-custom {
+                width: 200px;
+                max-width: 35vw;
+                min-width: 100px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .main-content { 
+                padding: 1rem 0.2rem; 
+            }
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .search-bar-custom {
+                width: 150px;
+                max-width: 30vw;
+                min-width: 80px;
+            }
+            .theme-toggle { right: 1rem; bottom: 1rem; }
+            .help-button { left: 1rem; bottom: 1rem; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="topbar">
+        <span class="hubble-gradient">Hubble</span>
+        <input id="search-bar" class="search-bar-custom" type="text" placeholder="Search Bar Unavailable" autocomplete="off" />
+        <span class="profile-area">
+            <span class="profile-label" id="profile-label">User</span>
+            <span class="profile-icon" id="profile-icon" data-initial="U"></span>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <button class="dropdown-item logout" id="logout-btn">Logout</button>
+            </div>
+        </span>
+    </div>
+    <div class="layout">
+        <main class="main-content" id="main-content">
+            <div class="games-container">
+                <div class="games-search-section">
+                    <input type="text" id="games-search" class="games-search-bar" placeholder="Search games..." autocomplete="off">
+                </div>
+                <div class="games-search-placeholder" id="games-search-placeholder"></div>
+                <div class="games-grid" id="games-grid">
+                    <div class="games-loading">Loading games...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">🌙</button>
+    <button class="help-button" id="help-button" title="Get Help">❓</button>
+    
+    <!-- Help Popup -->
+    <div class="help-popup-overlay" id="help-popup-overlay">
+        <div class="help-popup">
+            <h2 class="help-popup-title">Need Help?</h2>
+            <p class="help-popup-text">Click Create below to create a ticket for an issue you may have. Make sure you check the FAQ to see if your question is answered or if your issue has a solution.</p>
+            <div class="help-popup-buttons">
+                <button class="help-popup-btn create" onclick="showTicketPopup()">Create</button>
+                <button class="help-popup-btn faq" onclick="showFAQPopup()">FAQ</button>
+            </div>
+            <button class="help-popup-close" onclick="closeHelpPopup()">Close</button>
+        </div>
+    </div>
+    
+    <!-- Ticket Creation Popup -->
+    <div class="ticket-popup-overlay" id="ticket-popup-overlay">
+        <div class="ticket-popup">
+            <h2 class="ticket-popup-title" id="ticket-popup-title">Create Support Ticket</h2>
+            <div id="ticket-form-content">
+                <div class="ticket-form-group">
+                    <label for="ticket-subject" class="ticket-form-label">Subject</label>
+                    <input type="text" id="ticket-subject" class="ticket-form-input" placeholder="Brief description of your issue">
+                </div>
+                <div class="ticket-form-group">
+                    <label for="ticket-description" class="ticket-form-label">Describe the Issue</label>
+                    <textarea id="ticket-description" class="ticket-form-textarea" placeholder="Please provide detailed information about your issue..."></textarea>
+                </div>
+                <div class="ticket-form-group">
+                    <label for="ticket-email" class="ticket-form-label">Account Email</label>
+                    <input type="email" id="ticket-email" class="ticket-form-input" placeholder="1XXXXXX@lwsd.org">
+                </div>
+                <div class="ticket-form-buttons">
+                    <button class="ticket-form-btn cancel" onclick="closeTicketPopup()">Cancel</button>
+                    <button class="ticket-form-btn send" onclick="sendTicket()">Send</button>
+                </div>
+            </div>
+            <div id="ticket-sent-content" style="display: none; text-align: center;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Ticket Sent!</h3>
+                <p style="margin-bottom: 2rem;">Our support team will get to you shortly.</p>
+                <button class="ticket-form-btn send" onclick="closeAllPopups()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FAQ Popup -->
+    <div class="faq-popup-overlay" id="faq-popup-overlay">
+        <div class="faq-popup">
+            <h2 class="faq-popup-title">Frequently Asked Questions</h2>
+            
+            <!-- Not Getting Verification Email -->
+            <div class="faq-item">
+                <div class="faq-question">I'm not receiving my verification email. What should I do?</div>
+                <div class="faq-answer">
+                    Please wait a few minutes, as the email may take some time to arrive. 
+                    If you still haven't received it, click the "Resend Email" button on the verification page.
+                </div>
+            </div>
+
+            <!-- Username Being Used by Pending Account -->
+            <div class="faq-item">
+                <div class="faq-question">Why does it say my username is being used by a pending account?</div>
+                <div class="faq-answer">
+                    This can happen due to cached site data.  
+                    Go to your browser settings, navigate to <strong>Privacy and Security &gt; Site Settings</strong>, 
+                    select the website you were on, and click <strong>"Delete Data"</strong>.  
+                    Afterward, refresh the tab and try again.  
+                    <br><br>
+                    If the issue persists, please report it through our <strong>Create Ticket</strong> section, 
+                    and our support team will respond within 2 business days.
+                </div>
+            </div>
+
+            <!-- Email Already Used -->
+            <div class="faq-item">
+                <div class="faq-question">Why does it say my email is already associated with another account?</div>
+                <div class="faq-answer">
+                    If you see this message and you're certain it's your email, immediately report the issue to our support team by creating a ticket.  
+                    This may indicate a case of account fraud or a common system error.  
+                    Be sure to provide as many details as possible when submitting the ticket.
+                </div>
+            </div>
+
+            <!-- Forgot Password -->
+            <div class="faq-item">
+                <div class="faq-question">I forgot my password. What should I do?</div>
+                <div class="faq-answer">
+                    Click "Forgot password?" on the login page and enter your LWSD email address. 
+                    You'll receive a password reset link in your email.
+                </div>
+            </div>
+
+            <!-- Change Theme -->
+            <div class="faq-item">
+                <div class="faq-question">How do I change my theme (light/dark mode)?</div>
+                <div class="faq-answer">
+                    Click the theme toggle button in the bottom right corner of the screen to switch between light and dark modes.
+                </div>
+            </div>
+
+            <!-- Fullscreen Games -->
+            <div class="faq-item">
+                <div class="faq-question">Can I play games in fullscreen?</div>
+                <div class="faq-answer">
+                    Yes, but only the webpage itself will go fullscreen.  
+                    When you open a game, you'll see a "Fullscreen" button in the top bar.  
+                    You can press the <strong>Escape</strong> key to exit fullscreen mode.
+                </div>
+            </div>
+
+            <!-- Final Note -->
+            <div class="faq-final-note" style="margin-top: 2rem; text-align: center;">
+                <h3>If you have any other questions, please feel free to create a support ticket!</h3>
+            </div>
+
+            <!-- Close Button -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="help-popup-close" onclick="closeFAQPopup()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game Fullscreen Container -->
+    <div class="game-fullscreen" id="game-fullscreen">
+        <iframe class="game-content" id="game-content" src=""></iframe>
+    </div>
+    
+    <script>
+        // Help System Functions
+        function showHelpPopup() {
+            const popup = document.getElementById('help-popup-overlay');
+            if (popup) {
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.style.opacity = '1';
+                }, 10);
+            }
+        }
+        
+        function closeHelpPopup() {
+            const popup = document.getElementById('help-popup-overlay');
+            if (popup) {
+                popup.style.display = 'none';
+                popup.style.opacity = '0';
+            }
+        }
+        
+        function showTicketPopup() {
+            closeHelpPopup();
+            const popup = document.getElementById('ticket-popup-overlay');
+            const formContent = document.getElementById('ticket-form-content');
+            const sentContent = document.getElementById('ticket-sent-content');
+            
+            if (popup) {
+                // Reset form
+                formContent.style.display = 'block';
+                sentContent.style.display = 'none';
+                document.getElementById('ticket-subject').value = '';
+                document.getElementById('ticket-description').value = '';
+                document.getElementById('ticket-email').value = '';
+                
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.style.opacity = '1';
+                }, 10);
+            }
+        }
+        
+        function closeTicketPopup() {
+            const popup = document.getElementById('ticket-popup-overlay');
+            if (popup) {
+                popup.style.display = 'none';
+                popup.style.opacity = '0';
+            }
+        }
+        
+        async function sendTicket() {
+            const subject = document.getElementById('ticket-subject').value.trim();
+            const description = document.getElementById('ticket-description').value.trim();
+            const email = document.getElementById('ticket-email').value.trim();
+            
+            // Basic validation
+            if (!subject || !description || !email) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            // Email validation
+            if (!email.includes('@lwsd.org')) {
+                alert('Please enter a valid LWSD email address.');
+                return;
+            }
+            
+            try {
+                console.log('Starting ticket submission...');
+                
+                // Save ticket to Firebase
+                const { getFirestore, collection, addDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                console.log('Firebase modules loaded, creating ticket data...');
+                
+                const ticketData = {
+                    subject: subject,
+                    description: description,
+                    email: email,
+                    timestamp: new Date(),
+                    status: 'open',
+                    priority: 'normal'
+                };
+                
+                console.log('Ticket data prepared:', ticketData);
+                console.log('Attempting to save to Firebase...');
+                
+                const docRef = await addDoc(collection(db, 'tickets'), ticketData);
+                console.log('Ticket saved with ID:', docRef.id);
+                
+                // Show sent confirmation
+                const formContent = document.getElementById('ticket-form-content');
+                const sentContent = document.getElementById('ticket-sent-content');
+                
+                formContent.style.display = 'none';
+                sentContent.style.display = 'block';
+                
+                console.log('Ticket submitted successfully to Firebase');
+            } catch (error) {
+                console.error('Error submitting ticket:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    code: error.code,
+                    stack: error.stack
+                });
+                alert(`Failed to submit ticket: ${error.message}. Please try again.`);
+            }
+        }
+        
+        function showFAQPopup() {
+            closeHelpPopup();
+            const popup = document.getElementById('faq-popup-overlay');
+            if (popup) {
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.style.opacity = '1';
+                }, 10);
+            }
+        }
+        
+        function closeFAQPopup() {
+            const popup = document.getElementById('faq-popup-overlay');
+            if (popup) {
+                popup.style.display = 'none';
+                popup.style.opacity = '0';
+            }
+        }
+        
+        function closeAllPopups() {
+            closeHelpPopup();
+            closeTicketPopup();
+            closeFAQPopup();
+        }
+        
+        // Close popups when clicking outside
+        document.addEventListener('click', function(e) {
+            // Help popup
+            const helpPopup = document.getElementById('help-popup-overlay');
+            if (helpPopup && e.target === helpPopup) {
+                closeHelpPopup();
+            }
+            
+            // FAQ popup
+            const faqPopup = document.getElementById('faq-popup-overlay');
+            if (faqPopup && e.target === faqPopup) {
+                closeFAQPopup();
+            }
+            
+            // Ticket popup
+            const ticketPopup = document.getElementById('ticket-popup-overlay');
+            const sentContent = document.getElementById('ticket-sent-content');
+            if (ticketPopup && e.target === ticketPopup && sentContent.style.display === 'none') {
+                closeTicketPopup();
+            }
+        });
+        
+        // Authentication check and user display
+        async function checkAuthAndLoadUser() {
+            try {
+                const { getAuth, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
+                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        // Check if user exists in Firestore (completed registration)
+                        try {
+                            const userDoc = await getDocs(query(collection(db, "users"), where("email", "==", user.email)));
+                            if (!userDoc.empty) {
+                                currentUser = user; // Set global user variable
+                                const userData = userDoc.docs[0].data();
+                                const username = userData.username || 'User';
+                                
+                                // Update profile display
+                                const profileLabel = document.getElementById('profile-label');
+                                const profileIcon = document.getElementById('profile-icon');
+                                
+                                if (profileLabel) profileLabel.textContent = username;
+                                if (profileIcon) {
+                                    profileIcon.setAttribute('data-initial', username[0].toUpperCase());
+                                    // Remove any existing text content
+                                    profileIcon.textContent = '';
+                                }
+                                
+                                // Load user's theme preference
+                                await loadThemeFromFirebase(user);
+                            }
+                        } catch (error) {
+                            console.error('Error loading user data:', error);
+                            // Fallback to localStorage theme
+                            const localTheme = localStorage.getItem('hubble-theme') || 'light';
+                            setTheme(localTheme, false);
+                        }
+                    } else {
+                        // Not authenticated, redirect to index
+                        currentUser = null;
+                        window.location.href = 'index.html';
+                    }
+                });
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Theme toggle logic with Firebase saving
+        const themeToggle = document.getElementById('theme-toggle');
+        let currentUser = null;
+        
+        // Game time tracking
+        let gameStartTime = null;
+        let currentGameName = null;
+        
+        async function startGameTimeTracking(gameName) {
+            currentGameName = gameName;
+            gameStartTime = Date.now();
+            console.log('Started tracking time for game:', gameName);
+        }
+        
+        async function stopGameTimeTracking() {
+            if (!gameStartTime || !currentGameName || !currentUser) {
+                return;
+            }
+            
+            const timeSpent = Date.now() - gameStartTime;
+            const timeSpentMinutes = Math.round(timeSpent / 60000); // Convert to minutes
+            
+            if (timeSpentMinutes > 0) { // Only track if at least 1 minute was spent
+                try {
+                    const { getFirestore, doc, updateDoc, increment } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                    const { app } = await import('./firebase.js');
+                    const db = getFirestore(app);
+                    
+                    // Update game time in user's document
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    await updateDoc(userRef, {
+                        [`gameTime.${currentGameName.replace(/[^a-zA-Z0-9]/g, '_')}`]: increment(timeSpentMinutes)
+                    });
+                    
+                    console.log(`Tracked ${timeSpentMinutes} minutes for game: ${currentGameName}`);
+                } catch (error) {
+                    console.error('Failed to track game time:', error);
+                }
+            }
+            
+            // Reset tracking
+            gameStartTime = null;
+            currentGameName = null;
+        }
+        
+        // Profile dropdown functionality
+        function setupProfileDropdown() {
+            const profileIcon = document.getElementById('profile-icon');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Toggle dropdown on profile icon click
+            profileIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.style.display = 'none';
+                }
+            });
+            
+            // Logout functionality
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    // Stop any active game time tracking before logout
+                    await stopGameTimeTracking();
+                    
+                    const { auth } = await import('./firebase.js');
+                    const { signOut } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
+                    
+                    await signOut(auth);
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                    // Still redirect even if logout fails
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+        
+        async function setTheme(theme, saveToFirebase = true) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('hubble-theme', theme);
+            themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+            
+            // Save to Firebase if user is authenticated
+            if (saveToFirebase && currentUser) {
+                try {
+                    const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                    const { app } = await import('./firebase.js');
+                    const db = getFirestore(app);
+                    
+                    const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
+                    const userDocs = await getDocs(userQuery);
+                    
+                    if (!userDocs.empty) {
+                        const userDocRef = doc(db, "users", userDocs.docs[0].id);
+                        await updateDoc(userDocRef, { theme: theme });
+                        console.log('Theme saved to Firebase:', theme);
+                    }
+                } catch (error) {
+                    console.error('Error saving theme to Firebase:', error);
+                }
+            }
+        }
+        
+        async function loadThemeFromFirebase(user) {
+            try {
+                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                const userQuery = query(collection(db, "users"), where("email", "==", user.email));
+                const userDocs = await getDocs(userQuery);
+                
+                if (!userDocs.empty) {
+                    const userData = userDocs.docs[0].data();
+                    const savedTheme = userData.theme || 'light'; // Default to light
+                    setTheme(savedTheme, false); // Don't save back to Firebase when loading
+                    return savedTheme;
+                }
+            } catch (error) {
+                console.error('Error loading theme from Firebase:', error);
+            }
+            
+            // Fallback to localStorage or default
+            const localTheme = localStorage.getItem('hubble-theme') || 'light';
+            setTheme(localTheme, false);
+            return localTheme;
+        }
+        
+        themeToggle.onclick = () => {
+            const current = document.body.getAttribute('data-theme');
+            setTheme(current === 'light' ? 'dark' : 'light');
+        };
+
+        // Games System
+        const gamesList = [
+        { name: "Doodle Jump", image: "images/Doodle-Jump.png", url: "./games/Doodle_jump.html" },
+            { name: "Getting Over It", image: "images/Getting-Over-It.png", url: "./games/gettingoverit.html" },
+            { name: "Retro Bowl", image: "images/Retro-Bowl.png", url: "./games/retro-bowl/" },
+            { name: "Slope", image: "images/Slope.png", url: "./games/slope.html" },
+            { name: "Snow Rider 3D", image: "images/Snow-Rider-3d.png", url: "./games/Snow Rider 3D.html" },
+            { name: "Tetris", image: "images/Tetris.png", url: "./games/Tetris.html" },
+            { name: "Appel", image: "images/Appel.png", url: "./games/Appel.html" },
+            { name: "Arena", image: "images/Arena.png", url: "./games/Arena.html" },
+            { name: "Space Huggers", image: "images/Space-Huggers.png", url: "./games/spacehuggers.html" },
+            { name: "Stack", image: "images/Stack.png", url: "./games/stack.html" },
+            { name: "Suika Watermelon", image: "images/Suika-Watermelon.png", url: "./games/Suika-watermelon.html" },
+            { name: "60 Seconds Burger Run", image: "images/60-Seconds-Burger-Run.png", url: "./games/60second_burger_run.html" },
+            { name: "Eaglercraft", image: "images/Eaglercraft.png", url: "./games/eaglercraft.1.8.8.html" },
+            { name: "1v1.LOL", image: "images/1v1-lol.png", url: "./games/1v1.lol/index.html" },
+            { name: "Ball Blast", image: "images/Ball-Blast.png", url: "./games/ball-blast.html" },
+            { name: "Multiplayer Appel", image: "images/Appel-Multiplayer.png", url: "./games/appel-multiplayer.html" },
+            { name: "2048", image: "images/2048.png", url: "./games/2048.html" },
+            { name: "Volcanic Appel", image: "images/Volcanic-Appel.png", url: "./games/Volcanic-Appel.html" },
+            { name: "Agar.io", image: "images/agario.png", url: "./games/agario.html" },
+            { name: "Astrotype", image: "images/Astrotype.png", url: "/games/astrotype.html" },
+            { name: "Basketball Stars", image: "images/Basketball-Stars.png", url: "./games/basketball-stars/" },
+            { name: "1", image: "images/1.png", url: "./games/1/" },
+            { name: "2048 Multitask", image: "images/2048-Mulitask.png", url: "./games/2048-Multitask/" },
+            { name: "Angry Birds", image: "images/Angry-Birds.png", url: "./games/angry-birds/" },
+            { name: "Among Us", image: "images/Among-Us.png", url: "./games/among-us/" },
+            { name: "The Binding Of Issac", image: "images/The-Binding-Of-Isaac.png", url: "./games/binding-of-isaac/" },
+            { name: "Cookie Clicker", image: "images/Cookie-Clicker.png", url: "./games/cookieclicker/" },
+            { name: "Chrome Dino", image: "images/Chrome-Dino.png", url: "./games/dino.html" },
+            { name: "Duck Life", image: "images/Duck-Life.png", url: "./games/ducklife/" },
+            { name: "Duck Life 2", image: "images/Duck-Life-2.png", url: "./games/ducklife2/" },
+            { name: "Duck Life 3", image: "images/Duck-Life-3.png", url: "./games/ducklife3/" },
+            { name: "Duck Life 4", image: "images/Duck-Life-4.png", url: "./games/ducklife4/" },
+            { name: "Duck Life Treasure Hunt", image: "images/Duck-Life-Treasure-Hunt.png", url: "./games/duck-life-treasurehunt/" },
+            { name: "Bitlife", image: "images/Bitlife.png", url: "./games/bitlife/" },
+            { name: "Geometry Dash", image: "images/Geometry-Dash.png", url: "./games/geometrydash/" },
+            { name: "Core Ball", image: "images/coreball.png", url: "./games/core-ball/" },
+            { name: "Bloons TD", image: "images/Bloonstd.png", url: "./games/bloonstd/" },
+            { name: "Bloons TD 2", image: "images/Bloonstd2.png", url: "./games/bloonstd2/" },
+            { name: "Friday Night Funkin", image: "images/Friday-Night-Funkin.png", url: "./games/friday-night-funkin/" },
+            { name: "Getaway Shootout", image: "images/Getaway-Shootout.png", url: "./games/getaway-shootout/" },
+            { name: "Subway Surfers", image: "images/Subway-Surfers.png", url: "./games/subway-surfers/" },
+            { name: "Tiny Fishing", image: "images/Tiny-Fishing.png", url: "./games/tiny-fishing/" },
+            { name: "Stickman Hook", image: "images/Stickman-Hook.png", url: "./games/stickman-hook/" },
+            { name: "Idle Breakout", image: "images/Idle-Breakout.png", url: "./games/idle-breakout/" },
+            { name: "Learn To Fly", image: "images/Learn-To-Fly.png", url: "./games/flash/?game=learn-to-fly" },
+            { name: "Learn To Fly 2", image: "images/Learn-To-Fly-2.png", url: "./games/flash/?game=learn-to-fly-2" },
+            { name: "Learn To Fly 3", image: "images/Learn-To-Fly-3.png", url: "./games/flash/?game=learn-to-fly-3" },
+            { name: "Learn To Fly Idle", image: "images/Learn-To-Fly-Idle.png", url: "./games/flash/?game=learn-to-fly-idle" },
+            { name: "Gun Mayhem", image: "images/Gun-Mayhem.png", url: "./games/flash/?game=gun-mayhem" },
+            { name: "Gun Mayhem 2", image: "images/Gun-Mayhem-2.png", url: "./games/flash/?game=gun-mayhem-2" },
+            { name: "Gun Spin", image: "images/Gunspin.png", url: "./games/gunspin/" },
+            { name: "Google Snake", image: "images/Google-Snake.png", url: "./games/google-snake/" },
+            { name: "Doge Miner", image: "images/Doge-miner.png", url: "./games/DogeMiner/" },
+            { name: "Doge Miner 2", image: "images/Doge-Miner-2.png", url: "./games/doge-miner-2/" },
+            { name: "Crossy Road", image: "images/Crossy-Road.png", url: "./games/crossyroad/" },
+            { name: "Cluster Rush", image: "images/Cluster-Rush.png", url: "./games/cluster-rush/" },
+            { name: "Craftmine", image: "images/Craftmine.png", url: "./games/craftmine/" },
+            { name: "Volley Random", image: "images/Volley-Random.png", url: "./games/volley-random/" },
+            { name: "Basket Random", image: "images/Basket-random.png", url: "./games/basket-random/" },
+            { name: "Boxing Random", image: "images/Boxing-Random.png", url: "./games/boxing-random/" },
+            { name: "Soccer Random", image: "images/soccer-Random.png", url: "./games/soccer-random/" },
+            { name: "Drift Boss", image: "images/Drift-Boss.png", url: "./games/drift-boss/" },
+            { name: "Drive Mad", image: "images/Drive-Mad.png", url: "./games/drive-mad/" },
+            { name: "Monkey Mart", image: "images/Monkey-Mart.png", url: "./games/monkey-mart/" },
+            { name: "Gons.io", image: "images/Gons-io.png", url: "./games/gons-io/" },
+            { name: "Rooftop Snipers", image: "images/Rooftop-Snipers.png", url: "./games/rooftop-snipers/" },
+            { name: "A Game Inside", image: "images/A-Game-Inside.png", url: "./games/game-inside/" },
+            { name: "Tanuki Sunset", image: "images/Tanuki-Sunset.png", url: "./games/tanuki-sunset/" },
+            { name: "Blumgi Ball", image: "images/Blumgi-Ball.png", url: "./games/blumgi-ball/" },
+            { name: "PolyTrack", image: "images/Polytrack.png", url: "./games/polytrack/" },
+            { name: "Iron Snout", image: "images/iron-Snout.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/811766381464516446/files/index.html" },
+            { name: "Bacon May Die", image: "images/Bacon-May-Die.png", url: "http://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/320690105873469650/files/index.html" },
+            { name: "N-gon", image: "images/n-gon.png", url: "./games/n-gon/" },
+            { name: "Vex 3", image: "images/vex-3.png", url: "./games/vex-3/" },
+            { name: "Vex 4", image: "images/Vex-4.png", url: "./games/vex-4/" },
+            { name: "Vex 5", image: "images/vex-5.png", url: "./games/vex-5/" },
+            { name: "Vex 6", image: "images/Vex-6.png", url: "./games/vex-6/" },
+            { name: "Vex 7", image: "images/vex-7.png", url: "./games/vex-7/" },
+            { name: "Motox3m", image: "images/Motox3m.png", url: "./games/motox3m/" },        
+            { name: "Flappy Bird", image: "images/flappy-Bird.png", url: "./games/flappy-bird/" },
+            { name: "Backrooms", image: "images/Backrooms.png", url: "./games/backrooms/" },
+            { name: "Geometry Dash Remastered", image: "images/geometry-Dash-Remastered.png", url: "./games/geometry-dash-remastered/" },
+            { name: "Burrito Bison", image: "images/burrito-Bison.png", url: "./games/burrito-bison/" },
+            { name: "Cut The Rope ", image: "images/Cut-The-Rope.png", url: "./games/cuttherope/" },
+            { name: "Cut The Rope 2", image: "images/Cut-The-Rope-2.png", url: "./games/cuttherope-2/" },
+            { name: "Cannon Basketball 4", image: "images/Cannon-Basketball.png", url: "./games/cannon-basketball-4/" },
+            { name: "Doge Mining Simulator", image: "images/Placeholder.png", url: "./games/doge-mining-simulator/" },
+            { name: "Basket.io", image: "images/Basketball-io.png", url: "./games/basketball-io/" },
+            { name: "Baldis Basics", image: "images/Baldis-Basics.png", url: "./games/baldis-basics/"  },
+            { name: "Car Simulator", image: "images/Cars-Simulator.png", url: "./games/cars-simulator/"  },
+            { name: "Racer", image: "images/racer.png", url: "./games/racer/"  },
+            { name: "Bloxorz", image: "images/Bloxorz.png", url: "./games/bloxors/"  },
+            { name: "Boxel Rebound", image: "images/Boxel-Rebound.png", url: "./games/boxel-rebound/"  },
+            { name: "Gravity Soccer", image: "images/gravity-soccer.png", url: "./games/gravity-soccer/"  },
+            { name: "Justfall", image: "images/Justfall.png", url: "./games/justfall/"  },
+            { name: "Eggy Car", image: "images/Eggy-Car.png", url: "./games/eggy-car/"  },
+            { name: "Particle Clicker", image: "images/Particle-Clicker.png", url: "./games/particleclicker/"  },
+            { name: "Escape Road", image: "images/Escape-Road.png", url: "./games/escape-road/"  },
+            { name: "Escape Road 2", image: "images/Escape-Road-2.png", url: "./games/escape-road-2/"  },
+            { name: "Escape Road City", image: "images/Escape-Road-City.png", url: "./games/escape-road-city/"  },
+            { name: "Escape Road City 2", image: "images/Escape-Road-City-2.png", url: "./games/escape-road-city-2/"  },
+        
+        ];
+        
+        let allGames = [];
+        let currentGame = null;
+        
+        function initGamesSection() {
+            // Initialize allGames here to avoid initialization order issues
+            allGames = [...gamesList];
+            
+            // Add a delay to ensure DOM is ready
+            setTimeout(() => {
+                populateGamesGrid();
+                setupGamesSearch();
+                // Setup sticky search after everything is initialized with additional delay
+                setTimeout(() => {
+                    setupStickySearch();
+                }, 300);
+            }, 200);
+        }
+        
+        function populateGamesGrid() {
+            const gamesGrid = document.getElementById('games-grid');
+            
+            if (!gamesGrid) {
+                return;
+            }
+            
+            if (allGames.length === 0) {
+                gamesGrid.innerHTML = '<div class="games-loading">No games found</div>';
+                return;
+            }
+            
+            // Check if games have scores (from search) or sort alphabetically
+            let sortedGames;
+            if (allGames[0] && allGames[0].hasOwnProperty('score')) {
+                // Games are already sorted by score from search
+                sortedGames = allGames;
+            } else {
+                // Sort games alphabetically for default view
+                sortedGames = [...allGames].sort((a, b) => a.name.localeCompare(b.name));
+            }
+            
+            const gamesHTML = sortedGames.map(game => `
+                <div class="game-card" onclick="openGame('${game.name}', '${game.url}')">
+                    <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
+                    <h3 class="game-name">${game.name}</h3>
+                </div>
+            `).join('');
+            
+            gamesGrid.innerHTML = gamesHTML;
+        }
+        
+        function setupGamesSearch() {
+            const searchInput = document.getElementById('games-search');
+            if (!searchInput) return;
+            
+            // Add focus/blur event listeners for animation control
+            searchInput.addEventListener('focus', function() {
+                this.classList.add('paused');
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.classList.remove('paused');
+            });
+            
+            searchInput.addEventListener('input', function() {
+                // Auto-scroll to top if search bar is sticky and user is typing
+                const searchSection = document.querySelector('.games-search-section');
+                if (searchSection && searchSection.classList.contains('sticky')) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                if (!searchTerm) {
+                    // Reset to original games list without scores
+                    allGames = [...gamesList];
+                } else {
+                    // Advanced relevance scoring
+                    allGames = gamesList.filter(game => 
+                        game.name.toLowerCase().includes(searchTerm)
+                    ).map(game => {
+                        const gameName = game.name.toLowerCase();
+                        let score = 0;
+                        
+                        // Exact match gets highest score
+                        if (gameName === searchTerm) {
+                            score = 10000;
+                        }
+                        // Starts with search term gets very high score
+                        else if (gameName.startsWith(searchTerm)) {
+                            score = 8000 + (100 - searchTerm.length); // Shorter searches get higher priority
+                        }
+                        // Word boundary matches (space or dash before the term) get high score
+                        else if (gameName.includes(' ' + searchTerm) || gameName.includes('-' + searchTerm)) {
+                            score = 6000;
+                        }
+                        // Word boundary matches (space or dash after the term) get high score
+                        else if (gameName.includes(searchTerm + ' ') || gameName.includes(searchTerm + '-')) {
+                            score = 5000;
+                        }
+                        // Contains search term as whole word (surrounded by spaces/dashes/start/end)
+                        else if (new RegExp('\\b' + searchTerm + '\\b').test(gameName)) {
+                            score = 4000;
+                        }
+                        // Contains search term gets medium score
+                        else if (gameName.includes(searchTerm)) {
+                            // Earlier in the name = higher score
+                            const position = gameName.indexOf(searchTerm);
+                            score = 2000 - position;
+                        }
+                        
+                        // Bonus for shorter names (more specific)
+                        score += Math.max(0, 100 - game.name.length);
+                        
+                        // Additional bonus for games that start with the same letter as search term
+                        if (gameName.charAt(0) === searchTerm.charAt(0)) {
+                            score += 50;
+                        }
+                        
+                        return { ...game, score };
+                    }).sort((a, b) => {
+                        // Sort by score first (descending), then alphabetically
+                        if (b.score !== a.score) return b.score - a.score;
+                        return a.name.localeCompare(b.name);
+                    });
+                }
+                
+                populateGamesGrid();
+            });
+        }
+        
+        function openGame(gameName, gameUrl) {
+            currentGame = { name: gameName, url: gameUrl };
+            
+            // Start tracking time for this game
+            startGameTimeTracking(gameName);
+            
+            const gameFullscreen = document.getElementById('game-fullscreen');
+            const gameContent = document.getElementById('game-content');
+            
+            if (!gameFullscreen || !gameContent) {
+                console.error('Game fullscreen elements not found');
+                return;
+            }
+            
+            gameContent.src = gameUrl;
+            gameFullscreen.style.display = 'flex';
+            
+            // Modify header for game mode
+            enterGameMode(gameName);
+        }
+        
+        function enterGameMode(gameName) {
+            const topbar = document.querySelector('.topbar');
+            const hubbleTitle = document.querySelector('.hubble-gradient');
+            const searchBar = document.getElementById('search-bar');
+            
+            // Add game mode class
+            topbar.classList.add('game-mode');
+            
+            // Store original content
+            if (!topbar.dataset.originalTitle) {
+                topbar.dataset.originalTitle = hubbleTitle.textContent;
+            }
+            
+            // Change title to game name
+            hubbleTitle.textContent = gameName;
+            
+            // Hide search bar and create game controls in header
+            if (searchBar) {
+                searchBar.style.display = 'none';
+                createGameControlsInHeader();
+            }
+        }
+        
+        function createGameControlsInHeader() {
+            const searchBar = document.getElementById('search-bar');
+            
+            // Remove existing controls if any
+            removeGameControlsFromHeader();
+            
+            // Create fullscreen button
+            const fullscreenBtn = document.createElement('button');
+            fullscreenBtn.id = 'game-fullscreen-btn';
+            fullscreenBtn.className = 'game-fullscreen-btn';
+            fullscreenBtn.textContent = 'Fullscreen';
+            fullscreenBtn.onclick = toggleTabFullscreen;
+            
+            // Create exit button  
+            const exitBtn = document.createElement('button');
+            exitBtn.id = 'game-exit-btn-new';
+            exitBtn.className = 'game-exit-btn';
+            exitBtn.textContent = 'Exit Game';
+            exitBtn.onclick = exitGame;
+            
+            // Create container
+            const gameControls = document.createElement('div');
+            gameControls.id = 'game-controls';
+            gameControls.className = 'game-controls';
+            gameControls.style.display = 'flex';
+            gameControls.appendChild(fullscreenBtn);
+            gameControls.appendChild(exitBtn);
+            
+            // Insert after search bar
+            searchBar.parentNode.insertBefore(gameControls, searchBar.nextSibling);
+        }
+        
+        function removeGameControlsFromHeader() {
+            const existingControls = document.getElementById('game-controls');
+            if (existingControls) {
+                existingControls.remove();
+            }
+        }
+        
+        let isTabFullscreen = false;
+        
+        function toggleTabFullscreen() {
+            const gameFullscreen = document.getElementById('game-fullscreen');
+            const topbar = document.querySelector('.topbar');
+            const fullscreenBtn = document.getElementById('game-fullscreen-btn');
+            
+            if (!isTabFullscreen) {
+                // Enter tab fullscreen mode
+                gameFullscreen.classList.add('tab-fullscreen');
+                topbar.style.display = 'none';
+                
+                // Move button to be positioned above the game
+                fullscreenBtn.classList.add('minimized');
+                fullscreenBtn.textContent = '← Back';
+                
+                // Remove from header and add to game container
+                fullscreenBtn.remove();
+                gameFullscreen.appendChild(fullscreenBtn);
+                
+                isTabFullscreen = true;
+            } else {
+                // Exit tab fullscreen mode
+                gameFullscreen.classList.remove('tab-fullscreen');
+                topbar.style.display = 'flex';
+                fullscreenBtn.classList.remove('minimized');
+                fullscreenBtn.textContent = 'Fullscreen';
+                
+                // Move button back to header
+                fullscreenBtn.remove();
+                const gameControls = document.getElementById('game-controls');
+                if (gameControls) {
+                    gameControls.insertBefore(fullscreenBtn, gameControls.firstChild);
+                }
+                
+                isTabFullscreen = false;
+            }
+        }
+        
+        async function exitGame() {
+            // Stop tracking time for the current game
+            await stopGameTimeTracking();
+            
+            const gameFullscreen = document.getElementById('game-fullscreen');
+            const gameContent = document.getElementById('game-content');
+            const topbar = document.querySelector('.topbar');
+            const hubbleTitle = document.querySelector('.hubble-gradient');
+            const searchBar = document.getElementById('search-bar');
+            
+            // Exit tab fullscreen if active
+            if (isTabFullscreen) {
+                gameFullscreen.classList.remove('tab-fullscreen');
+                topbar.style.display = 'flex';
+                isTabFullscreen = false;
+            }
+            
+            // Hide game fullscreen
+            gameFullscreen.style.display = 'none';
+            gameContent.src = '';
+            
+            // Remove game controls from header
+            removeGameControlsFromHeader();
+            
+            // Restore header
+            topbar.classList.remove('game-mode');
+            hubbleTitle.textContent = topbar.dataset.originalTitle || 'Hubble';
+            
+            // Restore search bar
+            if (searchBar) {
+                searchBar.style.display = 'block';
+            }
+            
+            // Show post button again
+            const postButton = document.getElementById('post-expand-toggle');
+            if (postButton) {
+                postButton.style.display = 'block';
+            }
+            
+            currentGame = null;
+        }
+        
+        function openRandomGame() {
+            if (gamesList.length > 0) {
+                const randomGame = gamesList[Math.floor(Math.random() * gamesList.length)];
+                openGame(randomGame.name, randomGame.url);
+            }
+        }
+        
+        // Add global escape key handler for games
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && currentGame) {
+                if (isTabFullscreen) {
+                    // Exit tab fullscreen first
+                    toggleTabFullscreen();
+                } else {
+                    // Exit game completely
+                    exitGame();
+                }
+            }
+        });
+        
+        // Sticky search bar functionality
+        function setupStickySearch() {
+            const searchSection = document.querySelector('.games-search-section');
+            const placeholder = document.getElementById('games-search-placeholder');
+            
+            if (!searchSection) {
+                return;
+            }
+            
+            // Wait for everything to be fully loaded
+            setTimeout(() => {
+                const searchSectionOriginalTop = searchSection.offsetTop;
+                const searchSectionOriginalLeft = searchSection.offsetLeft;
+                
+                window.addEventListener("scroll", function () {
+                    if (window.scrollY >= searchSectionOriginalTop) {
+                        searchSection.classList.add("sticky");
+                        if (placeholder) placeholder.classList.add('active');
+                        searchSection.style.left = `${searchSectionOriginalLeft}px`;
+                    } else {
+                        searchSection.classList.remove("sticky");
+                        if (placeholder) placeholder.classList.remove('active');
+                        searchSection.style.left = "";
+                    }
+                });
+            }, 1000); // Wait to ensure everything is loaded
+            
+            // Add manual test function
+            window.testSticky = function() {
+                searchSection.classList.add("sticky");
+                if (placeholder) placeholder.classList.add('active');
+            };
+            
+            window.removeSticky = function() {
+                searchSection.classList.remove("sticky");
+                if (placeholder) placeholder.classList.remove('active');
+            };
+        }
+        
+        // Initialize games section and auth on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthAndLoadUser();
+            initGamesSection();
+            setupProfileDropdown();
+            
+            // Setup help button
+            const helpButton = document.getElementById('help-button');
+            if (helpButton) {
+                helpButton.addEventListener('click', showHelpPopup);
+            }
+        });
+        
+        // Backup sticky setup on window load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                setupStickySearch();
+            }, 500);
+        });
+        
+        // Track game time when page is unloaded
+        window.addEventListener('beforeunload', async () => {
+            await stopGameTimeTracking();
+        });
+        
+        window.addEventListener('pagehide', async () => {
+            await stopGameTimeTracking();
+        });
+        
+        // Developer Tools Protection
+        (function() {
+            'use strict';
+            
+            // Disable right-click context menu (silent - no alerts)
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                return false;
+            }, true);
+            
+            // Disable inspection keyboard shortcuts (triggers alert/redirect)
+            document.addEventListener('keydown', function(e) {
+                // F12
+                if (e.keyCode === 123 || e.key === 'F12') {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                    setTimeout(() => window.location.href = 'about:blank', 500);
+                    return false;
+                }
+                // Ctrl+Shift+I (Inspector)
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.keyCode === 73 || e.key === 'I')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                    setTimeout(() => window.location.href = 'about:blank', 500);
+                    return false;
+                }
+                // Ctrl+Shift+J (Console)
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.keyCode === 74 || e.key === 'J')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                    setTimeout(() => window.location.href = 'about:blank', 500);
+                    return false;
+                }
+                // Ctrl+Shift+C (Element Selector)
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.keyCode === 67 || e.key === 'C')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                    setTimeout(() => window.location.href = 'about:blank', 500);
+                    return false;
+                }
+                // Ctrl+U (View Source)
+                if ((e.ctrlKey || e.metaKey) && (e.keyCode === 85 || e.key === 'u')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                    setTimeout(() => window.location.href = 'about:blank', 500);
+                    return false;
+                }
+                // Ctrl+Shift+K (Console Firefox)
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.keyCode === 75 || e.key === 'K')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                    setTimeout(() => window.location.href = 'about:blank', 500);
+                    return false;
+                }
+            }, true);
+            
+            // Detect DevTools opening by window size changes (more accurate)
+            let devtoolsOpen = false;
+            let lastInnerWidth = window.innerWidth;
+            let lastInnerHeight = window.innerHeight;
+            
+            setInterval(function() {
+                const currentInnerWidth = window.innerWidth;
+                const currentInnerHeight = window.innerHeight;
+                
+                // Only check if window size actually changed (not just zoom)
+                if (currentInnerWidth !== lastInnerWidth || currentInnerHeight !== lastInnerHeight) {
+                    lastInnerWidth = currentInnerWidth;
+                    lastInnerHeight = currentInnerHeight;
+                    
+                    // More accurate detection - DevTools typically add 300+ pixels
+                    let heightThreshold = window.outerHeight - window.innerHeight > 300;
+                    let widthThreshold = window.outerWidth - window.innerWidth > 300;
+                    
+                    // Additional check: DevTools usually make the window significantly larger
+                    let significantSizeIncrease = (window.outerHeight > window.innerHeight * 1.2) || 
+                                                (window.outerWidth > window.innerWidth * 1.2);
+                    
+                    if ((heightThreshold || widthThreshold) && significantSizeIncrease) {
+                        if (!devtoolsOpen) {
+                            devtoolsOpen = true;
+                            document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                            setTimeout(() => window.location.href = 'about:blank', 500);
+                        }
+                    }
+                }
+            }, 1000); // Less frequent checks
+            
+            // Console detection
+            let consoleDetectionCount = 0;
+            let element = new Image();
+            Object.defineProperty(element, 'id', {
+                get: function() {
+                    consoleDetectionCount++;
+                    // Only trigger after multiple detections to avoid false positives
+                    if (consoleDetectionCount > 3) {
+                        document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
+                        setTimeout(() => window.location.href = 'about:blank', 500);
+                    }
+                }
+            });
+            
+            // Less frequent console checks
+            setInterval(function() {
+                console.log(element);
+                console.clear();
+            }, 5000);
+            
+            // Disable text selection and copying (but allow input interaction)
+            document.onselectstart = function(e) { 
+                // Allow selection in input fields
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                    return true;
+                }
+                return false; 
+            };
+            document.onmousedown = function(e) { 
+                // Allow mouse down in input fields and buttons
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON')) {
+                    return true;
+                }
+                return false; 
+            };
+            document.ondragstart = function(e) { 
+                // Allow dragging in input fields
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                    return true;
+                }
+                return false; 
+            };
+            
+        })();
+    </script>
+</body>
+</html>

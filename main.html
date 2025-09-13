@@ -1151,7 +1151,7 @@
 
             <!-- Close Button -->
             <div style="text-align: center; margin-top: 2rem;">
-                <button class="help-popup-close" onclick="closeFAQPopup()">Close</button>
+                <button class="help-popup-close" onclick="closeFAQPopupAndReturnToHelp()">Close</button>
             </div>
         </div>
     </div>
@@ -1290,6 +1290,16 @@
             }
         }
         
+        function closeFAQPopupAndReturnToHelp() {
+            const popup = document.getElementById('faq-popup-overlay');
+            if (popup) {
+                popup.style.display = 'none';
+                popup.style.opacity = '0';
+                // Reopen the help popup instead of closing everything
+                showHelpPopup();
+            }
+        }
+        
         function closeAllPopups() {
             closeHelpPopup();
             closeTicketPopup();
@@ -1307,7 +1317,7 @@
             // FAQ popup
             const faqPopup = document.getElementById('faq-popup-overlay');
             if (faqPopup && e.target === faqPopup) {
-                closeFAQPopup();
+                closeFAQPopupAndReturnToHelp();
             }
             
             // Ticket popup

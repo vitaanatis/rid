@@ -809,9 +809,20 @@
             width: 100%;
             height: 180px;
             border-radius: 12px;
-            object-fit: contain;
+            object-fit: cover;
             margin-bottom: 0.1rem;
             background: var(--background-light);
+            border: 2px solid var(--secondary);
+            transition: border-color 0.3s ease;
+            flex-shrink: 0;
+            display: block;
+        }
+        
+        .game-image-placeholder {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            margin-bottom: 0.1rem;
             border: 2px solid var(--secondary);
             transition: border-color 0.3s ease;
             flex-shrink: 0;
@@ -822,7 +833,15 @@
             border-color: #2c3550;
         }
         
+        body[data-theme="dark"] .game-image-placeholder {
+            border-color: #2c3550;
+        }
+        
         .game-card:hover .game-image {
+            border-color: var(--primary);
+        }
+        
+        .game-card:hover .game-image-placeholder {
             border-color: var(--primary);
         }
         
@@ -1586,9 +1605,9 @@
             { name: "Cluster Rush", image: "images/Cluster-Rush.png", url: "./games/cluster-rush/" },
             { name: "Craftmine", image: "images/Craftmine.png", url: "./games/craftmine/" },
             { name: "Volley Random", image: "images/Volley-Random.png", url: "./games/volley-random/" },
-            { name: "Basket Random", image: "images/Basket-random.png", url: "./games/basket-random/" },
+            { name: "Basket Random", image: "images/Basket-Random.png", url: "./games/basket-random/" },
             { name: "Boxing Random", image: "images/Boxing-Random.png", url: "./games/boxing-random/" },
-            { name: "Soccer Random", image: "images/soccer-Random.png", url: "./games/soccer-random/" },
+            { name: "Soccer Random", image: "images/Soccer-Random.png", url: "./games/soccer-random/" },
             { name: "Drift Boss", image: "images/Drift-Boss.png", url: "./games/drift-boss/" },
             { name: "Drive Mad", image: "images/Drive-Mad.png", url: "./games/drive-mad/" },
             { name: "Monkey Mart", image: "images/Monkey-Mart.png", url: "./games/monkey-mart/" },
@@ -1598,7 +1617,7 @@
             { name: "Tanuki Sunset", image: "images/Tanuki-Sunset.png", url: "./games/tanuki-sunset/" },
             { name: "Blumgi Ball", image: "images/Blumgi-Ball.png", url: "./games/blumgi-ball/" },
             { name: "PolyTrack", image: "images/Polytrack.png", url: "./games/polytrack/" },
-            { name: "Iron Snout", image: "images/iron-Snout.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/811766381464516446/files/index.html" },
+            { name: "Iron Snout", image: "images/iron-snout.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/811766381464516446/files/index.html" },
             { name: "Bacon May Die", image: "images/Bacon-May-Die.png", url: "http://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/320690105873469650/files/index.html" },
             { name: "N-gon", image: "images/n-gon.png", url: "./games/n-gon/" },
             { name: "Vex 3", image: "images/vex-3.png", url: "./games/vex-3/" },
@@ -1611,10 +1630,10 @@
             { name: "Backrooms", image: "images/Backrooms.png", url: "./games/backrooms/" },
             { name: "Geometry Dash Remastered", image: "images/geometry-Dash-Remastered.png", url: "./games/geometry-dash-remastered/" },
             { name: "Burrito Bison", image: "images/burrito-Bison.png", url: "./games/burrito-bison/" },
-            { name: "Cut The Rope ", image: "images/Cut-The-Rope.png", url: "./games/cuttherope/" },
+            { name: "Cut The Rope ", image: "images/cut-the-rope.png", url: "./games/cuttherope/" },
             { name: "Cut The Rope 2", image: "images/Cut-The-Rope-2.png", url: "./games/cuttherope-2/" },
             { name: "Cannon Basketball 4", image: "images/Cannon-Basketball.png", url: "./games/cannon-basketball-4/" },
-            { name: "Doge Mining Simulator", image: "images/Placeholder.png", url: "./games/doge-mining-simulator/" },
+            { name: "Doge Mining Simulator", image: "images/Doge-Mining-Simulator.png", url: "./games/doge-mining-simulator/" },
             { name: "Basket.io", image: "images/Basketball-io.png", url: "./games/basketball-io/" },
             { name: "Baldis Basics", image: "images/Baldis-Basics.png", url: "./games/baldis-basics/"  },
             { name: "Car Simulator", image: "images/Cars-Simulator.png", url: "./games/cars-simulator/"  },
@@ -1678,12 +1697,23 @@
                 sortedGames = [...allGames].sort((a, b) => a.name.localeCompare(b.name));
             }
             
-            const gamesHTML = sortedGames.map(game => `
+            const gamesHTML = sortedGames.map((game, index) => {
+                const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C7C7C7', '#5366FF'];
+                const bgColor = colors[index % colors.length];
+                
+                // Get initials from each word, but limit to first 4 words to avoid too long text
+                const words = game.name.split(' ').filter(word => word.length > 0);
+                const initials = words.slice(0, 4).map(word => word[0]).join('').toUpperCase();
+                
+                return `
                 <div class="game-card" onclick="openGame('${game.name}', '${game.url}')">
-                    <img src="${game.image}" alt="${game.name}" class="game-image" onload="console.log('Image loaded successfully:', this.src)" onerror="console.error('Failed to load image:', this.src)">
+                    <div class="game-image-placeholder" style="background: linear-gradient(135deg, ${bgColor}, ${bgColor}dd); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+                        ${initials}
+                    </div>
                     <h3 class="game-name">${game.name}</h3>
                 </div>
-            `).join('');
+                `;
+            }).join('');
             
             console.log('Generated HTML for first game:', sortedGames[0] ? sortedGames[0].name : 'none');
             console.log('First game image path:', sortedGames[0] ? sortedGames[0].image : 'none');

@@ -1365,41 +1365,83 @@
                 const db = getFirestore(app);
                 
                 onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        // Check if user exists in Firestore (completed registration)
-                        try {
-                            const userDoc = await getDocs(query(collection(db, "users"), where("email", "==", user.email)));
-                            if (!userDoc.empty) {
-                                currentUser = user; // Set global user variable
-                                const userData = userDoc.docs[0].data();
-                                const username = userData.username || 'User';
-                                
-                                // Update profile display
-                                const profileLabel = document.getElementById('profile-label');
-                                const profileIcon = document.getElementById('profile-icon');
-                                
-                                if (profileLabel) profileLabel.textContent = username;
-                                if (profileIcon) {
-                                    profileIcon.setAttribute('data-initial', username[0].toUpperCase());
-                                    // Remove any existing text content
-                                    profileIcon.textContent = '';
-                                }
-                                
-                                // Load user's theme preference
-                                await loadThemeFromFirebase(user);
-                            }
-                        } catch (error) {
-                            console.error('Error loading user data:', error);
-                            // Fallback to localStorage theme
-                            const localTheme = localStorage.getItem('hubble-theme') || 'light';
-                            setTheme(localTheme, false);
+                  if (user) {
+                    try {
+                      const usersRef = collection(db, "users");
+                      const snap = await getDocs(query(usersRef, where("email", "==", user.email)));
+                
+                      if (!snap.empty) {
+                        // Profile exists → continue as before
+                        currentUser = user;
+                        const userData = snap.docs[0].data();
+                        const username = userData.username || 'User';
+                        const profileLabel = document.getElementById('profile-label');
+                        const profileIcon = document.getElementById('profile-icon');
+                        if (profileLabel) profileLabel.textContent = username;
+                        if (profileIcon) {
+                          profileIcon.setAttribute('data-initial', username[0].toUpperCase());
+                          profileIcon.textContent = '';
                         }
-                    } else {
-                        // Not authenticated, redirect to index
-                        currentUser = null;
-                        window.location.href = 'index.html';
+                        await loadThemeFromFirebase(user);
+                        return;
+                      }
+                
+                      // NEW: no profile doc yet
+                      if (!user.emailVerified) {
+                        // Gently block if they’re still unverified
+                        console.warn('User is not verified yet.');
+                        // Show a UI prompt to verify / resend if you have one
+                        return;
+                      }
+                
+                      // NEW: finish registration now that they’re verified
+                      // Prefer saved sign-up data, otherwise fall back to an email-based username.
+                      const pending = JSON.parse(localStorage.getItem('pendingUserData') || '{}');
+                      const username =
+                        (pending && pending.username) || user.email.split('@')[0];
+                      const userId = generateRandomId(12); // or your existing generator
+                
+                      await setDoc(doc(db, "users", user.uid), {
+                        email: user.email,
+                        username,
+                        userId,
+                        createdAt: Date.now(),
+                        following: [],
+                        followers: []
+                      });
+
+                      // Clear pending data so we don’t duplicate work
+                      localStorage.removeItem('pendingUserData');
+
+                      // Continue with your normal “profile exists” path
+                      currentUser = user;
+                      const profileLabel = document.getElementById('profile-label');
+                      const profileIcon = document.getElementById('profile-icon');
+                      if (profileLabel) profileLabel.textContent = username;
+                      if (profileIcon) {
+                        profileIcon.setAttribute('data-initial', username[0].toUpperCase());
+                        profileIcon.textContent = '';
+                      }
+                      await loadThemeFromFirebase(user);
+                
+                    } catch (error) {
+                      console.error('Error during post-verify setup:', error);
+                      // Optional: show UI notice to retry, or log out & prompt sign-in again
                     }
+                  } else {
+                    currentUser = null;
+                    window.location.href = 'index.html';
+                  }
                 });
+                
+                // Helper: simple ID generator (or reuse your existing one)
+                function generateRandomId(len = 12) {
+                  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                  let out = '';
+                  for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random() * chars.length)];
+                  return out;
+                }
+
             } catch (error) {
                 console.error('Auth check failed:', error);
                 window.location.href = 'index.html';

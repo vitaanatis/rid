@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hubble Alpha</title>
+    <title>Hubble | Alpha</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
         :root {
@@ -2115,37 +2115,6 @@
                 }
             }, true);
             
-            // Detect DevTools opening by window size changes (more accurate)
-            let devtoolsOpen = false;
-            let lastInnerWidth = window.innerWidth;
-            let lastInnerHeight = window.innerHeight;
-            
-            setInterval(function() {
-                const currentInnerWidth = window.innerWidth;
-                const currentInnerHeight = window.innerHeight;
-                
-                // Only check if window size actually changed (not just zoom)
-                if (currentInnerWidth !== lastInnerWidth || currentInnerHeight !== lastInnerHeight) {
-                    lastInnerWidth = currentInnerWidth;
-                    lastInnerHeight = currentInnerHeight;
-                    
-                    // More accurate detection - DevTools typically add 300+ pixels
-                    let heightThreshold = window.outerHeight - window.innerHeight > 300;
-                    let widthThreshold = window.outerWidth - window.innerWidth > 300;
-                    
-                    // Additional check: DevTools usually make the window significantly larger
-                    let significantSizeIncrease = (window.outerHeight > window.innerHeight * 1.2) || 
-                                                (window.outerWidth > window.innerWidth * 1.2);
-                    
-                    if ((heightThreshold || widthThreshold) && significantSizeIncrease) {
-                        if (!devtoolsOpen) {
-                            devtoolsOpen = true;
-                            document.documentElement.innerHTML = '<body style="background:#000;color:#ff0000;text-align:center;padding-top:40vh;font-size:24px;">ACCESS DENIED</body>';
-                            setTimeout(() => window.location.href = 'about:blank', 500);
-                        }
-                    }
-                }
-            }, 1000); // Less frequent checks
             
             // Console detection
             let consoleDetectionCount = 0;

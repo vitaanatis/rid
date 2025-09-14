@@ -1749,6 +1749,7 @@
                 
                 return `
                 <div class="game-card" onclick="openGame('${game.name}', '${game.url}')">
+                <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
                     <h3 class="game-name">${game.name}</h3>
                 </div>
                 `;

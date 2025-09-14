@@ -1359,7 +1359,7 @@
         async function checkAuthAndLoadUser() {
             try {
                 const { getAuth, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
-                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { getFirestore, collection, query, where, getDocs, setDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
                 const { app } = await import('./firebase.js');
                 const auth = getAuth(app);
                 const db = getFirestore(app);

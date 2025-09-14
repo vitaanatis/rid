@@ -838,6 +838,50 @@
             border: 2px solid var(--secondary);
             transition: border-color 0.3s ease;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--placeholder-bg, #FF6384), var(--placeholder-bg-secondary, #FF8FA3));
+            z-index: -1;
+        }
+        
+        .game-image-placeholder::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: placeholder-shine 3s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        @keyframes placeholder-shine {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .game-image-placeholder .placeholder-text {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            line-height: 1;
         }
         
         body[data-theme="dark"] .game-image {
@@ -847,6 +891,10 @@
         
         body[data-theme="dark"] .game-image-placeholder {
             border-color: #2c3550;
+        }
+        
+        body[data-theme="dark"] .game-image-placeholder::before {
+            background: linear-gradient(135deg, var(--placeholder-bg, #4A5568), var(--placeholder-bg-secondary, #2D3748));
         }
         
         .game-card:hover .game-image {
@@ -1726,6 +1774,43 @@
             }, 200);
         }
         
+        // Function to generate game name abbreviation
+        function generateGameAbbreviation(gameName) {
+            const words = gameName.split(' ').filter(word => word.length > 0);
+            
+            // Take first character of each word, limit to 4 characters max
+            const abbreviation = words
+                .slice(0, 4) // Limit to first 4 words
+                .map(word => word[0]) // Get first character of each word
+                .join('')
+                .toUpperCase();
+            
+            return abbreviation;
+        }
+        
+        // Function to get random color for placeholder
+        function getRandomPlaceholderColor() {
+            const colors = [
+                { primary: '#FF6384', secondary: '#FF8FA3' }, // Pink
+                { primary: '#36A2EB', secondary: '#5BB3F0' }, // Blue
+                { primary: '#FFCE56', secondary: '#FFD675' }, // Yellow
+                { primary: '#4BC0C0', secondary: '#6BCACA' }, // Teal
+                { primary: '#9966FF', secondary: '#AD7AFF' }, // Purple
+                { primary: '#FF9F40', secondary: '#FFB366' }, // Orange
+                { primary: '#C7C7C7', secondary: '#D4D4D4' }, // Gray
+                { primary: '#5366FF', secondary: '#6B7AFF' }, // Indigo
+                { primary: '#FF6B6B', secondary: '#FF8A8A' }, // Red
+                { primary: '#4ECDC4', secondary: '#6DD5CE' }, // Mint
+                { primary: '#45B7D1', secondary: '#6BC5D8' }, // Sky Blue
+                { primary: '#96CEB4', secondary: '#A8D5C1' }, // Green
+                { primary: '#FFEAA7', secondary: '#FFEDB8' }, // Light Yellow
+                { primary: '#DDA0DD', secondary: '#E4B3E4' }, // Plum
+                { primary: '#98D8C8', secondary: '#A8DFD1' }  // Aqua
+            ];
+            
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
         function populateGamesGrid() {
             const gamesGrid = document.getElementById('games-grid');
             
@@ -1753,16 +1838,13 @@
             }
             
             const gamesHTML = sortedGames.map((game, index) => {
-                const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C7C7C7', '#5366FF'];
-                const bgColor = colors[index % colors.length];
-                
-                // Get initials from each word, but limit to first 4 words to avoid too long text
-                const words = game.name.split(' ').filter(word => word.length > 0);
-                const initials = words.slice(0, 4).map(word => word[0]).join('').toUpperCase();
+                const abbreviation = generateGameAbbreviation(game.name);
+                const colorScheme = getRandomPlaceholderColor();
                 
                 return `
                 <div class="game-card" onclick="openGame('${game.name}', '${game.url}')">
-                <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
+                    <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" 
+                         onerror="showGamePlaceholder(this, '${abbreviation}', '${colorScheme.primary}', '${colorScheme.secondary}')">
                     <h3 class="game-name">${game.name}</h3>
                 </div>
                 `;
@@ -1773,6 +1855,34 @@
             
             gamesGrid.innerHTML = gamesHTML;
         }
+        
+        // Function to show placeholder when image fails to load
+        function showGamePlaceholder(imgElement, abbreviation, primaryColor, secondaryColor) {
+            console.log('showGamePlaceholder called with:', { abbreviation, primaryColor, secondaryColor });
+            
+            const gameCard = imgElement.closest('.game-card');
+            if (!gameCard) {
+                console.error('Could not find game card for image element');
+                return;
+            }
+            
+            // Create placeholder element
+            const placeholder = document.createElement('div');
+            placeholder.className = 'game-image-placeholder';
+            placeholder.style.setProperty('--placeholder-bg', primaryColor);
+            placeholder.style.setProperty('--placeholder-bg-secondary', secondaryColor);
+            
+            const textElement = document.createElement('div');
+            textElement.className = 'placeholder-text';
+            textElement.textContent = abbreviation;
+            placeholder.appendChild(textElement);
+            
+            // Replace the image with placeholder
+            imgElement.parentNode.replaceChild(placeholder, imgElement);
+            
+            console.log(`Successfully showing placeholder for game with abbreviation: ${abbreviation}`);
+        }
+        
         
         function setupGamesSearch() {
             const searchInput = document.getElementById('games-search');

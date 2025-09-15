@@ -1368,6 +1368,42 @@
         body[data-theme="dark"] .game-name {
             color: var(--text-dark);
         }
+        /* Coming Soon Game Card */
+.game-card.coming-soon {
+    position: relative;
+    background: transparent;
+    border-radius: 16px;
+    padding: 0;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    cursor: default;
+}
+
+.game-card.coming-soon .game-image-placeholder {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    border: 2px dashed var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--secondary);
+    background: rgba(0,0,0,0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Optional hover effect for "Coming Soon" */
+.game-card.coming-soon:hover .game-image-placeholder {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,0,0,0.4);
+}
+
         
         /* Game Fullscreen */
         .game-fullscreen {
@@ -2145,7 +2181,7 @@
             { name: "Slope", image: "images/Slope.png", url: "./games/slope.html" },
             { name: "Snow Rider 3D", image: "images/Snow-Rider-3d.png", url: "./games/Snow Rider 3D.html" },
             { name: "Tetris", image: "images/Tetris.png", url: "./games/Tetris.html" },
-            { name: "Appel", image: "images/Appel.png", url: "./games/Appel.html" },
+            { name: "Appel", comingSoon: true },
             { name: "Arena", image: "images/Arena.png", url: "./games/Arena.html" },
             { name: "Space Huggers", image: "images/Space-Huggers.png", url: "./games/spacehuggers.html" },
             { name: "Stack", image: "images/Stack.png", url: "./games/stack.html" },
@@ -2154,19 +2190,19 @@
             { name: "Eaglercraft", image: "images/Eaglercraft.png", url: "./games/eaglercraft.1.8.8.html" },
             { name: "1v1.LOL", image: "images/1v1-lol.png", url: "./games/1v1.lol/index.html" },
             { name: "Ball Blast", image: "images/Ball-Blast.png", url: "./games/ball-blast.html" },
-            { name: "Multiplayer Appel", image: "images/Appel-Multiplayer.png", url: "./games/appel-multiplayer.html" },
+            { name: "Multiplayer Appel", comingSoon: true },
             { name: "2048", image: "images/2048.png", url: "./games/2048.html" },
             { name: "Volcanic Appel", image: "images/Volcanic-Appel.png", url: "./games/Volcanic-Appel.html" },
             { name: "Agar.io", image: "images/agario.png", url: "./games/agario.html" },
-            { name: "Astrotype", image: "images/Astrotype.png", url: "/games/astrotype.html" },
+            { name: "Astrotype", comingSoon: true },
             { name: "Basketball Stars", image: "images/Basketball-Stars.png", url: "./games/basketball-stars/" },
             { name: "1", image: "images/1.png", url: "./games/1/" },
-            { name: "2048 Multitask", image: "images/2048-Mulitask.png", url: "./games/2048-Multitask/" },
+            { name: "2048 Multitask", comingSoon: true },
             { name: "Angry Birds", image: "images/Angry-Birds.png", url: "./games/angry-birds/" },
             { name: "Among Us", image: "images/Among-Us.png", url: "./games/among-us/" },
             { name: "The Binding Of Issac", image: "images/The-Binding-Of-Isaac.png", url: "./games/binding-of-isaac/" },
             { name: "Cookie Clicker", image: "images/Cookie-Clicker.png", url: "./games/cookieclicker/" },
-            { name: "Chrome Dino", image: "images/Chrome-Dino.png", url: "./games/dino.html" },
+            { name: "Chrome Dino", comingSoon: true },
             { name: "Duck Life", image: "images/Duck-Life.png", url: "./games/ducklife/" },
             { name: "Duck Life 2", image: "images/Duck-Life-2.png", url: "./games/ducklife2/" },
             { name: "Duck Life 3", image: "images/Duck-Life-3.png", url: "./games/ducklife3/" },
@@ -2189,7 +2225,7 @@
             { name: "Learn To Fly Idle", image: "images/Learn-To-Fly-Idle.png", url: "./games/flash/?game=learn-to-fly-idle" },
             { name: "Gun Mayhem", image: "images/Gun-Mayhem.png", url: "./games/flash/?game=gun-mayhem" },
             { name: "Gun Mayhem 2", image: "images/Gun-Mayhem-2.png", url: "./games/flash/?game=gun-mayhem-2" },
-            { name: "Gun Spin", image: "images/Gunspin.png", url: "./games/gunspin/" },
+            { name: "Gun Spin", comingSoon: true },
             { name: "Google Snake", image: "images/Google-Snake.png", url: "./games/google-snake/" },
             { name: "Doge Miner", image: "images/Doge-miner.png", url: "./games/DogeMiner/" },
             { name: "Doge Miner 2", image: "images/Doge-Miner-2.png", url: "./games/doge-miner-2/" },
@@ -2198,7 +2234,6 @@
             { name: "Craftmine", image: "images/Craftmine.png", url: "./games/craftmine/" },
             { name: "Volley Random", image: "images/Volley-Random.png", url: "./games/volley-random/" },
             { name: "Basket Random", image: "images/Basket-Random.png", url: "./games/basket-random/" },
-            { name: "Boxing Random", image: "images/Boxing-Random.png", url: "./games/boxing-random/" },
             { name: "Soccer Random", image: "images/Soccer-Random.png", url: "./games/soccer-random/" },
             { name: "Drift Boss", image: "images/Drift-Boss.png", url: "./games/drift-boss/" },
             { name: "Drive Mad", image: "images/Drive-Mad.png", url: "./games/drive-mad/" },
@@ -2208,9 +2243,9 @@
             { name: "A Game Inside", image: "images/A-Game-Inside.png", url: "./games/game-inside/" },
             { name: "Tanuki Sunset", image: "images/Tanuki-Sunset.png", url: "./games/tanuki-sunset/" },
             { name: "Blumgi Ball", image: "images/Blumgi-Ball.png", url: "./games/blumgi-ball/" },
-            { name: "PolyTrack", image: "images/Polytrack.png", url: "./games/polytrack/" },
+            { name: "PolyTrack", comingSoon: true },
             { name: "Iron Snout", image: "images/iron-snout.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/811766381464516446/files/index.html" },
-            { name: "Bacon May Die", image: "images/Bacon-May-Die.png", url: "http://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/320690105873469650/files/index.html" },
+            { name: "Bacon May Die", image: "images/Bacon-May-Die.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/320690105873469650/files/index.html" },
             { name: "N-gon", image: "images/n-gon.png", url: "./games/n-gon/" },
             { name: "Vex 3", image: "images/vex-3.png", url: "./games/vex-3/" },
             { name: "Vex 4", image: "images/Vex-4.png", url: "./games/vex-4/" },
@@ -2222,8 +2257,8 @@
             { name: "Backrooms", image: "images/Backrooms.png", url: "./games/backrooms/" },
             { name: "Geometry Dash Remastered", image: "images/geometry-Dash-Remastered.png", url: "./games/geometry-dash-remastered/" },
             { name: "Burrito Bison", image: "images/burrito-Bison.png", url: "./games/burrito-bison/" },
-            { name: "Cut The Rope ", image: "images/cut-the-rope.png", url: "./games/cuttherope/" },
-            { name: "Cut The Rope 2", image: "images/Cut-The-Rope-2.png", url: "./games/cuttherope-2/" },
+            { name: "Cut The Rope ", comingSoon: true },
+            { name: "Cut The Rope 2", comingSoon: true },
             { name: "Cannon Basketball 4", image: "images/Cannon-Basketball.png", url: "./games/cannon-basketball-4/" },
             { name: "Doge Mining Simulator", image: "images/Doge-Mining-Simulator.png", url: "./games/doge-mining-simulator/" },
             { name: "Basket.io", image: "images/Basketball-io.png", url: "./games/basketball-io/" },
@@ -2238,11 +2273,11 @@
             { name: "Particle Clicker", image: "images/Particle-Clicker.png", url: "./games/particleclicker/"  },
             { name: "Escape Road", image: "images/Escape-Road.png", url: "./games/escape-road/"  },
             { name: "Escape Road 2", image: "images/Escape-Road-2.png", url: "./games/escape-road-2/"  },
-            { name: "Escape Road City", image: "images/Escape-Road-City.png", url: "./games/escape-road-city/"  },
-            { name: "Escape Road City 2", image: "images/Escape-Road-City-2.png", url: "./games/escape-road-city-2/"  },
+            { name: "Escape Road City", comingSoon: true },
+            { name: "Escape Road City 2",comingSoon: true },
             { name: "Wordle", image: "images/Wordle.png", url: "./games/wordle/"  },
             { name: "Yohoho", image: "images/Yohoho.png", url: "./games/yohoho/"  },
-            { name: "Gladihoppers", image: "images/Gladihoppers.png", url: "./games/gladihoppers/"  },
+            { name: "Gladihoppers", comingSoon: true },
         ];
         
         let allGames = [];

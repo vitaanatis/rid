@@ -124,6 +124,462 @@
         body[data-theme="dark"] .search-bar-custom:focus {
             background: #232a3a;
         }
+        
+        /* Progress Bar Styles */
+        .registration-progress-bar {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            max-width: 40vw;
+            min-width: 200px;
+            height: 38px;
+            border-radius: 8px;
+            border: 1.5px solid var(--secondary);
+            background: #ffffff;
+            z-index: 10;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        body[data-theme="dark"] .registration-progress-bar {
+            background: #232a3a;
+            border: 1.5px solid var(--sidebar-border-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-bar-track {
+            width: 85%;
+            height: 8px;
+            background: rgba(160, 170, 255, 0.3);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(160, 170, 255, 0.4);
+        }
+        
+        body[data-theme="dark"] .progress-bar-track {
+            background: rgba(160, 170, 255, 0.1);
+            border: 1px solid rgba(160, 170, 255, 0.2);
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%);
+            background-size: 400% 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: hubble-gradient-flow 12s linear infinite;
+            position: relative;
+        }
+        
+        .progress-milestones {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .milestone-marker {
+            position: absolute;
+            top: -2px;
+            width: 2px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 1px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        body[data-theme="dark"] .milestone-marker {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .milestone-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+        
+        body[data-theme="dark"] .milestone-label {
+            color: var(--text-dark);
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-align: center;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 10px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        body[data-theme="dark"] .progress-text {
+            color: var(--text-dark);
+            background: rgba(35, 42, 58, 0.95);
+            border: 1px solid rgba(160, 170, 255, 0.3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gift-emoji {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            animation: gift-bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes gift-bounce {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-60%) scale(1.1); }
+        }
+        
+        /* Onboarding Animation Styles */
+        .onboarding-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .onboarding-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .onboarding-gift {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            z-index: 10001;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: gift-bounce-onboarding 2s ease-in-out infinite;
+        }
+        
+        @keyframes gift-bounce-onboarding {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -60%) scale(1.1); }
+        }
+        
+        .onboarding-gift.shrinking {
+            font-size: 1.2rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: none;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+        
+        .onboarding-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            z-index: 10002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 600px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10001;
+            overflow: hidden;
+        }
+        
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confetti-fall linear forwards;
+            opacity: 0.9;
+        }
+        
+        .confetti-piece:nth-child(2n) { background: #4ecdc4; }
+        .confetti-piece:nth-child(3n) { background: #45b7d1; }
+        .confetti-piece:nth-child(4n) { background: #96ceb4; }
+        .confetti-piece:nth-child(5n) { background: #feca57; }
+        .confetti-piece:nth-child(6n) { background: #ff9ff3; }
+        .confetti-piece:nth-child(7n) { background: #54a0ff; }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        
+        .onboarding-container.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        
+        
+        .onboarding-text {
+            text-align: center;
+            color: var(--text-light);
+            line-height: 1.6;
+            background: var(--background-light);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        body[data-theme="dark"] .onboarding-text {
+            background: var(--sidebar-bg-dark);
+            border-color: var(--sidebar-border-dark);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: var(--text-dark);
+        }
+        
+        .onboarding-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .onboarding-description {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .onboarding-proceed-btn {
+            background: linear-gradient(135deg, #009CFC, #0088e5);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 156, 252, 0.3);
+        }
+        
+        .onboarding-proceed-btn:hover {
+            background: linear-gradient(135deg, #0088e5, #0077d1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 156, 252, 0.4);
+        }
+        
+        .onboarding-progress-bar {
+            position: relative;
+            width: 400px;
+            max-width: 40vw;
+            min-width: 200px;
+            height: 38px;
+            border-radius: 8px;
+            border: 1.5px solid var(--secondary);
+            background: #ffffff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            visibility: visible;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body[data-theme="dark"] .onboarding-progress-bar {
+            background: #232a3a;
+            border: 1.5px solid var(--sidebar-border-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .onboarding-progress-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .onboarding-progress-track {
+            width: 85%;
+            height: 8px;
+            background: rgba(160, 170, 255, 0.3);
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .onboarding-progress-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%);
+            background-size: 400% 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: hubble-gradient-flow 12s linear infinite;
+            position: relative;
+        }
+        
+        .onboarding-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-align: center;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(160, 170, 255, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        body[data-theme="dark"] .onboarding-progress-text {
+            color: var(--text-dark);
+            background: rgba(35, 42, 58, 0.95);
+            border: 1px solid rgba(160, 170, 255, 0.3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .onboarding-gift-small {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            z-index: 3;
+        }
+        
+        
+        .onboarding-progress-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .onboarding-progress-track {
+            width: 85%;
+            height: 8px;
+            background: rgba(160, 170, 255, 0.3);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(160, 170, 255, 0.4);
+        }
+        
+        body[data-theme="dark"] .onboarding-progress-track {
+            background: rgba(160, 170, 255, 0.1);
+            border: 1px solid rgba(160, 170, 255, 0.2);
+        }
+        
+        .onboarding-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%);
+            background-size: 400% 100%;
+            border-radius: 4px;
+            animation: hubble-gradient-flow 12s linear infinite;
+            position: relative;
+        }
+        
+        .onboarding-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-align: center;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 10px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        body[data-theme="dark"] .onboarding-progress-text {
+            color: var(--text-dark);
+            background: rgba(35, 42, 58, 0.95);
+            border: 1px solid rgba(160, 170, 255, 0.3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .onboarding-gift-small {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            animation: gift-bounce 2s ease-in-out infinite;
+        }
         .profile-area {
             display: flex;
             align-items: center;
@@ -684,10 +1140,15 @@
         .games-search-section.sticky {
             position: fixed;
             top: 56px;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 99;
             background: var(--background-light);
             padding: 0.5rem 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
         }
         
         /* Create a placeholder element to maintain layout */
@@ -1067,6 +1528,11 @@
                 max-width: 35vw;
                 min-width: 100px;
             }
+            .registration-progress-bar {
+                width: 200px;
+                max-width: 35vw;
+                min-width: 100px;
+            }
         }
         
         @media (max-width: 600px) {
@@ -1082,6 +1548,11 @@
                 max-width: 30vw;
                 min-width: 80px;
             }
+            .registration-progress-bar {
+                width: 150px;
+                max-width: 30vw;
+                min-width: 80px;
+            }
             .theme-toggle { right: 1rem; bottom: 1rem; }
             .help-button { left: 1rem; bottom: 1rem; }
         }
@@ -1090,7 +1561,18 @@
 <body data-theme="light">
     <div class="topbar">
         <span class="hubble-gradient">Hubble</span>
-        <input id="search-bar" class="search-bar-custom" type="text" placeholder="Search Bar Unavailable" autocomplete="off" />
+        <div id="registration-progress-bar" class="registration-progress-bar">
+            <div class="progress-bar-container">
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    <div class="progress-milestones" id="progress-milestones">
+                        <!-- Milestone markers will be added by JavaScript -->
+                </div>
+                </div>
+                <div class="progress-text" id="progress-text">Loading...</div>
+                <div class="gift-emoji">🎁</div>
+            </div>
+        </div>
         <span class="profile-area">
             <span class="profile-label" id="profile-label">User</span>
             <span class="profile-icon" id="profile-icon" data-initial="U"></span>
@@ -1248,6 +1730,23 @@
     <div class="game-fullscreen" id="game-fullscreen">
         <iframe class="game-content" id="game-content" src=""></iframe>
     </div>
+    
+    <!-- Onboarding Animation -->
+    <div class="onboarding-overlay" id="onboarding-overlay">
+        <div class="onboarding-gift" id="onboarding-gift">🎁</div>
+        <div class="onboarding-container" id="onboarding-container">
+            <div class="onboarding-text">
+                <h2 class="onboarding-title">Welcome to Hubble's Launch Event!</h2>
+                <p class="onboarding-description">
+                    This is the first event of <strong>Hubble</strong>. Here, as our <strong>Hubble</strong> community grows and reaches milestone user counts, we unlock special rewards. The final milestone grants every registered user an exclusive prize when <strong>Hubble</strong> officially launches!
+                </p>
+                <button class="onboarding-proceed-btn" id="onboarding-proceed-btn">Proceed</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confetti-container"></div>
     
     <script>
         // Help System Functions
@@ -1443,6 +1942,10 @@
                           profileIcon.textContent = '';
                         }
                         await loadThemeFromFirebase(user);
+                        // Check for onboarding after user is loaded
+                        setTimeout(() => {
+                            checkAndStartOnboarding();
+                        }, 1000);
                         return;
                       }
                 
@@ -1483,6 +1986,10 @@
                         profileIcon.textContent = '';
                       }
                       await loadThemeFromFirebase(user);
+                      // Check for onboarding after user is loaded
+                      setTimeout(() => {
+                          checkAndStartOnboarding();
+                      }, 1000);
                 
                     } catch (error) {
                       console.error('Error during post-verify setup:', error);
@@ -1739,7 +2246,7 @@
             { name: "Basket.io", image: "images/Basketball-io.png", url: "./games/basketball-io/" },
             { name: "Baldis Basics", image: "images/Baldis-Basics.png", url: "./games/baldis-basics/"  },
             { name: "Car Simulator", image: "images/Cars-Simulator.png", url: "./games/cars-simulator/"  },
-            { name: "Racer", image: "images/Racer.png", url: "./games/racer/"  },
+            { name: "Racer", image: "images/racer.png", url: "./games/racer/"  },
             { name: "Bloxorz", image: "images/Bloxorz.png", url: "./games/bloxors/"  },
             { name: "Boxel Rebound", image: "images/Boxel-Rebound.png", url: "./games/boxel-rebound/"  },
             { name: "Gravity Soccer", image: "images/gravity-soccer.png", url: "./games/gravity-soccer/"  },
@@ -1988,7 +2495,7 @@
         function enterGameMode(gameName) {
             const topbar = document.querySelector('.topbar');
             const hubbleTitle = document.querySelector('.hubble-gradient');
-            const searchBar = document.getElementById('search-bar');
+            const progressBar = document.getElementById('registration-progress-bar');
             
             // Add game mode class
             topbar.classList.add('game-mode');
@@ -2001,15 +2508,15 @@
             // Change title to game name
             hubbleTitle.textContent = gameName;
             
-            // Hide search bar and create game controls in header
-            if (searchBar) {
-                searchBar.style.display = 'none';
+            // Hide progress bar and create game controls in header
+            if (progressBar) {
+                progressBar.style.display = 'none';
                 createGameControlsInHeader();
             }
         }
         
         function createGameControlsInHeader() {
-            const searchBar = document.getElementById('search-bar');
+            const progressBar = document.getElementById('registration-progress-bar');
             
             // Remove existing controls if any
             removeGameControlsFromHeader();
@@ -2036,8 +2543,8 @@
             gameControls.appendChild(fullscreenBtn);
             gameControls.appendChild(exitBtn);
             
-            // Insert after search bar
-            searchBar.parentNode.insertBefore(gameControls, searchBar.nextSibling);
+            // Insert after progress bar
+            progressBar.parentNode.insertBefore(gameControls, progressBar.nextSibling);
         }
         
         function removeGameControlsFromHeader() {
@@ -2094,7 +2601,7 @@
             const gameContent = document.getElementById('game-content');
             const topbar = document.querySelector('.topbar');
             const hubbleTitle = document.querySelector('.hubble-gradient');
-            const searchBar = document.getElementById('search-bar');
+            const progressBar = document.getElementById('registration-progress-bar');
             
             // Exit tab fullscreen if active
             if (isTabFullscreen) {
@@ -2114,9 +2621,9 @@
             topbar.classList.remove('game-mode');
             hubbleTitle.textContent = topbar.dataset.originalTitle || 'Hubble';
             
-            // Restore search bar
-            if (searchBar) {
-                searchBar.style.display = 'block';
+            // Restore progress bar
+            if (progressBar) {
+                progressBar.style.display = 'flex';
             }
             
             // Show post button again
@@ -2160,17 +2667,22 @@
             // Wait for everything to be fully loaded
             setTimeout(() => {
                 const searchSectionOriginalTop = searchSection.offsetTop;
-                const searchSectionOriginalLeft = searchSection.offsetLeft;
                 
                 window.addEventListener("scroll", function () {
                     if (window.scrollY >= searchSectionOriginalTop) {
                         searchSection.classList.add("sticky");
-                        if (placeholder) placeholder.classList.add('active');
-                        searchSection.style.left = `${searchSectionOriginalLeft}px`;
+                        if (placeholder) {
+                            placeholder.classList.add('active');
+                            placeholder.style.height = searchSection.offsetHeight + 'px';
+                        }
+                        console.log('Search bar is now sticky');
                     } else {
                         searchSection.classList.remove("sticky");
-                        if (placeholder) placeholder.classList.remove('active');
-                        searchSection.style.left = "";
+                        if (placeholder) {
+                            placeholder.classList.remove('active');
+                            placeholder.style.height = '0px';
+                        }
+                        console.log('Search bar is no longer sticky');
                     }
                 });
             }, 1000); // Wait to ensure everything is loaded
@@ -2187,11 +2699,236 @@
             };
         }
         
+        // Registration Progress Bar Functions
+        async function fetchRegisteredUserCount() {
+            try {
+                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                // Query users with registrationCompleted = true
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("registrationCompleted", "==", true));
+                const querySnapshot = await getDocs(q);
+                
+                return querySnapshot.size;
+            } catch (error) {
+                console.error('Error fetching user count:', error);
+                return 0;
+            }
+        }
+        
+        function createMilestoneMarkers() {
+            const milestonesContainer = document.getElementById('progress-milestones');
+            if (!milestonesContainer) return;
+            
+            const milestones = [100, 300, 500, 700, 900, 1000];
+            const maxUsers = 1000;
+            
+            milestones.forEach(milestone => {
+                const percentage = (milestone / maxUsers) * 100;
+                
+                const marker = document.createElement('div');
+                marker.className = 'milestone-marker';
+                marker.style.left = `${percentage}%`;
+                
+                const label = document.createElement('div');
+                label.className = 'milestone-label';
+                label.textContent = milestone;
+                label.style.left = `${percentage}%`;
+                
+                milestonesContainer.appendChild(marker);
+                milestonesContainer.appendChild(label);
+            });
+        }
+        
+        async function updateProgressBar() {
+            try {
+                const userCount = await fetchRegisteredUserCount();
+                const milestones = [100, 300, 500, 700, 900, 1000];
+                
+                // Find current milestone range for text display
+                let nextMilestone = 100;
+                for (let i = 0; i < milestones.length; i++) {
+                    if (userCount < milestones[i]) {
+                        nextMilestone = milestones[i];
+                        break;
+                    }
+                }
+                
+                // Calculate progress toward 1000 for the bar fill
+                const maxUsers = 1000;
+                const percentage = Math.min((userCount / maxUsers) * 100, 100);
+                
+                const progressFill = document.getElementById('progress-bar-fill');
+                const progressText = document.getElementById('progress-text');
+                
+                if (progressFill) {
+                    progressFill.style.width = `${percentage}%`;
+                }
+                
+                if (progressText) {
+                    if (userCount >= 1000) {
+                        progressText.textContent = '1000+ Users';
+                    } else {
+                        progressText.textContent = `${userCount} / ${nextMilestone} Users`;
+                    }
+                }
+                
+                console.log(`Progress bar updated: ${userCount} registered users (${percentage.toFixed(1)}% toward 1000, showing ${userCount}/${nextMilestone})`);
+            } catch (error) {
+                console.error('Error updating progress bar:', error);
+                const progressText = document.getElementById('progress-text');
+                if (progressText) {
+                    progressText.textContent = 'Error loading data';
+                }
+            }
+        }
+        
+        // Initialize progress bar
+        function initProgressBar() {
+            createMilestoneMarkers();
+            updateProgressBar();
+            
+            // Update every 30 seconds
+            setInterval(updateProgressBar, 30000);
+        }
+        
+        // Onboarding Animation Functions
+        async function checkAndStartOnboarding() {
+            try {
+                const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                if (!currentUser) return;
+                
+                // Check if user has eventReady field
+                const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
+                const userDocs = await getDocs(userQuery);
+                
+                if (!userDocs.empty) {
+                    const userData = userDocs.docs[0].data();
+                    
+                    // If eventReady doesn't exist, start onboarding
+                    if (userData.eventReady === undefined) {
+                        startOnboardingAnimation();
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking onboarding status:', error);
+            }
+        }
+        
+        async function setEventReady() {
+            try {
+                const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                if (!currentUser) return;
+                
+                const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
+                const userDocs = await getDocs(userQuery);
+                
+                if (!userDocs.empty) {
+                    const userDocRef = doc(db, "users", userDocs.docs[0].id);
+                    await updateDoc(userDocRef, { eventReady: true });
+                    console.log('Event ready status set to true');
+                }
+            } catch (error) {
+                console.error('Error setting event ready status:', error);
+            }
+        }
+        
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti-container');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+            
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            
+            confettiContainer.appendChild(confetti);
+            
+            // Remove confetti after animation completes
+            setTimeout(() => {
+                if (confetti.parentNode) {
+                    confetti.parentNode.removeChild(confetti);
+                }
+            }, 5000);
+        }
+        
+        function startConfetti() {
+            // Create confetti every 30ms for much more confetti
+            const confettiInterval = setInterval(createConfetti, 30);
+            
+            // Store interval ID for cleanup
+            window.confettiInterval = confettiInterval;
+        }
+        
+        function stopConfetti() {
+            if (window.confettiInterval) {
+                clearInterval(window.confettiInterval);
+                window.confettiInterval = null;
+            }
+        }
+        
+        function startOnboardingAnimation() {
+            const overlay = document.getElementById('onboarding-overlay');
+            const gift = document.getElementById('onboarding-gift');
+            const container = document.getElementById('onboarding-container');
+            const proceedBtn = document.getElementById('onboarding-proceed-btn');
+            const realProgressBar = document.getElementById('registration-progress-bar');
+            
+            // Hide the real progress bar initially
+            if (realProgressBar) {
+                realProgressBar.style.display = 'none';
+            }
+            
+            // Show overlay and gift
+            overlay.classList.add('show');
+            
+            // Start confetti immediately
+            startConfetti();
+            
+            // After 2 seconds, shrink gift to center
+            setTimeout(() => {
+                gift.classList.add('shrinking');
+                
+                // After gift shrinks, show container with text
+                setTimeout(() => {
+                    container.classList.add('show');
+                }, 1200);
+            }, 2000);
+            
+            // Setup proceed button
+            proceedBtn.addEventListener('click', () => {
+                // Fade out overlay (but keep confetti running)
+                overlay.classList.remove('show');
+                
+                // Show real progress bar
+                if (realProgressBar) {
+                    realProgressBar.style.display = 'flex';
+                }
+                
+                // Stop generating new confetti
+                stopConfetti();
+                
+                // Set eventReady in Firebase
+                setEventReady();
+            });
+        }
+        
         // Initialize games section and auth on load
         document.addEventListener('DOMContentLoaded', function() {
             checkAuthAndLoadUser();
             initGamesSection();
             setupProfileDropdown();
+            initProgressBar();
             
             // Setup help button
             const helpButton = document.getElementById('help-button');

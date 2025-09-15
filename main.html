@@ -1150,35 +1150,6 @@
             position: relative;
         }
         
-        .games-search-section.sticky {
-            position: fixed;
-            top: 56px;
-            left: 0;
-            right: 0;
-            width: 100%;
-            z-index: 99;
-            background: var(--background-light);
-            padding: 0.5rem 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: center;
-        }
-        
-        /* Create a placeholder element to maintain layout */
-        .games-search-placeholder {
-            height: 0;
-            transition: height 0.2s ease;
-            overflow: hidden;
-        }
-        
-        .games-search-placeholder.active {
-            height: 60px;
-        }
-        
-        body[data-theme="dark"] .games-search-section.sticky {
-            background: var(--background-dark);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
         
         .games-search-bar {
             width: 100%;
@@ -1600,7 +1571,6 @@
                 <div class="games-search-section">
                     <input type="text" id="games-search" class="games-search-bar" placeholder="Search games..." autocomplete="off">
                 </div>
-                <div class="games-search-placeholder" id="games-search-placeholder"></div>
                 <div class="games-grid" id="games-grid">
                     <div class="games-loading">Loading games...</div>
                 </div>
@@ -2288,10 +2258,6 @@
                 console.log('Populating games grid...');
                 populateGamesGrid();
                 setupGamesSearch();
-                // Setup sticky search after everything is initialized with additional delay
-                setTimeout(() => {
-                    setupStickySearch();
-                }, 300);
             }, 200);
         }
         
@@ -2419,12 +2385,6 @@
             });
             
             searchInput.addEventListener('input', function() {
-                // Auto-scroll to top if search bar is sticky and user is typing
-                const searchSection = document.querySelector('.games-search-section');
-                if (searchSection && searchSection.classList.contains('sticky')) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-                }
                 const searchTerm = this.value.toLowerCase().trim();
                 
                 if (!searchTerm) {
@@ -2669,49 +2629,6 @@
             }
         });
         
-        // Sticky search bar functionality
-        function setupStickySearch() {
-            const searchSection = document.querySelector('.games-search-section');
-            const placeholder = document.getElementById('games-search-placeholder');
-            
-            if (!searchSection) {
-                return;
-            }
-            
-            // Wait for everything to be fully loaded
-            setTimeout(() => {
-                const searchSectionOriginalTop = searchSection.offsetTop;
-                
-                window.addEventListener("scroll", function () {
-                    if (window.scrollY >= searchSectionOriginalTop) {
-                        searchSection.classList.add("sticky");
-                        if (placeholder) {
-                            placeholder.classList.add('active');
-                            placeholder.style.height = searchSection.offsetHeight + 'px';
-                        }
-                        console.log('Search bar is now sticky');
-                    } else {
-                        searchSection.classList.remove("sticky");
-                        if (placeholder) {
-                            placeholder.classList.remove('active');
-                            placeholder.style.height = '0px';
-                        }
-                        console.log('Search bar is no longer sticky');
-                    }
-                });
-            }, 1000); // Wait to ensure everything is loaded
-            
-            // Add manual test function
-            window.testSticky = function() {
-                searchSection.classList.add("sticky");
-                if (placeholder) placeholder.classList.add('active');
-            };
-            
-            window.removeSticky = function() {
-                searchSection.classList.remove("sticky");
-                if (placeholder) placeholder.classList.remove('active');
-            };
-        }
         
         // Registration Progress Bar Functions
         async function fetchRegisteredUserCount() {
@@ -2934,6 +2851,22 @@
                 
                 // Set eventReady in Firebase
                 setEventReady();
+                
+                // Remove onboarding elements after fade out completes
+                setTimeout(() => {
+                    // Remove the entire onboarding overlay
+                    if (overlay && overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                }, 800); // Wait for CSS transition to complete (0.8s)
+                
+                // Remove confetti container after all confetti has fallen (5 seconds + buffer)
+                setTimeout(() => {
+                    const confettiContainer = document.getElementById('confetti-container');
+                    if (confettiContainer && confettiContainer.parentNode) {
+                        confettiContainer.parentNode.removeChild(confettiContainer);
+                    }
+                }, 6000); // 5 seconds for confetti to fall + 1 second buffer
             });
         }
         
@@ -2951,12 +2884,6 @@
             }
         });
         
-        // Backup sticky setup on window load
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                setupStickySearch();
-            }, 500);
-        });
         
         // Track game time when page is unloaded
         window.addEventListener('beforeunload', async () => {

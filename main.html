@@ -2106,9 +2106,8 @@
             
             if (timeSpentMinutes > 0) { // Only track if at least 1 minute was spent
                 try {
-                    const { getFirestore, doc, updateDoc, increment } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                    const { app } = await import('./firebase.js');
-                    const db = getFirestore(app);
+                    const { doc, updateDoc, increment } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                    const { db } = await import('./firebase.js');
                     
                     // Update game time in user's document
                     const userRef = doc(db, 'users', currentUser.uid);

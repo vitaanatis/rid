@@ -1404,6 +1404,54 @@
     background: rgba(0,0,0,0.4);
 }
 
+/* Coming Soon Overlay for games with images */
+.game-card.coming-soon .game-image {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 0.1rem;
+    border: 2px solid var(--secondary);
+    background: rgba(0,0,0,0.3);
+    transition: border-color 0.3s ease;
+    flex-shrink: 0;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card.coming-soon .game-image::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: placeholder-shine 3s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.game-card.coming-soon::after {
+    content: 'Coming Soon';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    z-index: 10;
+    pointer-events: none;
+    border: 2px solid var(--accent);
+}
+
+
         
         /* Game Fullscreen */
         .game-fullscreen {
@@ -2245,7 +2293,7 @@
             { name: "Blumgi Ball", image: "images/Blumgi-Ball.png", url: "./games/blumgi-ball/" },
             { name: "PolyTrack", comingSoon: true },
             { name: "Iron Snout", image: "images/iron-snout.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/811766381464516446/files/index.html" },
-            { name: "Bacon May Die", image: "images/Bacon-May-Die.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/320690105873469650/files/index.html" },
+            { name: "Bacon May Die", image: "images/Bacon-May-Die.png", url: "https://betterbull.com/uploads/5/5/6/7/5567194/custom_themes/320690105873469650/files/index.html", comingSoon: true },
             { name: "N-gon", image: "images/n-gon.png", url: "./games/n-gon/" },
             { name: "Vex 3", image: "images/vex-3.png", url: "./games/vex-3/" },
             { name: "Vex 4", image: "images/Vex-4.png", url: "./games/vex-4/" },
@@ -2255,7 +2303,7 @@
             { name: "Motox3m", image: "images/Motox3m.png", url: "./games/motox3m/" },        
             { name: "Flappy Bird", image: "images/flappy-Bird.png", url: "./games/flappy-bird/" },
             { name: "Backrooms", image: "images/Backrooms.png", url: "./games/backrooms/" },
-            { name: "Geometry Dash Remastered", image: "images/geometry-Dash-Remastered.png", url: "./games/geometry-dash-remastered/" },
+            { name: "Geometry Dash Remastered", image: "images/geometry-Dash-Remastered.png", url: "./games/geometry-dash-remastered/", comingSoon: true },
             { name: "Burrito Bison", image: "images/burrito-Bison.png", url: "./games/burrito-bison/" },
             { name: "Cut The Rope ", comingSoon: true },
             { name: "Cut The Rope 2", comingSoon: true },
@@ -2363,8 +2411,17 @@
                 const abbreviation = generateGameAbbreviation(game.name);
                 const colorScheme = getRandomPlaceholderColor();
                 
+                // Determine CSS classes and click behavior
+                let cssClasses = 'game-card';
+                let clickHandler = `onclick="openGame('${game.name}', '${game.url}')"`;
+                
+                if (game.comingSoon) {
+                    cssClasses += ' coming-soon';
+                    clickHandler = ''; // No click handler for coming soon games
+                }
+                
                 return `
-                <div class="game-card" onclick="openGame('${game.name}', '${game.url}')">
+                <div class="${cssClasses}" ${clickHandler}>
                     <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" 
                          onerror="showGamePlaceholder(this, '${abbreviation}', '${colorScheme.primary}', '${colorScheme.secondary}')">
                     <h3 class="game-name">${game.name}</h3>

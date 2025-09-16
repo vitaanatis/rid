@@ -1519,16 +1519,26 @@
                                 
                                 // Don't redirect if we're processing an email verification action code
                                 if (!(actionCode && mode === 'verifyEmail')) {
-                                    window.location.href = 'main.html';
+                                    // User is authenticated and verified, stay on main.html
+                                    console.log('User authenticated and verified, staying on main.html');
+                                    // Initialize the main application content
+                                    initializeMainApp();
                                 }
+                            } else {
+                                // User is authenticated but not in Firestore, redirect to index.html for verification completion
+                                console.log('User authenticated but not verified, redirecting to index.html');
+                                window.location.href = 'index.html';
                             }
-                            // If user is authenticated but not in Firestore, stay on index.html for verification completion
                         } catch (error) {
                             console.error('Error checking user registration:', error);
-                            // Stay on index.html if there's an error
+                            // Redirect to index.html if there's an error
+                            window.location.href = 'index.html';
                         }
+                    } else if (!user) {
+                        // If user is not authenticated, redirect to index.html
+                        console.log('User not authenticated, redirecting to index.html');
+                        window.location.href = 'index.html';
                     }
-                    // If user is not authenticated, stay on index.html
                 });
             } catch (e) {
                 console.error('Auth state check failed:', e);
@@ -2229,6 +2239,35 @@
         }
         function showError(msg) {
             return `<div class="error">${msg}</div>`;
+        }
+
+        function initializeMainApp() {
+            // This function will be called when the user is authenticated
+            // It will display the main application content instead of the login form
+            console.log('Initializing main application...');
+            
+            // For now, show a simple message that the user is logged in
+            // This will be replaced with the actual games interface
+            document.getElementById('auth-container').innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h1>Welcome to Hubble!</h1>
+                    <p>You are successfully logged in.</p>
+                    <p>Main application content will be loaded here.</p>
+                    <button onclick="logout()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">Logout</button>
+                </div>
+            `;
+        }
+
+        async function logout() {
+            try {
+                const module = await import('./auth.js');
+                await module.logout();
+                // The onAuthStateChanged listener will handle the redirect to index.html
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Force redirect to index.html even if logout fails
+                window.location.href = 'index.html';
+            }
         }
 
         function renderSignIn(errorMsg = '', values = {}, invalidFields = {}) {
@@ -3002,7 +3041,8 @@
         
         handleEmailVerification();
         
-        renderSignIn();
+        // Initialize main application content for authenticated users
+        initializeMainApp();
         
         document.addEventListener('DOMContentLoaded', function() {
             const helpButton = document.getElementById('help-button');

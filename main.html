@@ -66,7 +66,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            z-index: 100;
+            z-index: 10000;
             box-shadow: 0 2px 12px rgba(0,0,0,0.06);
             transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -625,6 +625,7 @@
             margin-right: 2.2rem;
             gap: 0.7rem;
             position: relative;
+            z-index: 10002;
         }
         .profile-label {
             color: inherit;
@@ -675,7 +676,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             min-width: 150px;
-            z-index: 1000;
+            z-index: 10003;
             display: none;
             overflow: hidden;
         }
@@ -827,7 +828,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 10001;
+            z-index: 10005;
             backdrop-filter: blur(5px);
             opacity: 0;
             visibility: hidden;
@@ -967,7 +968,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 10002;
+            z-index: 10006;
             backdrop-filter: blur(5px);
             opacity: 0;
             visibility: hidden;
@@ -1116,7 +1117,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 10001;
+            z-index: 10007;
             backdrop-filter: blur(5px);
             opacity: 0;
             visibility: hidden;
@@ -1612,6 +1613,10 @@
             z-index: 10000;
         }
         
+        .game-fullscreen-btn.minimized.true-fullscreen {
+            left: 140px; /* Position next to the back button (100px width + 20px margin) */
+        }
+        
         .game-exit-btn {
             width: 200px;
             max-width: 20vw;
@@ -1691,7 +1696,7 @@
         .customization-popup {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 1000;
+            z-index: 10004;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2856,11 +2861,11 @@
             
             // Store original content
             if (!topbar.dataset.originalTitle) {
-                topbar.dataset.originalTitle = hubbleTitle.textContent;
+                topbar.dataset.originalTitle = hubbleTitle.innerHTML;
             }
             
             // Change title to game name
-            hubbleTitle.textContent = gameName;
+            hubbleTitle.innerHTML = gameName;
             
             // Hide progress bar and alpha badge, create game controls in header
             if (progressBar) {
@@ -2912,6 +2917,33 @@
         }
         
         let isTabFullscreen = false;
+        let isTrueFullscreen = false;
+        
+        function toggleTrueFullscreen() {
+            if (!document.fullscreenElement) {
+                // Enter true fullscreen
+                document.documentElement.requestFullscreen().then(() => {
+                    isTrueFullscreen = true;
+                    const trueFullscreenBtn = document.getElementById('game-true-fullscreen-btn');
+                    if (trueFullscreenBtn) {
+                        trueFullscreenBtn.textContent = 'Exit True Fullscreen';
+                    }
+                }).catch(err => {
+                    console.error('Error entering fullscreen:', err);
+                });
+            } else {
+                // Exit true fullscreen
+                document.exitFullscreen().then(() => {
+                    isTrueFullscreen = false;
+                    const trueFullscreenBtn = document.getElementById('game-true-fullscreen-btn');
+                    if (trueFullscreenBtn) {
+                        trueFullscreenBtn.textContent = 'True Fullscreen';
+                    }
+                }).catch(err => {
+                    console.error('Error exiting fullscreen:', err);
+                });
+            }
+        }
         
         function toggleTabFullscreen() {
             const gameFullscreen = document.getElementById('game-fullscreen');
@@ -2923,23 +2955,46 @@
                 gameFullscreen.classList.add('tab-fullscreen');
                 topbar.style.display = 'none';
                 
-                // Move button to be positioned above the game
+                // Move back button to be positioned above the game
                 fullscreenBtn.classList.add('minimized');
                 fullscreenBtn.textContent = '← Back';
                 
-                // Remove from header and add to game container
+                // Create true fullscreen button and position it next to back button
+                const trueFullscreenBtn = document.createElement('button');
+                trueFullscreenBtn.id = 'game-true-fullscreen-btn';
+                trueFullscreenBtn.className = 'game-fullscreen-btn minimized true-fullscreen';
+                trueFullscreenBtn.textContent = 'True Fullscreen';
+                trueFullscreenBtn.onclick = toggleTrueFullscreen;
+                
+                // Remove back button from header and add both buttons to game container
                 fullscreenBtn.remove();
                 gameFullscreen.appendChild(fullscreenBtn);
+                gameFullscreen.appendChild(trueFullscreenBtn);
                 
                 isTabFullscreen = true;
             } else {
+                // Exit true fullscreen if active
+                if (isTrueFullscreen && document.fullscreenElement) {
+                    document.exitFullscreen().then(() => {
+                        isTrueFullscreen = false;
+                    }).catch(err => {
+                        console.error('Error exiting fullscreen:', err);
+                    });
+                }
+                
                 // Exit tab fullscreen mode
                 gameFullscreen.classList.remove('tab-fullscreen');
                 topbar.style.display = 'flex';
                 fullscreenBtn.classList.remove('minimized');
                 fullscreenBtn.textContent = 'Fullscreen';
                 
-                // Move button back to header
+                // Remove true fullscreen button
+                const trueFullscreenBtn = document.getElementById('game-true-fullscreen-btn');
+                if (trueFullscreenBtn) {
+                    trueFullscreenBtn.remove();
+                }
+                
+                // Move back button back to header
                 fullscreenBtn.remove();
                 const gameControls = document.getElementById('game-controls');
                 if (gameControls) {
@@ -2960,6 +3015,15 @@
             const hubbleTitle = document.querySelector('.hubble-gradient');
             const progressBar = document.getElementById('registration-progress-bar');
             
+            // Exit true fullscreen if active
+            if (isTrueFullscreen && document.fullscreenElement) {
+                document.exitFullscreen().then(() => {
+                    isTrueFullscreen = false;
+                }).catch(err => {
+                    console.error('Error exiting fullscreen:', err);
+                });
+            }
+            
             // Exit tab fullscreen if active
             if (isTabFullscreen) {
                 gameFullscreen.classList.remove('tab-fullscreen');
@@ -2974,9 +3038,15 @@
             // Remove game controls from header
             removeGameControlsFromHeader();
             
+            // Remove true fullscreen button if it exists
+            const trueFullscreenBtn = document.getElementById('game-true-fullscreen-btn');
+            if (trueFullscreenBtn) {
+                trueFullscreenBtn.remove();
+            }
+            
             // Restore header
             topbar.classList.remove('game-mode');
-            hubbleTitle.textContent = topbar.dataset.originalTitle || 'Hubble';
+            hubbleTitle.innerHTML = topbar.dataset.originalTitle || 'Hubble<span class="alpha-badge" id="alpha-badge">Alpha</span>';
             
             // Restore progress bar and alpha badge
             if (progressBar) {
@@ -3006,12 +3076,27 @@
         // Add global escape key handler for games
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && currentGame) {
-                if (isTabFullscreen) {
+                if (isTrueFullscreen && document.fullscreenElement) {
+                    // Exit true fullscreen first
+                    toggleTrueFullscreen();
+                } else if (isTabFullscreen) {
                     // Exit tab fullscreen first
                     toggleTabFullscreen();
                 } else {
                     // Exit game completely
                     exitGame();
+                }
+            }
+        });
+        
+        // Listen for fullscreen changes to update button state
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement && isTrueFullscreen) {
+                // User exited fullscreen via browser controls
+                isTrueFullscreen = false;
+                const trueFullscreenBtn = document.getElementById('game-true-fullscreen-btn');
+                if (trueFullscreenBtn) {
+                    trueFullscreenBtn.textContent = 'True Fullscreen';
                 }
             }
         });

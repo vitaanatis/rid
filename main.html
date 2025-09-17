@@ -707,6 +707,12 @@
         .dropdown-item.logout:hover {
             background: rgba(211, 47, 47, 0.1);
         }
+        body[data-theme="dark"] .dropdown-item.logout {
+            color: #ff5252;
+        }
+        body[data-theme="dark"] .dropdown-item.logout:hover {
+            background: rgba(255, 82, 82, 0.1);
+        }
         .layout {
             display: flex;
             margin-top: 56px;
@@ -768,8 +774,8 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
         
-        /* Help button */
-        .help-button {
+        /* Bug button */
+        .bug-button {
             position: fixed;
             left: 2.2rem;
             bottom: 2.2rem;
@@ -789,22 +795,22 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: scale(1);
         }
-        .help-button:hover {
+        .bug-button:hover {
             background: var(--primary);
             color: #fff;
             transform: scale(1.1) rotate(-15deg);
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-        .help-button:active {
+        .bug-button:active {
             transform: scale(0.9) rotate(0deg);
             transition: all 0.1s ease-out;
         }
-        body[data-theme="dark"] .help-button {
+        body[data-theme="dark"] .bug-button {
             background: #232a3a;
             color: #f7f8fa;
             border: 2px solid var(--sidebar-border-dark);
         }
-        body[data-theme="dark"] .help-button:hover {
+        body[data-theme="dark"] .bug-button:hover {
             background: var(--primary);
             color: #fff;
             transform: scale(1.1) rotate(-15deg);
@@ -813,7 +819,7 @@
         
         /* Hide buttons when game is open */
         .game-fullscreen .theme-toggle,
-        .game-fullscreen .help-button {
+        .game-fullscreen .bug-button {
             display: none;
         }
         
@@ -896,6 +902,279 @@
             align-items: center;
             margin: 1.5rem 0;
             flex-wrap: wrap;
+        }
+        
+        /* Bug popup styles */
+        .bug-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 107, 107, 0.1);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .bug-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        body[data-theme="dark"] .bug-popup-overlay {
+            background: rgba(255, 107, 107, 0.15);
+            backdrop-filter: blur(2px);
+        }
+        
+        .bug-popup {
+            background: var(--background-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+            border: 2px solid #ff6b6b;
+            transition: all 0.3s ease;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .bug-popup-overlay.show .bug-popup {
+            transform: scale(1) translateY(0);
+        }
+        
+        body[data-theme="dark"] .bug-popup {
+            background: var(--sidebar-bg-dark);
+            border-color: #ff5252;
+        }
+        
+        .bug-popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ff6b6b;
+            text-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+        }
+        
+        body[data-theme="dark"] .bug-popup-title {
+            color: #ff5252;
+        }
+        
+        .bug-popup-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        body[data-theme="dark"] .bug-popup-text {
+            color: var(--text-dark);
+        }
+        
+        .bug-popup-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .bug-popup-btn {
+            padding: 0.9rem 1.8rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .bug-popup-btn.create {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .bug-popup-btn.create:hover {
+            background: linear-gradient(135deg, #ee5a24, #d63031);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        .bug-popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+        
+        .bug-popup-close:hover {
+            color: var(--primary);
+        }
+        
+        body[data-theme="dark"] .bug-popup-close {
+            color: var(--text-dark);
+        }
+        
+        /* Bug Ticket Popup Styles */
+        .bug-ticket-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 107, 107, 0.1);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .bug-ticket-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        body[data-theme="dark"] .bug-ticket-popup-overlay {
+            background: rgba(255, 107, 107, 0.15);
+            backdrop-filter: blur(2px);
+        }
+        
+        .bug-ticket-popup {
+            background: var(--background-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+            border: 2px solid #ff6b6b;
+            transition: all 0.3s ease;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .bug-ticket-popup-overlay.show .bug-ticket-popup {
+            transform: scale(1) translateY(0);
+        }
+        
+        body[data-theme="dark"] .bug-ticket-popup {
+            background: var(--sidebar-bg-dark);
+            border-color: #ff5252;
+        }
+        
+        .bug-ticket-popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ff6b6b;
+            text-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+        }
+        
+        body[data-theme="dark"] .bug-ticket-popup-title {
+            color: #ff5252;
+        }
+        
+        /* Game Suggestion Popup Styles */
+        .game-suggestion-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 215, 0, 0.1);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .game-suggestion-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        body[data-theme="dark"] .game-suggestion-popup-overlay {
+            background: rgba(255, 215, 0, 0.15);
+            backdrop-filter: blur(2px);
+        }
+        
+        .game-suggestion-popup {
+            background: var(--background-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+            border: 2px solid #ffd700;
+            transition: all 0.3s ease;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .game-suggestion-popup-overlay.show .game-suggestion-popup {
+            transform: scale(1) translateY(0);
+        }
+        
+        body[data-theme="dark"] .game-suggestion-popup {
+            background: var(--sidebar-bg-dark);
+            border-color: #ffed4e;
+        }
+        
+        .game-suggestion-popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffd700;
+            text-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+        }
+        
+        body[data-theme="dark"] .game-suggestion-popup-title {
+            color: #ffed4e;
+        }
+        
+        /* Error text styling for all popups */
+        .popup-error-text {
+            color: #ff4444;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+        }
+        
+        body[data-theme="dark"] .popup-error-text {
+            color: #ff6666;
+            background: rgba(255, 68, 68, 0.15);
+            border-color: rgba(255, 68, 68, 0.3);
         }
         
         .help-popup-btn {
@@ -1209,8 +1488,10 @@
             margin-bottom: 2rem;
             display: flex;
             justify-content: center;
+            align-items: center;
             z-index: 50;
             position: relative;
+            gap: 1rem;
         }
         
         
@@ -1278,6 +1559,49 @@
         body[data-theme="dark"] .games-search-bar::placeholder {
             color: var(--accent);
             opacity: 0.8;
+        }
+        
+        /* Game Suggestion Button */
+        .game-suggestion-btn {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #ff8c00;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .game-suggestion-btn:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+            border-color: #ff6b35;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .game-suggestion-btn:active {
+            transform: scale(0.95) rotate(0deg);
+            transition: all 0.1s ease-out;
+        }
+        
+        body[data-theme="dark"] .game-suggestion-btn {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            border-color: #ff8c00;
+        }
+        
+        body[data-theme="dark"] .game-suggestion-btn:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+            border-color: #ff6b35;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
         }
         
         .games-grid {
@@ -1535,7 +1859,7 @@
         }
         
         body[data-theme="dark"] .game-fullscreen {
-            background: #1a1f2e;
+            background: #0a0e1a;
         }
         
         .game-content {
@@ -1689,7 +2013,7 @@
                 min-width: 80px;
             }
             .theme-toggle { right: 1rem; bottom: 1rem; }
-            .help-button { left: 1rem; bottom: 1rem; }
+            .bug-button { left: 1rem; bottom: 1rem; }
         }
         
         /* Username Change Popup Styles */
@@ -1909,7 +2233,8 @@
         <main class="main-content" id="main-content">
             <div class="games-container">
                 <div class="games-search-section">
-                    <input type="text" id="games-search" class="games-search-bar" placeholder="Search games..." autocomplete="off">
+                    <input type="text" id="games-search" class="games-search-bar" placeholder="Search through our games..." autocomplete="off">
+                    <button class="game-suggestion-btn" id="game-suggestion-btn" title="Suggest a Game">💡</button>
                 </div>
                 <div class="games-grid" id="games-grid">
                     <div class="games-loading">Loading games...</div>
@@ -1918,18 +2243,17 @@
         </main>
     </div>
     <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">🌙</button>
-    <button class="help-button" id="help-button" title="Get Help">❓</button>
+    <button class="bug-button" id="bug-button" title="Report Bug">🐛</button>
     
-    <!-- Help Popup -->
-    <div class="help-popup-overlay" id="help-popup-overlay">
-        <div class="help-popup">
-            <h2 class="help-popup-title">Need Help?</h2>
-            <p class="help-popup-text">Click Create below to create a ticket for an issue you may have. Make sure you check the FAQ to see if your question is answered or if your issue has a solution.</p>
-            <div class="help-popup-buttons">
-                <button class="help-popup-btn create" onclick="showTicketPopup()">Create</button>
-                <button class="help-popup-btn faq" onclick="showFAQPopup()">FAQ</button>
+    <!-- Bug Report Popup -->
+    <div class="bug-popup-overlay" id="bug-popup-overlay">
+        <div class="bug-popup">
+            <h2 class="bug-popup-title">🐛 Report a Bug</h2>
+            <p class="bug-popup-text">Click Create below to create a bug ticket. This will help us identify and fix issues in the system. Please provide as much detail as possible about the bug you encountered.</p>
+            <div class="bug-popup-buttons">
+                <button class="bug-popup-btn create" onclick="showBugTicketPopup()">Create Bug Ticket</button>
             </div>
-            <button class="help-popup-close" onclick="closeHelpPopup()">Close</button>
+            <button class="bug-popup-close" onclick="closeBugPopup()">×</button>
         </div>
     </div>
     
@@ -1937,6 +2261,7 @@
     <div class="ticket-popup-overlay" id="ticket-popup-overlay">
         <div class="ticket-popup">
             <h2 class="ticket-popup-title" id="ticket-popup-title">Create Support Ticket</h2>
+            <div id="ticket-error-text" class="popup-error-text" style="display: none;"></div>
             <div id="ticket-form-content">
                 <div class="ticket-form-group">
                     <label for="ticket-subject" class="ticket-form-label">Subject</label>
@@ -1958,6 +2283,33 @@
             <div id="ticket-sent-content" style="display: none; text-align: center;">
                 <h3 style="color: var(--primary); margin-bottom: 1rem;">Ticket Sent!</h3>
                 <p style="margin-bottom: 2rem;">Our support team will get to you shortly.</p>
+                <button class="ticket-form-btn send" onclick="closeAllPopups()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bug Ticket Creation Popup -->
+    <div class="bug-ticket-popup-overlay" id="bug-ticket-popup-overlay">
+        <div class="bug-ticket-popup">
+            <h2 class="bug-ticket-popup-title" id="bug-ticket-popup-title">🐛 Report a Bug</h2>
+            <div id="bug-ticket-error-text" class="popup-error-text" style="display: none;"></div>
+            <div id="bug-ticket-form-content">
+                <div class="ticket-form-group">
+                    <label for="bug-ticket-subject" class="ticket-form-label">Bug Title</label>
+                    <input type="text" id="bug-ticket-subject" class="ticket-form-input" placeholder="Brief description of the bug">
+                </div>
+                <div class="ticket-form-group">
+                    <label for="bug-ticket-description" class="ticket-form-label">Bug Description</label>
+                    <textarea id="bug-ticket-description" class="ticket-form-textarea" placeholder="Please provide detailed information about the bug, including steps to reproduce it..."></textarea>
+                </div>
+                <div class="ticket-form-buttons">
+                    <button class="ticket-form-btn cancel" onclick="closeBugTicketPopup()">Cancel</button>
+                    <button class="ticket-form-btn send" onclick="sendBugTicket()">Send Bug Report</button>
+                </div>
+            </div>
+            <div id="bug-ticket-sent-content" style="display: none; text-align: center;">
+                <h3 style="color: #ff6b6b; margin-bottom: 1rem;">Bug Report Sent!</h3>
+                <p style="margin-bottom: 2rem;">Thank you for reporting this bug. Our development team will investigate and fix it.</p>
                 <button class="ticket-form-btn send" onclick="closeAllPopups()">Close</button>
             </div>
         </div>
@@ -2049,6 +2401,37 @@
         </div>
     </div>
     
+    <!-- Game Suggestion Popup -->
+    <div class="game-suggestion-popup-overlay" id="game-suggestion-popup-overlay">
+        <div class="game-suggestion-popup">
+            <h2 class="game-suggestion-popup-title" id="game-suggestion-popup-title">💡 Suggest a Game</h2>
+            <div id="game-suggestion-error-text" class="popup-error-text" style="display: none;"></div>
+            <div id="game-suggestion-form-content">
+                <div class="ticket-form-group">
+                    <label for="game-suggestion-title" class="ticket-form-label">Game Title</label>
+                    <input type="text" id="game-suggestion-title" class="ticket-form-input" placeholder="Enter the name of the game you'd like to suggest">
+                </div>
+                <div class="ticket-form-group">
+                    <label for="game-suggestion-description" class="ticket-form-label">Why do you want this game? <span style="color: #888; font-weight: normal;">(Optional)</span></label>
+                    <textarea id="game-suggestion-description" class="ticket-form-textarea" placeholder="Tell us why you think this game would be great for Hubble... (Optional)"></textarea>
+                </div>
+                <div class="ticket-form-group">
+                    <label for="game-suggestion-link" class="ticket-form-label">Game Link <span style="color: #888; font-weight: normal;">(If Applicable)</span></label>
+                    <input type="url" id="game-suggestion-link" class="ticket-form-input" placeholder="https://example.com/game (Optional)">
+                </div>
+                <div class="ticket-form-buttons">
+                    <button class="ticket-form-btn cancel" onclick="closeGameSuggestionPopup()">Cancel</button>
+                    <button class="ticket-form-btn send" onclick="sendGameSuggestion()">Submit Suggestion</button>
+                </div>
+            </div>
+            <div id="game-suggestion-sent-content" style="display: none; text-align: center;">
+                <h3 style="color: #ffd700; margin-bottom: 1rem;">Suggestion Submitted!</h3>
+                <p style="margin-bottom: 2rem;">Thank you for your game suggestion! We'll review it and consider adding it to Hubble.</p>
+                <button class="ticket-form-btn send" onclick="closeAllPopups()">Close</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Game Fullscreen Container -->
     <div class="game-fullscreen" id="game-fullscreen">
         <iframe class="game-content" id="game-content" src=""></iframe>
@@ -2072,9 +2455,9 @@
     <div class="confetti-container" id="confetti-container"></div>
     
     <script>
-        // Help System Functions
-        function showHelpPopup() {
-            const popup = document.getElementById('help-popup-overlay');
+        // Bug Report System Functions
+        function showBugPopup() {
+            const popup = document.getElementById('bug-popup-overlay');
             if (popup) {
                 popup.style.display = 'flex';
                 setTimeout(() => {
@@ -2083,8 +2466,42 @@
             }
         }
         
-        function closeHelpPopup() {
-            const popup = document.getElementById('help-popup-overlay');
+        function closeBugPopup() {
+            const popup = document.getElementById('bug-popup-overlay');
+            if (popup) {
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
+            }
+        }
+        
+        function showBugTicketPopup() {
+            closeBugPopup();
+            const popup = document.getElementById('bug-ticket-popup-overlay');
+            const formContent = document.getElementById('bug-ticket-form-content');
+            const sentContent = document.getElementById('bug-ticket-sent-content');
+            const errorText = document.getElementById('bug-ticket-error-text');
+            
+            if (popup) {
+                // Reset form and hide error
+                document.getElementById('bug-ticket-subject').value = '';
+                document.getElementById('bug-ticket-description').value = '';
+                errorText.style.display = 'none';
+                
+                // Show form, hide sent message
+                formContent.style.display = 'block';
+                sentContent.style.display = 'none';
+                
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 10);
+            }
+        }
+        
+        function closeBugTicketPopup() {
+            const popup = document.getElementById('bug-ticket-popup-overlay');
             if (popup) {
                 popup.classList.remove('show');
                 setTimeout(() => {
@@ -2094,18 +2511,20 @@
         }
         
         function showTicketPopup() {
-            closeHelpPopup();
+            closeBugPopup();
             const popup = document.getElementById('ticket-popup-overlay');
             const formContent = document.getElementById('ticket-form-content');
             const sentContent = document.getElementById('ticket-sent-content');
+            const errorText = document.getElementById('ticket-error-text');
             
             if (popup) {
-                // Reset form
+                // Reset form and hide error
                 formContent.style.display = 'block';
                 sentContent.style.display = 'none';
                 document.getElementById('ticket-subject').value = '';
                 document.getElementById('ticket-description').value = '';
                 document.getElementById('ticket-email').value = '';
+                errorText.style.display = 'none';
                 
                 popup.style.display = 'flex';
                 setTimeout(() => {
@@ -2128,16 +2547,22 @@
             const subject = document.getElementById('ticket-subject').value.trim();
             const description = document.getElementById('ticket-description').value.trim();
             const email = document.getElementById('ticket-email').value.trim();
+            const errorText = document.getElementById('ticket-error-text');
+            
+            // Hide any previous error
+            errorText.style.display = 'none';
             
             // Basic validation
             if (!subject || !description || !email) {
-                alert('Please fill in all fields.');
+                errorText.textContent = 'Please fill in all fields.';
+                errorText.style.display = 'block';
                 return;
             }
             
             // Email validation
             if (!email.includes('@lwsd.org')) {
-                alert('Please enter a valid LWSD email address.');
+                errorText.textContent = 'Please enter a valid LWSD email address.';
+                errorText.style.display = 'block';
                 return;
             }
             
@@ -2181,12 +2606,110 @@
                     code: error.code,
                     stack: error.stack
                 });
-                alert(`Failed to submit ticket: ${error.message}. Please try again.`);
+                
+                // Handle specific error cases
+                let errorMessage = 'Failed to submit ticket. Please try again.';
+                if (error.code === 'permission-denied' || error.code === 'unavailable') {
+                    errorMessage = 'Service temporarily unavailable. Please try again later.';
+                } else if (error.message) {
+                    errorMessage = `Failed to submit ticket: ${error.message}`;
+                }
+                
+                errorText.textContent = errorMessage;
+                errorText.style.display = 'block';
             }
         }
         
+        async function sendBugTicket() {
+            const subject = document.getElementById('bug-ticket-subject').value.trim();
+            const description = document.getElementById('bug-ticket-description').value.trim();
+            const errorText = document.getElementById('bug-ticket-error-text');
+            
+            // Hide any previous error
+            errorText.style.display = 'none';
+            
+            // Basic validation
+            if (!subject || !description) {
+                errorText.textContent = 'Please fill in all fields.';
+                errorText.style.display = 'block';
+                return;
+            }
+            
+            if (!currentUser) {
+                errorText.textContent = 'You must be logged in to submit a bug report.';
+                errorText.style.display = 'block';
+                return;
+            }
+            
+            try {
+                console.log('Starting bug ticket submission...');
+                
+                // Save bug ticket to Firebase
+                const { getFirestore, collection, addDoc, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                console.log('Firebase modules loaded, getting user data...');
+                
+                // Get user data from Firestore
+                const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
+                const userDocs = await getDocs(userQuery);
+                let username = 'User';
+                
+                if (!userDocs.empty) {
+                    const userData = userDocs.docs[0].data();
+                    username = userData.username || 'User';
+                }
+                
+                const bugTicketData = {
+                    subject: subject,
+                    description: description,
+                    email: currentUser.email,
+                    username: username,
+                    uid: currentUser.uid,
+                    timestamp: new Date(),
+                    status: 'open',
+                    priority: 'normal',
+                    type: 'bug'
+                };
+                
+                console.log('Bug ticket data prepared:', bugTicketData);
+                console.log('Attempting to save to Firebase...');
+                
+                const docRef = await addDoc(collection(db, 'bugs'), bugTicketData);
+                console.log('Bug ticket saved with ID:', docRef.id);
+                
+                // Show sent confirmation
+                const formContent = document.getElementById('bug-ticket-form-content');
+                const sentContent = document.getElementById('bug-ticket-sent-content');
+                
+                formContent.style.display = 'none';
+                sentContent.style.display = 'block';
+                
+                console.log('Bug ticket submitted successfully to Firebase');
+            } catch (error) {
+                console.error('Error submitting bug ticket:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    code: error.code,
+                    stack: error.stack
+                });
+                
+                // Handle specific error cases
+                let errorMessage = 'Failed to submit bug ticket. Please try again.';
+                if (error.code === 'permission-denied' || error.code === 'unavailable') {
+                    errorMessage = 'Service temporarily unavailable. Please try again later.';
+                } else if (error.message) {
+                    errorMessage = `Failed to submit bug ticket: ${error.message}`;
+                }
+                
+                errorText.textContent = errorMessage;
+                errorText.style.display = 'block';
+            }
+        }
+
         function showFAQPopup() {
-            closeHelpPopup();
+            closeBugPopup();
             const popup = document.getElementById('faq-popup-overlay');
             if (popup) {
                 popup.style.display = 'flex';
@@ -2212,23 +2735,162 @@
                 popup.classList.remove('show');
                 setTimeout(() => {
                     popup.style.display = 'none';
-                    showHelpPopup();
                 }, 300);
             }
         }
         
         function closeAllPopups() {
-            closeHelpPopup();
+            closeBugPopup();
+            closeBugTicketPopup();
             closeTicketPopup();
+            closeGameSuggestionPopup();
             closeFAQPopup();
+        }
+        
+        // Game Suggestion Functions
+        function showGameSuggestionPopup() {
+            const popup = document.getElementById('game-suggestion-popup-overlay');
+            const formContent = document.getElementById('game-suggestion-form-content');
+            const sentContent = document.getElementById('game-suggestion-sent-content');
+            const errorText = document.getElementById('game-suggestion-error-text');
+            
+            if (popup) {
+                // Reset form and hide error
+                document.getElementById('game-suggestion-title').value = '';
+                document.getElementById('game-suggestion-description').value = '';
+                document.getElementById('game-suggestion-link').value = '';
+                errorText.style.display = 'none';
+                
+                // Show form, hide sent message
+                formContent.style.display = 'block';
+                sentContent.style.display = 'none';
+                
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 10);
+            }
+        }
+        
+        function closeGameSuggestionPopup() {
+            const popup = document.getElementById('game-suggestion-popup-overlay');
+            if (popup) {
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
+            }
+        }
+        
+        async function sendGameSuggestion() {
+            const title = document.getElementById('game-suggestion-title').value.trim();
+            const description = document.getElementById('game-suggestion-description').value.trim();
+            const link = document.getElementById('game-suggestion-link').value.trim();
+            const errorText = document.getElementById('game-suggestion-error-text');
+            
+            // Hide any previous error
+            errorText.style.display = 'none';
+            
+            // Basic validation - only title is required
+            if (!title) {
+                errorText.textContent = 'Please enter a game title.';
+                errorText.style.display = 'block';
+                return;
+            }
+            
+            if (!currentUser) {
+                errorText.textContent = 'You must be logged in to submit a game suggestion.';
+                errorText.style.display = 'block';
+                return;
+            }
+            
+            try {
+                console.log('Starting game suggestion submission...');
+                
+                // Save game suggestion to Firebase
+                const { getFirestore, collection, addDoc, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                console.log('Firebase modules loaded, getting user data...');
+                
+                // Get user data from Firestore
+                const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
+                const userDocs = await getDocs(userQuery);
+                let username = 'User';
+                
+                if (!userDocs.empty) {
+                    const userData = userDocs.docs[0].data();
+                    username = userData.username || 'User';
+                }
+                
+                const gameSuggestionData = {
+                    title: title,
+                    description: description || '', // Make description optional
+                    link: link || '', // Make link optional
+                    email: currentUser.email,
+                    username: username,
+                    uid: currentUser.uid,
+                    timestamp: new Date(),
+                    status: 'pending',
+                    type: 'game_suggestion'
+                };
+                
+                console.log('Game suggestion data prepared:', gameSuggestionData);
+                console.log('Attempting to save to Firebase...');
+                
+                const docRef = await addDoc(collection(db, 'gamesuggestions'), gameSuggestionData);
+                console.log('Game suggestion saved with ID:', docRef.id);
+                
+                // Show sent confirmation
+                const formContent = document.getElementById('game-suggestion-form-content');
+                const sentContent = document.getElementById('game-suggestion-sent-content');
+                
+                formContent.style.display = 'none';
+                sentContent.style.display = 'block';
+                
+                console.log('Game suggestion submitted successfully to Firebase');
+            } catch (error) {
+                console.error('Error submitting game suggestion:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    code: error.code,
+                    stack: error.stack
+                });
+                
+                // Handle specific error cases
+                let errorMessage = 'Failed to submit game suggestion. Please try again.';
+                if (error.code === 'permission-denied' || error.code === 'unavailable') {
+                    errorMessage = 'Service temporarily unavailable. Please try again later.';
+                } else if (error.message) {
+                    errorMessage = `Failed to submit game suggestion: ${error.message}`;
+                }
+                
+                errorText.textContent = errorMessage;
+                errorText.style.display = 'block';
+            }
         }
         
         // Close popups when clicking outside
         document.addEventListener('click', function(e) {
-            // Help popup
-            const helpPopup = document.getElementById('help-popup-overlay');
-            if (helpPopup && e.target === helpPopup) {
-                closeHelpPopup();
+            // Bug popup
+            const bugPopup = document.getElementById('bug-popup-overlay');
+            if (bugPopup && e.target === bugPopup) {
+                closeBugPopup();
+            }
+            
+            // Bug ticket popup
+            const bugTicketPopup = document.getElementById('bug-ticket-popup-overlay');
+            const bugSentContent = document.getElementById('bug-ticket-sent-content');
+            if (bugTicketPopup && e.target === bugTicketPopup && bugSentContent.style.display === 'none') {
+                closeBugTicketPopup();
+            }
+            
+            // Game suggestion popup
+            const gameSuggestionPopup = document.getElementById('game-suggestion-popup-overlay');
+            const gameSuggestionSentContent = document.getElementById('game-suggestion-sent-content');
+            if (gameSuggestionPopup && e.target === gameSuggestionPopup && gameSuggestionSentContent.style.display === 'none') {
+                closeGameSuggestionPopup();
             }
             
             // FAQ popup
@@ -2627,6 +3289,12 @@
             // Initialize allGames here to avoid initialization order issues
             allGames = [...gamesList];
             console.log('Initializing games section with', allGames.length, 'games');
+            
+            // Update search placeholder with game count
+            const searchInput = document.getElementById('games-search');
+            if (searchInput) {
+                searchInput.placeholder = `Search through our ${allGames.length} games...`;
+            }
             
             // Add a delay to ensure DOM is ready
             setTimeout(() => {
@@ -3368,10 +4036,16 @@
             setupProfileDropdown();
             initProgressBar();
             
-            // Setup help button
-            const helpButton = document.getElementById('help-button');
-            if (helpButton) {
-                helpButton.addEventListener('click', showHelpPopup);
+            // Setup bug button
+            const bugButton = document.getElementById('bug-button');
+            if (bugButton) {
+                bugButton.addEventListener('click', showBugPopup);
+            }
+            
+            // Setup game suggestion button
+            const gameSuggestionBtn = document.getElementById('game-suggestion-btn');
+            if (gameSuggestionBtn) {
+                gameSuggestionBtn.addEventListener('click', showGameSuggestionPopup);
             }
         });
         

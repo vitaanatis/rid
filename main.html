@@ -829,6 +829,13 @@
             align-items: center;
             z-index: 10001;
             backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .help-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
         }
         
         body[data-theme="dark"] .help-popup-overlay {
@@ -846,6 +853,11 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             border: 2px solid var(--secondary);
             transition: all 0.3s ease;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .help-popup-overlay.show .help-popup {
+            transform: scale(1) translateY(0);
         }
         
         body[data-theme="dark"] .help-popup {
@@ -957,6 +969,13 @@
             align-items: center;
             z-index: 10002;
             backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .ticket-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
         }
         
         body[data-theme="dark"] .ticket-popup-overlay {
@@ -973,6 +992,11 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             border: 2px solid var(--secondary);
             transition: all 0.3s ease;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ticket-popup-overlay.show .ticket-popup {
+            transform: scale(1) translateY(0);
         }
         
         body[data-theme="dark"] .ticket-popup {
@@ -1094,6 +1118,13 @@
             align-items: center;
             z-index: 10001;
             backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .faq-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
         }
         
         body[data-theme="dark"] .faq-popup-overlay {
@@ -1112,6 +1143,11 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             border: 2px solid var(--secondary);
             transition: all 0.3s ease;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .faq-popup-overlay.show .faq-popup {
+            transform: scale(1) translateY(0);
         }
         
         body[data-theme="dark"] .faq-popup {
@@ -1650,6 +1686,197 @@
             .theme-toggle { right: 1rem; bottom: 1rem; }
             .help-button { left: 1rem; bottom: 1rem; }
         }
+        
+        /* Username Change Popup Styles */
+        .customization-popup {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .customization-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .customization-popup-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .customization-popup.show .customization-popup-bg {
+            opacity: 1;
+        }
+        .customization-popup-content {
+            position: relative;
+            background: #fff;
+            color: #222;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            z-index: 2;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .customization-popup.show .customization-popup-content {
+            transform: scale(1) translateY(0);
+        }
+        body[data-theme="dark"] .customization-popup-content {
+            background: #232a3a;
+            color: #f7f8fa;
+        }
+        .customization-popup-content h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .popup-input-group {
+            margin-bottom: 1.2rem;
+        }
+        .popup-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: inherit;
+        }
+        .popup-input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1.5px solid var(--secondary);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--background-light);
+            color: var(--text-light);
+            box-sizing: border-box;
+        }
+        .popup-input-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        body[data-theme="dark"] .popup-input-group input {
+            background: #232a3a;
+            color: #f7f8fa;
+            border-color: #2c3550;
+        }
+        .popup-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .popup-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.18s;
+        }
+        .popup-btn.secondary {
+            background: #e0e6f7;
+            color: var(--primary);
+        }
+        .popup-btn.primary {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: #fff;
+        }
+        .popup-btn:hover {
+            transform: scale(1.02);
+        }
+        .popup-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .confirmation-message {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        body[data-theme="dark"] .confirmation-message {
+            background: #2d2a1a;
+            border-color: #4a3f1a;
+            color: #f7f8fa;
+        }
+        .confirmation-message p {
+            margin: 0.5rem 0;
+        }
+        .confirmation-message p:first-child {
+            margin-top: 0;
+        }
+        .confirmation-message p:last-child {
+            margin-bottom: 0;
+        }
+        .timer-circle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
+        }
+        .timer-svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .timer-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.3);
+            stroke-width: 2;
+            stroke-dasharray: 100 100;
+        }
+        .timer-progress {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+            stroke-dasharray: 0 100;
+            transition: stroke-dasharray 0.1s linear;
+        }
+        .timer-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        /* Customization Notifications */
+        .customization-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10001;
+            font-weight: 600;
+            animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -1668,6 +1895,7 @@
             <span class="profile-label" id="profile-label">User</span>
             <span class="profile-icon" id="profile-icon" data-initial="U"></span>
             <div class="profile-dropdown" id="profile-dropdown">
+                <button class="dropdown-item" id="change-username-btn">Change Username</button>
                 <button class="dropdown-item logout" id="logout-btn">Logout</button>
             </div>
         </span>
@@ -1845,7 +2073,7 @@
             if (popup) {
                 popup.style.display = 'flex';
                 setTimeout(() => {
-                    popup.style.opacity = '1';
+                    popup.classList.add('show');
                 }, 10);
             }
         }
@@ -1853,8 +2081,10 @@
         function closeHelpPopup() {
             const popup = document.getElementById('help-popup-overlay');
             if (popup) {
-                popup.style.display = 'none';
-                popup.style.opacity = '0';
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
             }
         }
         
@@ -1874,7 +2104,7 @@
                 
                 popup.style.display = 'flex';
                 setTimeout(() => {
-                    popup.style.opacity = '1';
+                    popup.classList.add('show');
                 }, 10);
             }
         }
@@ -1882,8 +2112,10 @@
         function closeTicketPopup() {
             const popup = document.getElementById('ticket-popup-overlay');
             if (popup) {
-                popup.style.display = 'none';
-                popup.style.opacity = '0';
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
             }
         }
         
@@ -1954,7 +2186,7 @@
             if (popup) {
                 popup.style.display = 'flex';
                 setTimeout(() => {
-                    popup.style.opacity = '1';
+                    popup.classList.add('show');
                 }, 10);
             }
         }
@@ -1962,17 +2194,21 @@
         function closeFAQPopup() {
             const popup = document.getElementById('faq-popup-overlay');
             if (popup) {
-                popup.style.display = 'none';
-                popup.style.opacity = '0';
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
             }
         }
         
         function closeFAQPopupAndReturnToHelp() {
             const popup = document.getElementById('faq-popup-overlay');
             if (popup) {
-                popup.style.display = 'none';
-                popup.style.opacity = '0';
-                showHelpPopup();
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    showHelpPopup();
+                }, 300);
             }
         }
         
@@ -2170,6 +2406,7 @@
             const profileIcon = document.getElementById('profile-icon');
             const profileDropdown = document.getElementById('profile-dropdown');
             const logoutBtn = document.getElementById('logout-btn');
+            const changeUsernameBtn = document.getElementById('change-username-btn');
             
             // Toggle dropdown on profile icon click
             profileIcon.addEventListener('click', (e) => {
@@ -2182,6 +2419,12 @@
                 if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)) {
                     profileDropdown.style.display = 'none';
                 }
+            });
+            
+            // Change username functionality
+            changeUsernameBtn.addEventListener('click', () => {
+                profileDropdown.style.display = 'none'; // Close dropdown
+                showUsernameChange();
             });
             
             // Logout functionality
@@ -3166,6 +3409,252 @@
             };
             
         })();
+        
+        // Username Change Functions
+        function showCustomizationError(message) {
+            // Remove any existing notifications
+            const existingNotifications = document.querySelectorAll('.customization-notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'customization-notification';
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #d32f2f;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10001;
+                font-weight: 600;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.parentNode.removeChild(errorDiv);
+                }
+            }, 5000);
+        }
+        
+        function showCustomizationSuccess(message) {
+            // Remove any existing notifications
+            const existingNotifications = document.querySelectorAll('.customization-notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            const successDiv = document.createElement('div');
+            successDiv.className = 'customization-notification';
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2e7d32;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10001;
+                font-weight: 600;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.parentNode.removeChild(successDiv);
+                }
+            }, 3000);
+        }
+        
+        function closeCustomizationPopup() {
+            const popups = document.querySelectorAll('.customization-popup');
+            popups.forEach(popup => {
+                // Remove show class to trigger exit animation
+                popup.classList.remove('show');
+                
+                // Remove from DOM after animation completes
+                setTimeout(() => {
+                    if (popup.parentNode) {
+                        popup.parentNode.removeChild(popup);
+                    }
+                }, 300); // Match the CSS transition duration
+            });
+        }
+        
+        async function showUsernameChange() {
+            const currentUsername = document.getElementById('profile-label').textContent;
+            
+            // Create username change popup
+            const popup = document.createElement('div');
+            popup.className = 'customization-popup';
+            popup.innerHTML = `
+                <div class="customization-popup-bg"></div>
+                <div class="customization-popup-content">
+                    <h3>Change Username</h3>
+                    <div class="popup-input-group">
+                        <label>New Username</label>
+                        <input type="text" id="new-username" value="${currentUsername}" maxlength="75" minlength="3">
+                    </div>
+                    <div class="popup-buttons">
+                        <button class="popup-btn secondary" onclick="closeCustomizationPopup()">Cancel</button>
+                        <button class="popup-btn primary" onclick="confirmUsernameChange()">Change</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+            
+            // Add click handler for background to close popup
+            const bg = popup.querySelector('.customization-popup-bg');
+            bg.addEventListener('click', closeCustomizationPopup);
+            
+            // Trigger animation
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 10);
+            
+            // Focus on input after animation starts
+            setTimeout(() => {
+                const input = document.getElementById('new-username');
+                input.focus();
+                input.select();
+            }, 200);
+        }
+        
+        async function confirmUsernameChange() {
+            const newUsername = document.getElementById('new-username').value.trim();
+            const currentUsername = document.getElementById('profile-label').textContent;
+            
+            if (newUsername === currentUsername) {
+                showCustomizationError('New username must be different from current username.');
+                return;
+            }
+            
+            if (newUsername.length < 3 || newUsername.length > 75) {
+                showCustomizationError('Username must be 3-75 characters long.');
+                return;
+            }
+            
+            // Check if username is available
+            try {
+                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                const q = query(collection(db, 'users'), where('username', '==', newUsername));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    showCustomizationError('That username is already taken.');
+                    return;
+                }
+            } catch (err) {
+                showCustomizationError('Could not check username availability. Try again.');
+                return;
+            }
+            
+            // Show final confirmation popup
+            showFinalUsernameConfirmation(newUsername);
+        }
+        
+        function showFinalUsernameConfirmation(newUsername) {
+            const popup = document.createElement('div');
+            popup.className = 'customization-popup';
+            popup.innerHTML = `
+                <div class="customization-popup-bg"></div>
+                <div class="customization-popup-content">
+                    <h3>⚠️ Final Confirmation</h3>
+                    <div class="confirmation-message">
+                        <p><strong>Are you absolutely sure?</strong></p>
+                        <p>If you change your username to "${newUsername}", another user can claim your old username "${document.getElementById('profile-label').textContent}" and it will become unavailable.</p>
+                        <p>This action cannot be undone.</p>
+                    </div>
+                    <div class="popup-buttons">
+                        <button class="popup-btn secondary" onclick="closeCustomizationPopup()">Cancel</button>
+                        <button class="popup-btn primary disabled" id="final-change-btn" onclick="executeUsernameChange('${newUsername}')">
+                            <span class="timer-circle">
+                                <svg class="timer-svg" viewBox="0 0 36 36">
+                                    <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    <path class="timer-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                </svg>
+                                <span class="timer-text">3</span>
+                            </span>
+                            Change Username
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+            
+            // Add click handler for background to close popup
+            const bg = popup.querySelector('.customization-popup-bg');
+            bg.addEventListener('click', closeCustomizationPopup);
+            
+            // Trigger animation
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 10);
+            
+            // Start 3-second timer after animation
+            let timeLeft = 3;
+            const timerText = popup.querySelector('.timer-text');
+            const timerProgress = popup.querySelector('.timer-progress');
+            const finalBtn = document.getElementById('final-change-btn');
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerText.textContent = timeLeft;
+                
+                const progress = (3 - timeLeft) / 3;
+                timerProgress.style.strokeDasharray = `${progress * 100} 100`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finalBtn.classList.remove('disabled');
+                    finalBtn.disabled = false;
+                    // Remove the timer circle from the button text
+                    const timerCircle = finalBtn.querySelector('.timer-circle');
+                    if (timerCircle) {
+                        timerCircle.remove();
+                    }
+                }
+            }, 1000);
+        }
+        
+        async function executeUsernameChange(newUsername) {
+            try {
+                const { getAuth } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
+                const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+                
+                await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+                    username: newUsername
+                });
+                
+                // Update UI
+                document.getElementById('profile-label').textContent = newUsername;
+                document.getElementById('profile-icon').setAttribute('data-initial', newUsername[0].toUpperCase());
+                
+                // Close popup with animation
+                closeCustomizationPopup();
+                
+                // Show success message after popup starts closing
+                setTimeout(() => {
+                    showCustomizationSuccess('Username changed successfully!');
+                }, 150);
+                
+            } catch (err) {
+                showCustomizationError('Failed to change username. Please try again.');
+                console.error('Username change error:', err);
+            }
+        }
     </script>
     
     <!-- Version Checker -->

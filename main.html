@@ -185,44 +185,64 @@
             position: relative;
         }
         
-        .progress-milestones {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        .progress-bar-fill.golden {
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 25%, #ffd700 50%, #ffed4e 75%, #ffd700 100%);
+            background-size: 400% 100%;
+            animation: golden-shine 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
         }
         
-        .milestone-marker {
-            position: absolute;
-            top: -2px;
-            width: 2px;
-            height: 12px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 1px;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+        @keyframes golden-shine {
+            0%, 100% {
+                background: linear-gradient(90deg, #ffd700 0%, #ffed4e 25%, #ffd700 50%, #ffed4e 75%, #ffd700 100%);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                background: linear-gradient(90deg, #ffed4e 0%, #ffd700 25%, #ffed4e 50%, #ffd700 75%, #ffed4e 100%);
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.5);
+            }
         }
-        
-        body[data-theme="dark"] .milestone-marker {
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .milestone-label {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
+
+        /* Alpha Badge Styles */
+        .alpha-badge {
+            display: inline-block;
+            margin-left: 1rem;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7);
+            background-size: 400% 400%;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
             font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-light);
-            white-space: nowrap;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            animation: alpha-gradient-flow 3s ease-in-out infinite;
+            vertical-align: middle;
+            -webkit-background-clip: initial !important;
+            background-clip: initial !important;
+        }
+
+        @keyframes alpha-gradient-flow {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 50%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
+        .alpha-badge.hidden {
+            display: none;
         }
         
-        body[data-theme="dark"] .milestone-label {
-            color: var(--text-dark);
-        }
         
         .progress-text {
             position: absolute;
@@ -256,6 +276,12 @@
             transform: translateY(-50%);
             font-size: 1.2rem;
             animation: gift-bounce 2s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+        
+        .progress-bar-fill.golden ~ .gift-emoji {
+            opacity: 0;
+            pointer-events: none;
         }
         
         @keyframes gift-bounce {
@@ -1628,14 +1654,11 @@
 </head>
 <body data-theme="light">
     <div class="topbar">
-        <span class="hubble-gradient">Hubble</span>
+        <span class="hubble-gradient">Hubble<span class="alpha-badge" id="alpha-badge">Alpha</span></span>
         <div id="registration-progress-bar" class="registration-progress-bar">
             <div class="progress-bar-container">
                 <div class="progress-bar-track">
                     <div class="progress-bar-fill" id="progress-bar-fill"></div>
-                    <div class="progress-milestones" id="progress-milestones">
-                        <!-- Milestone markers will be added by JavaScript -->
-                </div>
                 </div>
                 <div class="progress-text" id="progress-text">Loading...</div>
                 <div class="gift-emoji">🎁</div>
@@ -1805,7 +1828,7 @@
             <div class="onboarding-text">
                 <h2 class="onboarding-title">Welcome to Hubble's Launch Event!</h2>
                 <p class="onboarding-description">
-                    This is the first event of <strong><span class="hubble-gradient">Hubble</span></strong>. Here, as <strong><span class="hubble-gradient">Hubble</span></strong> grows and reaches milestone user counts, you, the users, unlock special rewards. The final milestone grants every registered user an exclusive prize when <strong><span class="hubble-gradient">Hubble</span></strong> officially launches!
+                    This is the first event of <strong><span class="hubble-gradient">Hubble</span></strong>. Help us reach our goal of 100 registered users for the alpha! When we reach this milestone, every registered user will receive an exclusive prize when <strong><span class="hubble-gradient">Hubble</span></strong> officially launches!
                 </p>
                 <button class="onboarding-proceed-btn" id="onboarding-proceed-btn">Proceed</button>
             </div>
@@ -2037,7 +2060,9 @@
                         userId,
                         createdAt: Date.now(),
                         following: [],
-                        followers: []
+                        followers: [],
+                        firstONEhundred: false,
+                        gameTime: {}
                       });
 
                       // Clear pending data so we don’t duplicate work
@@ -2098,26 +2123,40 @@
         
         async function stopGameTimeTracking() {
             if (!gameStartTime || !currentGameName || !currentUser) {
+                console.log('Game time tracking stopped - missing data:', { gameStartTime: !!gameStartTime, currentGameName, currentUser: !!currentUser });
                 return;
             }
             
             const timeSpent = Date.now() - gameStartTime;
             const timeSpentMinutes = Math.round(timeSpent / 60000); // Convert to minutes
             
+            console.log(`Game time tracking: ${timeSpentMinutes} minutes for ${currentGameName}`);
+            
             if (timeSpentMinutes > 0) { // Only track if at least 1 minute was spent
                 try {
-                    const { doc, updateDoc, increment } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                    const { doc, updateDoc, increment, setDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
                     const { db } = await import('./firebase.js');
                     
-                    // Update game time in user's document
                     const userRef = doc(db, 'users', currentUser.uid);
+                    const gameKey = currentGameName.replace(/[^a-zA-Z0-9]/g, '_');
+                    
+                    // First, ensure gameTime field exists
                     await updateDoc(userRef, {
-                        [`gameTime.${currentGameName.replace(/[^a-zA-Z0-9]/g, '_')}`]: increment(timeSpentMinutes)
+                        gameTime: {}
+                    }).catch(async () => {
+                        // If updateDoc fails, try setDoc with merge
+                        await setDoc(userRef, { gameTime: {} }, { merge: true });
                     });
                     
-                    console.log(`Tracked ${timeSpentMinutes} minutes for game: ${currentGameName}`);
+                    // Then increment the specific game time
+                    await updateDoc(userRef, {
+                        [`gameTime.${gameKey}`]: increment(timeSpentMinutes)
+                    });
+                    
+                    console.log(`Successfully tracked ${timeSpentMinutes} minutes for game: ${currentGameName} (key: ${gameKey})`);
                 } catch (error) {
                     console.error('Failed to track game time:', error);
+                    console.error('Error details:', error.message);
                 }
             }
             
@@ -2561,6 +2600,7 @@
             const topbar = document.querySelector('.topbar');
             const hubbleTitle = document.querySelector('.hubble-gradient');
             const progressBar = document.getElementById('registration-progress-bar');
+            const alphaBadge = document.getElementById('alpha-badge');
             
             // Add game mode class
             topbar.classList.add('game-mode');
@@ -2573,10 +2613,13 @@
             // Change title to game name
             hubbleTitle.textContent = gameName;
             
-            // Hide progress bar and create game controls in header
+            // Hide progress bar and alpha badge, create game controls in header
             if (progressBar) {
                 progressBar.style.display = 'none';
                 createGameControlsInHeader();
+            }
+            if (alphaBadge) {
+                alphaBadge.classList.add('hidden');
             }
         }
         
@@ -2686,9 +2729,13 @@
             topbar.classList.remove('game-mode');
             hubbleTitle.textContent = topbar.dataset.originalTitle || 'Hubble';
             
-            // Restore progress bar
+            // Restore progress bar and alpha badge
             if (progressBar) {
                 progressBar.style.display = 'flex';
+            }
+            const alphaBadge = document.getElementById('alpha-badge');
+            if (alphaBadge) {
+                alphaBadge.classList.remove('hidden');
             }
             
             // Show post button again
@@ -2741,45 +2788,51 @@
         }
         
         function createMilestoneMarkers() {
-            const milestonesContainer = document.getElementById('progress-milestones');
-            if (!milestonesContainer) return;
-            
-            const milestones = [100, 300, 500, 700, 900, 1000];
-            const maxUsers = 1000;
-            
-            milestones.forEach(milestone => {
-                const percentage = (milestone / maxUsers) * 100;
-                
-                const marker = document.createElement('div');
-                marker.className = 'milestone-marker';
-                marker.style.left = `${percentage}%`;
-                
-                const label = document.createElement('div');
-                label.className = 'milestone-label';
-                label.textContent = milestone;
-                label.style.left = `${percentage}%`;
-                
-                milestonesContainer.appendChild(marker);
-                milestonesContainer.appendChild(label);
-            });
+            // Milestones removed - no longer needed
+            return;
         }
         
+        // Function to update all users with firstONEhundred = true
+        async function updateAllUsersFirstOneHundred() {
+            try {
+                const { getFirestore, collection, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { app } = await import('./firebase.js');
+                const db = getFirestore(app);
+                
+                console.log('Starting batch update for firstONEhundred...');
+                
+                // Get all users
+                const usersRef = collection(db, 'users');
+                const usersSnapshot = await getDocs(usersRef);
+                
+                // Update each user
+                const updatePromises = [];
+                usersSnapshot.forEach((userDoc) => {
+                    const updatePromise = updateDoc(doc(db, 'users', userDoc.id), {
+                        firstONEhundred: true
+                    });
+                    updatePromises.push(updatePromise);
+                });
+                
+                // Wait for all updates to complete
+                await Promise.all(updatePromises);
+                
+                console.log(`Successfully updated ${updatePromises.length} users with firstONEhundred = true`);
+                
+                // Store a flag to prevent repeated updates
+                localStorage.setItem('firstONEhundredUpdated', 'true');
+                
+            } catch (error) {
+                console.error('Error updating users with firstONEhundred:', error);
+            }
+        }
+
         async function updateProgressBar() {
             try {
                 const userCount = await fetchRegisteredUserCount();
-                const milestones = [100, 300, 500, 700, 900, 1000];
                 
-                // Find current milestone range for text display
-                let nextMilestone = 100;
-                for (let i = 0; i < milestones.length; i++) {
-                    if (userCount < milestones[i]) {
-                        nextMilestone = milestones[i];
-                        break;
-                    }
-                }
-                
-                // Calculate progress toward 1000 for the bar fill
-                const maxUsers = 1000;
+                // Calculate progress toward 100 for the bar fill
+                const maxUsers = 100;
                 const percentage = Math.min((userCount / maxUsers) * 100, 100);
                 
                 const progressFill = document.getElementById('progress-bar-fill');
@@ -2787,17 +2840,30 @@
                 
                 if (progressFill) {
                     progressFill.style.width = `${percentage}%`;
-                }
-                
-                if (progressText) {
-                    if (userCount >= 1000) {
-                        progressText.textContent = '1000+ Users';
+                    
+                    // Add golden class when reaching 100 users
+                    if (userCount >= 100) {
+                        progressFill.classList.add('golden');
+                        
+                        // Update all users with firstONEhundred = true (only once)
+                        const alreadyUpdated = localStorage.getItem('firstONEhundredUpdated');
+                        if (!alreadyUpdated) {
+                            await updateAllUsersFirstOneHundred();
+                        }
                     } else {
-                        progressText.textContent = `${userCount} / ${nextMilestone} Users`;
+                        progressFill.classList.remove('golden');
                     }
                 }
                 
-                console.log(`Progress bar updated: ${userCount} registered users (${percentage.toFixed(1)}% toward 1000, showing ${userCount}/${nextMilestone})`);
+                if (progressText) {
+                    if (userCount >= 100) {
+                        progressText.textContent = '100+ Users';
+                    } else {
+                        progressText.textContent = `${userCount} / 100 Users`;
+                    }
+                }
+                
+                console.log(`Progress bar updated: ${userCount} registered users (${percentage.toFixed(1)}% toward 100)`);
             } catch (error) {
                 console.error('Error updating progress bar:', error);
                 const progressText = document.getElementById('progress-text');
@@ -2984,6 +3050,7 @@
         window.addEventListener('pagehide', async () => {
             await stopGameTimeTracking();
         });
+
         
         // Developer Tools Protection
         (function() {

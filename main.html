@@ -2458,6 +2458,7 @@
         // Bug Report System Functions
         function showBugPopup() {
             const popup = document.getElementById('bug-popup-overlay');
+<<<<<<< HEAD
             if (popup) {
                 popup.style.display = 'flex';
                 setTimeout(() => {
@@ -2466,6 +2467,44 @@
             }
         }
         
+        function closeBugPopup() {
+            const popup = document.getElementById('bug-popup-overlay');
+=======
+>>>>>>> 843a2e05e407df3c5931260578a5a75ce4781122
+            if (popup) {
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
+            }
+        }
+        
+        function showBugTicketPopup() {
+            closeBugPopup();
+            const popup = document.getElementById('bug-ticket-popup-overlay');
+            const formContent = document.getElementById('bug-ticket-form-content');
+            const sentContent = document.getElementById('bug-ticket-sent-content');
+            const errorText = document.getElementById('bug-ticket-error-text');
+            
+            if (popup) {
+                // Reset form and hide error
+                document.getElementById('bug-ticket-subject').value = '';
+                document.getElementById('bug-ticket-description').value = '';
+                errorText.style.display = 'none';
+                
+                // Show form, hide sent message
+                formContent.style.display = 'block';
+                sentContent.style.display = 'none';
+                
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 10);
+            }
+        }
+        
+<<<<<<< HEAD
+=======
         function closeBugPopup() {
             const popup = document.getElementById('bug-popup-overlay');
             if (popup) {
@@ -2500,6 +2539,7 @@
             }
         }
         
+>>>>>>> 843a2e05e407df3c5931260578a5a75ce4781122
         function closeBugTicketPopup() {
             const popup = document.getElementById('bug-ticket-popup-overlay');
             if (popup) {
@@ -3274,6 +3314,7 @@
             { name: "Gladihoppers", image: "images/Gladihoppers.png", url: "./games/gladihoppers/" },
             { name: "Quiz 60", image: "images/Quiz-60.png", url: "https://quiz-60.github.io/" },
             { name: "Quiz 70", image: "images/Quiz-70.png", url: "https://quiz-70.github.io/" },
+<<<<<<< HEAD
             { name: "Slow Roads", image: "images/Slow-Roads.png", url: "./games/slow-roads/" },
             { name: "Astrotype", image: "images/Astrotype.png", url: "./games/astrotype.html" },
             { name: "Planet clicker", image: "images/Planet-Clicker.png", url: "./games/planet-clicker.html" },
@@ -3283,6 +3324,12 @@
             { name: "1 On 1 Soccer", image: "images/1-On-1-Soccer.png", url: "./games/1on1soccer/game.html" },
             { name: "Blumgi Slime", image: "images/Blumgi-Slime.png", url: "./games/blumgi-slime/index.html" },
 
+=======
+            { name: "Quiz 50", image: "images/Quiz-50.png", url: "https://quiz-50.github.io/" },
+            { name: "Quiz 40", image: "images/Quiz-40.png", url: "https://quiz-40.github.io/" },
+            { name: "Quiz 30", image: "images/Quiz-30.png", url: "https://quiz-30.github.io/" },
+            { name: "History World", image: "images/Quiz-20.png", url: "https://history-world.github.io//" },
+>>>>>>> 843a2e05e407df3c5931260578a5a75ce4781122
         ];
         
         let allGames = [];

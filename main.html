@@ -2458,7 +2458,6 @@
         // Bug Report System Functions
         function showBugPopup() {
             const popup = document.getElementById('bug-popup-overlay');
-<<<<<<< HEAD
             if (popup) {
                 popup.style.display = 'flex';
                 setTimeout(() => {
@@ -2467,44 +2466,6 @@
             }
         }
         
-        function closeBugPopup() {
-            const popup = document.getElementById('bug-popup-overlay');
-=======
->>>>>>> 843a2e05e407df3c5931260578a5a75ce4781122
-            if (popup) {
-                popup.classList.remove('show');
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                }, 300);
-            }
-        }
-        
-        function showBugTicketPopup() {
-            closeBugPopup();
-            const popup = document.getElementById('bug-ticket-popup-overlay');
-            const formContent = document.getElementById('bug-ticket-form-content');
-            const sentContent = document.getElementById('bug-ticket-sent-content');
-            const errorText = document.getElementById('bug-ticket-error-text');
-            
-            if (popup) {
-                // Reset form and hide error
-                document.getElementById('bug-ticket-subject').value = '';
-                document.getElementById('bug-ticket-description').value = '';
-                errorText.style.display = 'none';
-                
-                // Show form, hide sent message
-                formContent.style.display = 'block';
-                sentContent.style.display = 'none';
-                
-                popup.style.display = 'flex';
-                setTimeout(() => {
-                    popup.classList.add('show');
-                }, 10);
-            }
-        }
-        
-<<<<<<< HEAD
-=======
         function closeBugPopup() {
             const popup = document.getElementById('bug-popup-overlay');
             if (popup) {
@@ -2539,7 +2500,30 @@
             }
         }
         
->>>>>>> 843a2e05e407df3c5931260578a5a75ce4781122
+        function showBugTicketPopup() {
+            closeBugPopup();
+            const popup = document.getElementById('bug-ticket-popup-overlay');
+            const formContent = document.getElementById('bug-ticket-form-content');
+            const sentContent = document.getElementById('bug-ticket-sent-content');
+            const errorText = document.getElementById('bug-ticket-error-text');
+            
+            if (popup) {
+                // Reset form and hide error
+                document.getElementById('bug-ticket-subject').value = '';
+                document.getElementById('bug-ticket-description').value = '';
+                errorText.style.display = 'none';
+                
+                // Show form, hide sent message
+                formContent.style.display = 'block';
+                sentContent.style.display = 'none';
+                
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 10);
+            }
+        }
+        
         function closeBugTicketPopup() {
             const popup = document.getElementById('bug-ticket-popup-overlay');
             if (popup) {
@@ -3077,26 +3061,33 @@
             
             if (timeSpentMinutes > 0) { // Only track if at least 1 minute was spent
                 try {
-                    const { doc, updateDoc, increment, setDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                    const { doc, updateDoc, increment, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
                     const { db } = await import('./firebase.js');
                     
                     const userRef = doc(db, 'users', currentUser.uid);
                     const gameKey = currentGameName.replace(/[^a-zA-Z0-9]/g, '_');
                     
-                    // First, ensure gameTime field exists
-                    await updateDoc(userRef, {
-                        gameTime: {}
-                    }).catch(async () => {
-                        // If updateDoc fails, try setDoc with merge
-                        await setDoc(userRef, { gameTime: {} }, { merge: true });
-                    });
+                    // Get current user document to check if gameTime field exists
+                    const userDoc = await getDoc(userRef);
+                    const userData = userDoc.data();
                     
-                    // Then increment the specific game time
+                    if (!userData) {
+                        console.error('User document not found for UID:', currentUser.uid);
+                        return;
+                    }
+                    
+                    if (!userData.gameTime) {
+                        // Initialize gameTime field if it doesn't exist
+                        console.log('Initializing gameTime field for user:', currentUser.uid);
+                        await setDoc(userRef, { gameTime: {} }, { merge: true });
+                    }
+                    
+                    // Increment the specific game time
                     await updateDoc(userRef, {
                         [`gameTime.${gameKey}`]: increment(timeSpentMinutes)
                     });
                     
-                    console.log(`Successfully tracked ${timeSpentMinutes} minutes for game: ${currentGameName} (key: ${gameKey})`);
+                    console.log(`Successfully tracked ${timeSpentMinutes} minutes for game: ${currentGameName} (key: ${gameKey}) in user document: ${currentUser.uid}`);
                 } catch (error) {
                     console.error('Failed to track game time:', error);
                     console.error('Error details:', error.message);
@@ -3314,7 +3305,6 @@
             { name: "Gladihoppers", image: "images/Gladihoppers.png", url: "./games/gladihoppers/" },
             { name: "Quiz 60", image: "images/Quiz-60.png", url: "https://quiz-60.github.io/" },
             { name: "Quiz 70", image: "images/Quiz-70.png", url: "https://quiz-70.github.io/" },
-<<<<<<< HEAD
             { name: "Slow Roads", image: "images/Slow-Roads.png", url: "./games/slow-roads/" },
             { name: "Astrotype", image: "images/Astrotype.png", url: "./games/astrotype.html" },
             { name: "Planet clicker", image: "images/Planet-Clicker.png", url: "./games/planet-clicker.html" },
@@ -3323,13 +3313,10 @@
             { name: "Blumgi Rocket", image: "images/Blumgi-Rocket.png", url: "./games/blumgi-rocket/index.html" },
             { name: "1 On 1 Soccer", image: "images/1-On-1-Soccer.png", url: "./games/1on1soccer/game.html" },
             { name: "Blumgi Slime", image: "images/Blumgi-Slime.png", url: "./games/blumgi-slime/index.html" },
-
-=======
             { name: "Quiz 50", image: "images/Quiz-50.png", url: "https://quiz-50.github.io/" },
             { name: "Quiz 40", image: "images/Quiz-40.png", url: "https://quiz-40.github.io/" },
             { name: "Quiz 30", image: "images/Quiz-30.png", url: "https://quiz-30.github.io/" },
             { name: "History World", image: "images/Quiz-20.png", url: "https://history-world.github.io//" },
->>>>>>> 843a2e05e407df3c5931260578a5a75ce4781122
         ];
         
         let allGames = [];

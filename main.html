@@ -3055,11 +3055,11 @@
             }
             
             const timeSpent = Date.now() - gameStartTime;
-            const timeSpentMinutes = Math.round(timeSpent / 60000); // Convert to minutes
+            const timeSpentSeconds = Math.round(timeSpent / 1000); // Convert to seconds
             
-            console.log(`Game time tracking: ${timeSpentMinutes} minutes for ${currentGameName}`);
+            console.log(`Game time tracking: ${timeSpentSeconds} seconds for ${currentGameName}`);
             
-            if (timeSpentMinutes > 0) { // Only track if at least 1 minute was spent
+            if (timeSpentSeconds > 0) { // Only track if at least 1 second was spent
                 try {
                     const { doc, updateDoc, increment, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
                     const { db } = await import('./firebase.js');
@@ -3084,10 +3084,10 @@
                     
                     // Increment the specific game time
                     await updateDoc(userRef, {
-                        [`gameTime.${gameKey}`]: increment(timeSpentMinutes)
+                        [`gameTime.${gameKey}`]: increment(timeSpentSeconds)
                     });
                     
-                    console.log(`Successfully tracked ${timeSpentMinutes} minutes for game: ${currentGameName} (key: ${gameKey}) in user document: ${currentUser.uid}`);
+                    console.log(`Successfully tracked ${timeSpentSeconds} seconds for game: ${currentGameName} (key: ${gameKey}) in user document: ${currentUser.uid}`);
                 } catch (error) {
                     console.error('Failed to track game time:', error);
                     console.error('Error details:', error.message);

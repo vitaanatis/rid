@@ -2959,6 +2959,9 @@
                           profileIcon.textContent = '';
                         }
                         await loadThemeFromFirebase(user);
+                        
+                        // Process any pending game data/time
+                        await processPendingData();
                         // Check for onboarding after user is loaded
                         setTimeout(() => {
                             checkAndStartOnboarding();
@@ -2989,13 +2992,14 @@
                         following: [],
                         followers: [],
                         firstONEhundred: false,
-                        gameTime: {}
+                        gameTime: {},
+                        gameData: {}
                       });
 
                       // Clear pending data so we don’t duplicate work
                       localStorage.removeItem('pendingUserData');
 
-                      // Continue with your normal “profile exists” path
+                      // Continue with your normal "profile exists" path
                       currentUser = user;
                       const profileLabel = document.getElementById('profile-label');
                       const profileIcon = document.getElementById('profile-icon');
@@ -3005,6 +3009,9 @@
                         profileIcon.textContent = '';
                       }
                       await loadThemeFromFirebase(user);
+                      
+                      // Process any pending game data/time
+                      await processPendingData();
                       // Check for onboarding after user is loaded
                       setTimeout(() => {
                           checkAndStartOnboarding();
@@ -3042,10 +3049,219 @@
         let gameStartTime = null;
         let currentGameName = null;
         
+        // Game data storage
+        let currentGameData = null;
+        let gameDataAutoSaveInterval = null;
+        
+        // Game data storage functions
+        async function saveGameData(gameName, gameData) {
+            if (!currentUser) {
+                console.log('No user logged in, cannot save game data');
+                return;
+            }
+            
+            try {
+                const { doc, updateDoc, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { db } = await import('./firebase.js');
+                
+                const userRef = doc(db, 'users', currentUser.uid);
+                const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
+                
+                // Get current user document
+                const userDoc = await getDoc(userRef);
+                const userData = userDoc.data();
+                
+                if (!userData) {
+                    console.error('User document not found for UID:', currentUser.uid);
+                    return;
+                }
+                
+                // Initialize gameData field if it doesn't exist
+                if (!userData.gameData) {
+                    console.log('Initializing gameData field for user:', currentUser.uid);
+                    await setDoc(userRef, { gameData: {} }, { merge: true });
+                }
+                
+                // Save the game data
+                await updateDoc(userRef, {
+                    [`gameData.${gameKey}`]: {
+                        data: gameData,
+                        lastSaved: Date.now(),
+                        gameName: gameName
+                    }
+                });
+                
+                console.log(`Successfully saved game data for: ${gameName} (key: ${gameKey})`);
+            } catch (error) {
+                console.error('Failed to save game data:', error);
+                console.error('Error details:', error.message);
+            }
+        }
+        
+        async function loadGameData(gameName) {
+            if (!currentUser) {
+                console.log('No user logged in, cannot load game data');
+                return null;
+            }
+            
+            try {
+                const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { db } = await import('./firebase.js');
+                
+                const userRef = doc(db, 'users', currentUser.uid);
+                const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
+                
+                const userDoc = await getDoc(userRef);
+                const userData = userDoc.data();
+                
+                if (!userData || !userData.gameData || !userData.gameData[gameKey]) {
+                    console.log(`No saved data found for game: ${gameName}`);
+                    return null;
+                }
+                
+                const gameData = userData.gameData[gameKey];
+                console.log(`Successfully loaded game data for: ${gameName}`);
+                return gameData.data;
+            } catch (error) {
+                console.error('Failed to load game data:', error);
+                console.error('Error details:', error.message);
+                return null;
+            }
+        }
+        
+        // Function to capture game data from localStorage and cookies
+        function captureGameData(gameName) {
+            const gameData = {
+                localStorage: {},
+                sessionStorage: {},
+                cookies: document.cookie,
+                timestamp: Date.now()
+            };
+            
+            // Capture localStorage data (filter for game-related keys)
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (key.toLowerCase().includes(gameName.toLowerCase()) || 
+                           key.toLowerCase().includes('game') ||
+                           key.toLowerCase().includes('save') ||
+                           key.toLowerCase().includes('progress') ||
+                           key.toLowerCase().includes('score') ||
+                           key.toLowerCase().includes('level') ||
+                           key.toLowerCase().includes('player'))) {
+                    gameData.localStorage[key] = localStorage.getItem(key);
+                }
+            }
+            
+            // Capture sessionStorage data (filter for game-related keys)
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key && (key.toLowerCase().includes(gameName.toLowerCase()) || 
+                           key.toLowerCase().includes('game') ||
+                           key.toLowerCase().includes('save') ||
+                           key.toLowerCase().includes('progress') ||
+                           key.toLowerCase().includes('score') ||
+                           key.toLowerCase().includes('level') ||
+                           key.toLowerCase().includes('player'))) {
+                    gameData.sessionStorage[key] = sessionStorage.getItem(key);
+                }
+            }
+            
+            console.log(`Captured game data for ${gameName}:`, gameData);
+            return gameData;
+        }
+        
+        // Function to restore game data to localStorage and cookies
+        function restoreGameData(gameData) {
+            if (!gameData) {
+                console.log('No game data to restore');
+                return;
+            }
+            
+            try {
+                // Restore localStorage data
+                if (gameData.localStorage) {
+                    Object.entries(gameData.localStorage).forEach(([key, value]) => {
+                        localStorage.setItem(key, value);
+                    });
+                }
+                
+                // Restore sessionStorage data
+                if (gameData.sessionStorage) {
+                    Object.entries(gameData.sessionStorage).forEach(([key, value]) => {
+                        sessionStorage.setItem(key, value);
+                    });
+                }
+                
+                // Restore cookies (note: this has limitations due to browser security)
+                if (gameData.cookies) {
+                    // Note: Setting cookies from JavaScript is limited by browser security policies
+                    // This will only work for cookies that can be set from the current domain
+                    console.log('Attempting to restore cookies:', gameData.cookies);
+                }
+                
+                console.log('Game data restored successfully');
+            } catch (error) {
+                console.error('Failed to restore game data:', error);
+            }
+        }
+        
         async function startGameTimeTracking(gameName) {
             currentGameName = gameName;
             gameStartTime = Date.now();
             console.log('Started tracking time for game:', gameName);
+            
+            // Start auto-save for game data every 30 seconds
+            if (gameDataAutoSaveInterval) {
+                clearInterval(gameDataAutoSaveInterval);
+            }
+            
+            gameDataAutoSaveInterval = setInterval(async () => {
+                if (currentGame && currentGame.name === gameName) {
+                    console.log(`Auto-saving game data for: ${gameName}`);
+                    const gameData = captureGameData(gameName);
+                    await saveGameData(gameName, gameData);
+                }
+            }, 30000); // Auto-save every 30 seconds
+        }
+        
+        // Separate function to save game time
+        async function saveGameTime(gameName, timeSpentSeconds) {
+            if (!currentUser || !gameName || timeSpentSeconds <= 0) {
+                return;
+            }
+            
+            try {
+                const { doc, updateDoc, increment, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                const { db } = await import('./firebase.js');
+                
+                const userRef = doc(db, 'users', currentUser.uid);
+                const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
+                
+                // Get current user document to check if gameTime field exists
+                const userDoc = await getDoc(userRef);
+                const userData = userDoc.data();
+                
+                if (!userData) {
+                    console.error('User document not found for UID:', currentUser.uid);
+                    return;
+                }
+                
+                if (!userData.gameTime) {
+                    // Initialize gameTime field if it doesn't exist
+                    console.log('Initializing gameTime field for user:', currentUser.uid);
+                    await setDoc(userRef, { gameTime: {} }, { merge: true });
+                }
+                
+                // Increment the specific game time
+                await updateDoc(userRef, {
+                    [`gameTime.${gameKey}`]: increment(timeSpentSeconds)
+                });
+                
+                console.log(`Successfully tracked ${timeSpentSeconds} seconds for game: ${gameName} (key: ${gameKey}) in user document: ${currentUser.uid}`);
+            } catch (error) {
+                console.error('Failed to track game time:', error);
+                console.error('Error details:', error.message);
+            }
         }
         
         async function stopGameTimeTracking() {
@@ -3060,38 +3276,13 @@
             console.log(`Game time tracking: ${timeSpentSeconds} seconds for ${currentGameName}`);
             
             if (timeSpentSeconds > 0) { // Only track if at least 1 second was spent
-                try {
-                    const { doc, updateDoc, increment, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                    const { db } = await import('./firebase.js');
-                    
-                    const userRef = doc(db, 'users', currentUser.uid);
-                    const gameKey = currentGameName.replace(/[^a-zA-Z0-9]/g, '_');
-                    
-                    // Get current user document to check if gameTime field exists
-                    const userDoc = await getDoc(userRef);
-                    const userData = userDoc.data();
-                    
-                    if (!userData) {
-                        console.error('User document not found for UID:', currentUser.uid);
-                        return;
-                    }
-                    
-                    if (!userData.gameTime) {
-                        // Initialize gameTime field if it doesn't exist
-                        console.log('Initializing gameTime field for user:', currentUser.uid);
-                        await setDoc(userRef, { gameTime: {} }, { merge: true });
-                    }
-                    
-                    // Increment the specific game time
-                    await updateDoc(userRef, {
-                        [`gameTime.${gameKey}`]: increment(timeSpentSeconds)
-                    });
-                    
-                    console.log(`Successfully tracked ${timeSpentSeconds} seconds for game: ${currentGameName} (key: ${gameKey}) in user document: ${currentUser.uid}`);
-                } catch (error) {
-                    console.error('Failed to track game time:', error);
-                    console.error('Error details:', error.message);
-                }
+                await saveGameTime(currentGameName, timeSpentSeconds);
+            }
+            
+            // Clear auto-save interval
+            if (gameDataAutoSaveInterval) {
+                clearInterval(gameDataAutoSaveInterval);
+                gameDataAutoSaveInterval = null;
             }
             
             // Reset tracking
@@ -3534,8 +3725,15 @@
             });
         }
         
-        function openGame(gameName, gameUrl) {
+        async function openGame(gameName, gameUrl) {
             currentGame = { name: gameName, url: gameUrl };
+            
+            // Load saved game data before starting the game
+            console.log(`Loading saved data for game: ${gameName}`);
+            const savedGameData = await loadGameData(gameName);
+            if (savedGameData) {
+                restoreGameData(savedGameData);
+            }
             
             // Start tracking time for this game
             startGameTimeTracking(gameName);
@@ -3711,6 +3909,13 @@
         }
         
         async function exitGame() {
+            // Save game data before exiting
+            if (currentGame && currentGame.name) {
+                console.log(`Saving game data for: ${currentGame.name}`);
+                const gameData = captureGameData(currentGame.name);
+                await saveGameData(currentGame.name, gameData);
+            }
+            
             // Stop tracking time for the current game
             await stopGameTimeTracking();
             
@@ -4087,13 +4292,68 @@
         });
         
         
-        // Track game time when page is unloaded
-        window.addEventListener('beforeunload', async () => {
-            await stopGameTimeTracking();
+        // Save pending data to localStorage for recovery
+        function savePendingData() {
+            if (currentGame && currentGame.name && currentUser) {
+                const gameData = captureGameData(currentGame.name);
+                const pendingData = {
+                    gameName: currentGame.name,
+                    gameData: gameData,
+                    userId: currentUser.uid,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('pendingGameData', JSON.stringify(pendingData));
+            }
+            
+            if (gameStartTime && currentGameName && currentUser) {
+                const timeSpent = Date.now() - gameStartTime;
+                const timeSpentSeconds = Math.round(timeSpent / 1000);
+                if (timeSpentSeconds > 0) {
+                    const pendingTime = {
+                        gameName: currentGameName,
+                        timeSpent: timeSpentSeconds,
+                        userId: currentUser.uid,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('pendingGameTime', JSON.stringify(pendingTime));
+                }
+            }
+        }
+        
+        // Process pending data on page load
+        async function processPendingData() {
+            try {
+                // Process pending game data
+                const pendingGameData = localStorage.getItem('pendingGameData');
+                if (pendingGameData) {
+                    const data = JSON.parse(pendingGameData);
+                    if (data.userId === currentUser?.uid) {
+                        await saveGameData(data.gameName, data.gameData);
+                        localStorage.removeItem('pendingGameData');
+                    }
+                }
+                
+                // Process pending game time
+                const pendingGameTime = localStorage.getItem('pendingGameTime');
+                if (pendingGameTime) {
+                    const data = JSON.parse(pendingGameTime);
+                    if (data.userId === currentUser?.uid) {
+                        await saveGameTime(data.gameName, data.timeSpent);
+                        localStorage.removeItem('pendingGameTime');
+                    }
+                }
+            } catch (error) {
+                console.error('Error processing pending data:', error);
+            }
+        }
+        
+        // Track game time and save game data when page is unloaded
+        window.addEventListener('beforeunload', () => {
+            savePendingData();
         });
         
-        window.addEventListener('pagehide', async () => {
-            await stopGameTimeTracking();
+        window.addEventListener('pagehide', () => {
+            savePendingData();
         });
 
         

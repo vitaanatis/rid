@@ -26,6 +26,28 @@
             --main-content-dark: transparent;
             --unavailable-light: #FFC107;
             --unavailable-dark: #FF8F00;
+            
+            /* Green Eagle Theme Variables */
+            --eagle-primary: #417137;
+            --eagle-secondary: #5a8a4a;
+            --eagle-accent: #2d5a2d;
+            --eagle-background: #2d4a2d;
+            --eagle-sidebar-bg: #3a5a3a;
+            --eagle-sidebar-border: #4a6a4a;
+            --eagle-sidebar-active: #4a7a4a;
+            --eagle-text: #e8f5e8;
+            --eagle-main-content: rgba(45, 74, 45, 0.1);
+            
+            /* Fall Theme Variables */
+            --fall-primary: #d2691e;
+            --fall-secondary: #cd853f;
+            --fall-accent: #b8860b;
+            --fall-background: #fff8dc;
+            --fall-sidebar-bg: #f5f5dc;
+            --fall-sidebar-border: #daa520;
+            --fall-sidebar-active: #f0e68c;
+            --fall-text: #8b4513;
+            --fall-main-content: transparent;
         }
         body {
             font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
@@ -43,6 +65,14 @@
             background: var(--background-dark);
             color: var(--text-dark);
         }
+        body[data-theme="eagle"] {
+            background: var(--eagle-background);
+            color: var(--eagle-text);
+        }
+        body[data-theme="fall"] {
+            background: var(--fall-background);
+            color: var(--fall-text);
+        }
         body::before {
             content: '';
             position: fixed;
@@ -57,6 +87,79 @@
                 repeating-radial-gradient(circle at 30% 30%, #fff 0 1px, transparent 2px 100px),
                 repeating-radial-gradient(circle at 50% 50%, rgba(160,170,255,0.08) 0 60px, transparent 62px 100vw);
             opacity: 0.22;
+        }
+        
+        /* Fall theme falling leaves animation */
+        body[data-theme="fall"]::before {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(210,105,30,0.15) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(205,133,63,0.12) 0 5vw, transparent 8vw),
+                repeating-radial-gradient(circle at 30% 30%, #f0e68c 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, #daa520 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 30% 30%, #fff8dc 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(218,165,32,0.08) 0 60px, transparent 62px 100vw);
+            opacity: 0.25;
+        }
+        
+        /* Eagle theme background */
+        body[data-theme="eagle"]::before {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(65,113,55,0.3) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(90,138,74,0.25) 0 5vw, transparent 8vw),
+                radial-gradient(circle at 50% 50%, rgba(45,74,45,0.2) 0 15vw, transparent 20vw),
+                repeating-radial-gradient(circle at 30% 30%, #4a6a4a 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, #5a8a4a 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 30% 30%, #3a5a3a 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(90,138,74,0.15) 0 60px, transparent 62px 100vw);
+            opacity: 0.4;
+        }
+        
+        /* Falling leaves animation */
+        .falling-leaves {
+            position: fixed;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #d2691e, #cd853f, #b8860b);
+            border-radius: 0 100% 0 100%;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+        
+        .leaf:nth-child(odd) {
+            background: linear-gradient(45deg, #8b4513, #a0522d, #cd853f);
+            transform: scale(0.8);
+        }
+        
+        .leaf:nth-child(3n) {
+            background: linear-gradient(45deg, #daa520, #b8860b, #d2691e);
+            transform: scale(1.2);
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Hide falling leaves for non-fall themes */
+        body:not([data-theme="fall"]) .falling-leaves {
+            display: none;
         }
         .topbar {
             position: fixed;
@@ -73,6 +176,15 @@
         body[data-theme="dark"] .topbar {
             background: #20263a;
             box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+        }
+        body[data-theme="eagle"] .topbar {
+            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-secondary));
+            box-shadow: 0 2px 12px rgba(65,113,55,0.3);
+            border-bottom: 2px solid var(--eagle-accent);
+        }
+        body[data-theme="fall"] .topbar {
+            background: var(--fall-sidebar-bg);
+            box-shadow: 0 2px 12px rgba(210,105,30,0.15);
         }
         .hubble-gradient {
             font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
@@ -91,6 +203,8 @@
             user-select: none;
             cursor: default;
         }
+
+        
         .search-bar-custom {
             position: absolute;
             left: 50%;
@@ -124,6 +238,26 @@
         body[data-theme="dark"] .search-bar-custom:focus {
             background: #232a3a;
         }
+        body[data-theme="eagle"] .search-bar-custom {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
+        }
+        body[data-theme="eagle"] .search-bar-custom:focus {
+            background: linear-gradient(135deg, var(--eagle-sidebar-active), var(--eagle-primary));
+            border: 2px solid var(--eagle-primary);
+            box-shadow: 0 4px 15px rgba(65,113,55,0.3);
+        }
+        body[data-theme="fall"] .search-bar-custom {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border: 1.5px solid var(--fall-sidebar-border);
+        }
+        body[data-theme="fall"] .search-bar-custom:focus {
+            background: var(--fall-sidebar-active);
+            border: 1.5px solid var(--fall-primary);
+        }
         
         /* Progress Bar Styles */
         .registration-progress-bar {
@@ -149,6 +283,16 @@
             background: #232a3a;
             border: 1.5px solid var(--sidebar-border-dark);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        body[data-theme="eagle"] .registration-progress-bar {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            border: 1.5px solid var(--eagle-sidebar-border);
+            box-shadow: 0 2px 8px rgba(65,113,55,0.3);
+        }
+        body[data-theme="fall"] .registration-progress-bar {
+            background: linear-gradient(135deg, var(--fall-sidebar-bg), var(--fall-sidebar-active));
+            border: 1.5px solid var(--fall-sidebar-border);
+            box-shadow: 0 2px 8px rgba(210,105,30,0.3);
         }
         
         .progress-bar-container {
@@ -268,6 +412,18 @@
             border: 1px solid rgba(160, 170, 255, 0.3);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
+        body[data-theme="eagle"] .progress-text {
+            color: var(--eagle-text);
+            background: rgba(58, 90, 58, 0.95);
+            border: 1px solid rgba(90, 138, 74, 0.3);
+            box-shadow: 0 2px 4px rgba(65, 113, 55, 0.3);
+        }
+        body[data-theme="fall"] .progress-text {
+            color: var(--fall-text);
+            background: rgba(245, 245, 220, 0.95);
+            border: 1px solid rgba(218, 165, 32, 0.3);
+            box-shadow: 0 2px 4px rgba(210, 105, 30, 0.3);
+        }
         
         .gift-emoji {
             position: absolute;
@@ -323,6 +479,15 @@
         @keyframes gift-bounce-onboarding {
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
             50% { transform: translate(-50%, -60%) scale(1.1); }
+        }
+        
+        @keyframes hallOfFameGlow {
+            0% { 
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+            }
+            100% { 
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
+            }
         }
         
         .onboarding-gift.shrinking {
@@ -684,6 +849,16 @@
             background: #232a3a;
             border-color: #2c3550;
         }
+        body[data-theme="eagle"] .profile-dropdown {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            border-color: var(--eagle-sidebar-border);
+            box-shadow: 0 8px 30px rgba(65, 113, 55, 0.3);
+        }
+        body[data-theme="fall"] .profile-dropdown {
+            background: linear-gradient(135deg, var(--fall-sidebar-bg), var(--fall-sidebar-active));
+            border-color: var(--fall-sidebar-border);
+            box-shadow: 0 8px 30px rgba(210, 105, 30, 0.3);
+        }
         .dropdown-item {
             padding: 0.8rem 1rem;
             color: #222222;
@@ -697,6 +872,12 @@
         }
         body[data-theme="dark"] .dropdown-item {
             color: #f7f8fa;
+        }
+        body[data-theme="eagle"] .dropdown-item {
+            color: var(--eagle-text);
+        }
+        body[data-theme="fall"] .dropdown-item {
+            color: var(--fall-text);
         }
         .dropdown-item:hover {
             background: rgba(0, 156, 252, 0.1);
@@ -729,6 +910,15 @@
         }
         body[data-theme="dark"] .main-content {
             background: var(--main-content-dark);
+        }
+        body[data-theme="eagle"] .main-content {
+            background: transparent;
+            border-radius: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+        body[data-theme="fall"] .main-content {
+            background: var(--fall-main-content);
         }
         
         /* Theme toggle button */
@@ -773,6 +963,29 @@
             transform: scale(1.1) rotate(15deg);
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
+        body[data-theme="eagle"] .theme-toggle {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
+        }
+        body[data-theme="eagle"] .theme-toggle:hover {
+            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-accent));
+            color: #fff;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 4px 20px rgba(65,113,55,0.4);
+        }
+        body[data-theme="fall"] .theme-toggle {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border: 2px solid var(--fall-sidebar-border);
+        }
+        body[data-theme="fall"] .theme-toggle:hover {
+            background: var(--fall-primary);
+            color: #fff;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 4px 20px rgba(210,105,30,0.25);
+        }
         
         /* Bug button */
         .bug-button {
@@ -816,10 +1029,34 @@
             transform: scale(1.1) rotate(-15deg);
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
+        body[data-theme="eagle"] .bug-button {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
+        }
+        body[data-theme="eagle"] .bug-button:hover {
+            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-accent));
+            color: #fff;
+            transform: scale(1.1) rotate(-15deg);
+            box-shadow: 0 4px 20px rgba(65,113,55,0.4);
+        }
+        body[data-theme="fall"] .bug-button {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border: 2px solid var(--fall-sidebar-border);
+        }
+        body[data-theme="fall"] .bug-button:hover {
+            background: var(--fall-primary);
+            color: #fff;
+            transform: scale(1.1) rotate(-15deg);
+            box-shadow: 0 4px 20px rgba(210,105,30,0.25);
+        }
         
         /* Hide buttons when game is open */
         .game-fullscreen .theme-toggle,
-        .game-fullscreen .bug-button {
+        .game-fullscreen .bug-button,
+        .game-fullscreen .hall-of-fame-btn {
             display: none;
         }
         
@@ -893,6 +1130,23 @@
         
         body[data-theme="dark"] .help-popup-text {
             color: var(--text-dark);
+        }
+        body[data-theme="eagle"] .help-popup {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
+        }
+        body[data-theme="eagle"] .help-popup-text {
+            color: var(--eagle-text);
+        }
+        body[data-theme="fall"] .help-popup {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border-color: var(--fall-sidebar-border);
+        }
+        body[data-theme="fall"] .help-popup-text {
+            color: var(--fall-text);
         }
         
         .help-popup-buttons {
@@ -976,6 +1230,21 @@
         
         body[data-theme="dark"] .bug-popup-text {
             color: var(--text-dark);
+        }
+        body[data-theme="eagle"] .bug-popup {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            border: 2px solid var(--eagle-primary);
+            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
+        }
+        body[data-theme="eagle"] .bug-popup-text {
+            color: var(--eagle-text);
+        }
+        body[data-theme="fall"] .bug-popup {
+            background: var(--fall-sidebar-bg);
+            border-color: var(--fall-primary);
+        }
+        body[data-theme="fall"] .bug-popup-text {
+            color: var(--fall-text);
         }
         
         .bug-popup-buttons {
@@ -1312,6 +1581,36 @@
         body[data-theme="dark"] .ticket-form-label {
             color: var(--text-dark);
         }
+        body[data-theme="eagle"] .ticket-popup {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
+        }
+        body[data-theme="eagle"] .ticket-form-label {
+            color: var(--eagle-text);
+        }
+        body[data-theme="eagle"] .ticket-form-input,
+        body[data-theme="eagle"] .ticket-form-textarea {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
+        }
+        body[data-theme="fall"] .ticket-popup {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border-color: var(--fall-sidebar-border);
+        }
+        body[data-theme="fall"] .ticket-form-label {
+            color: var(--fall-text);
+        }
+        body[data-theme="fall"] .ticket-form-input,
+        body[data-theme="fall"] .ticket-form-textarea {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border-color: var(--fall-sidebar-border);
+        }
         
         .ticket-form-input,
         .ticket-form-textarea {
@@ -1383,6 +1682,357 @@
             background: #5a6268;
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+        
+        /* Hall of Fame Button */
+        .hall-of-fame-btn {
+            position: fixed;
+            left: 2.2rem;
+            top: 6rem;
+            z-index: 100;
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+            color: #333;
+            border: 3px solid #ffd700;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+            touch-action: manipulation;
+            animation: hallOfFameGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .hall-of-fame-btn:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd700, #ffed4e);
+            transform: scale(1.2) rotate(20deg);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 215, 0, 0.5);
+            animation-play-state: paused;
+        }
+        
+        .hall-of-fame-btn:active {
+            transform: scale(1.1) rotate(10deg);
+            transition: all 0.1s ease-out;
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-btn {
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+            color: #333;
+            border: 3px solid #ffd700;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-btn:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd700, #ffed4e);
+            transform: scale(1.2) rotate(20deg);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+        body[data-theme="eagle"] .hall-of-fame-btn {
+            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-secondary), var(--eagle-primary));
+            color: #fff;
+            border: 3px solid var(--eagle-accent);
+            box-shadow: 0 8px 25px rgba(65, 113, 55, 0.6), 0 0 20px rgba(90, 138, 74, 0.4);
+        }
+        body[data-theme="eagle"] .hall-of-fame-btn:hover {
+            background: linear-gradient(135deg, var(--eagle-secondary), var(--eagle-primary), var(--eagle-secondary));
+            transform: scale(1.2) rotate(20deg);
+            box-shadow: 0 12px 35px rgba(65, 113, 55, 0.8), 0 0 30px rgba(90, 138, 74, 0.6);
+        }
+        body[data-theme="fall"] .hall-of-fame-btn {
+            background: linear-gradient(135deg, var(--fall-primary), var(--fall-secondary), var(--fall-primary));
+            color: #fff;
+            border: 3px solid var(--fall-accent);
+            box-shadow: 0 8px 25px rgba(210, 105, 30, 0.6), 0 0 20px rgba(205, 133, 63, 0.4);
+        }
+        body[data-theme="fall"] .hall-of-fame-btn:hover {
+            background: linear-gradient(135deg, var(--fall-secondary), var(--fall-primary), var(--fall-secondary));
+            transform: scale(1.2) rotate(20deg);
+            box-shadow: 0 12px 35px rgba(210, 105, 30, 0.8), 0 0 30px rgba(205, 133, 63, 0.6);
+        }
+        
+        /* Hall of Fame Popup */
+        .hall-of-fame-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10008;
+            backdrop-filter: blur(5px);
+        }
+        
+        .hall-of-fame-popup-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-popup-overlay {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .hall-of-fame-popup {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .hall-of-fame-popup-overlay.show .hall-of-fame-popup {
+            animation: slideIn 0.3s ease;
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-popup {
+            background: #2a2a2a;
+            border: 1px solid #444;
+        }
+        body[data-theme="eagle"] .hall-of-fame-popup {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 20px 60px rgba(65, 113, 55, 0.3);
+        }
+        body[data-theme="fall"] .hall-of-fame-popup {
+            background: linear-gradient(135deg, var(--fall-sidebar-bg), var(--fall-sidebar-active));
+            border: 2px solid var(--fall-sidebar-border);
+            box-shadow: 0 20px 60px rgba(210, 105, 30, 0.3);
+        }
+        
+        .hall-of-fame-popup-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffd700;
+            text-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+            text-align: center;
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-popup-title {
+            color: #ffed4e;
+        }
+        
+        .hall-of-fame-content {
+            margin-bottom: 1rem;
+        }
+        
+        .hall-of-fame-categories {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #ffd700;
+            background: transparent;
+            color: #ffd700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 200px;
+            text-align: center;
+        }
+        
+        .category-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .category-btn.active {
+            background: #ffd700;
+            color: #333;
+        }
+        
+        body[data-theme="dark"] .category-btn {
+            border-color: #ffed4e;
+            color: #ffed4e;
+        }
+        
+        body[data-theme="dark"] .category-btn:hover {
+            background: rgba(255, 237, 78, 0.1);
+        }
+        
+        body[data-theme="dark"] .category-btn.active {
+            background: #ffed4e;
+            color: #333;
+        }
+        
+        .hall-of-fame-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .hof-section {
+            display: none;
+        }
+        
+        .hof-section.active {
+            display: block;
+        }
+        
+        .hof-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .hof-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hof-item.gold {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-left-color: #ffd700;
+        }
+        
+        .hof-item.silver {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            border-left-color: #c0c0c0;
+        }
+        
+        .hof-item.bronze {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            border-left-color: #cd7f32;
+        }
+        
+        .hof-item.achievement {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border-left-color: #4caf50;
+        }
+        
+        .hof-item.contributor {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left-color: #2196f3;
+        }
+        
+        body[data-theme="dark"] .hof-item {
+            background: #3a3a3a;
+            border-left-color: #666;
+        }
+        
+        body[data-theme="dark"] .hof-item:hover {
+            background: #4a4a4a;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        body[data-theme="dark"] .hof-item.gold {
+            background: linear-gradient(135deg, #4a3a00, #6b4c00);
+            border-left-color: #ffd700;
+        }
+        
+        body[data-theme="dark"] .hof-item.silver {
+            background: linear-gradient(135deg, #3a3a3a, #4a4a4a);
+            border-left-color: #c0c0c0;
+        }
+        
+        body[data-theme="dark"] .hof-item.bronze {
+            background: linear-gradient(135deg, #4a2c00, #6b3d00);
+            border-left-color: #cd7f32;
+        }
+        
+        body[data-theme="dark"] .hof-item.achievement {
+            background: linear-gradient(135deg, #1a3a1a, #2a4a2a);
+            border-left-color: #4caf50;
+        }
+        
+        body[data-theme="dark"] .hof-item.contributor {
+            background: linear-gradient(135deg, #1a2a3a, #2a3a4a);
+            border-left-color: #2196f3;
+        }
+        
+        .hof-rank {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .hof-info {
+            flex: 1;
+        }
+        
+        .hof-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        
+        .hof-detail {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .hof-score {
+            font-weight: 700;
+            color: #ffd700;
+            font-size: 1.1rem;
+        }
+        
+        body[data-theme="dark"] .hof-name {
+            color: #fff;
+        }
+        
+        body[data-theme="dark"] .hof-detail {
+            color: #ccc;
+        }
+        
+        body[data-theme="dark"] .hof-score {
+            color: #ffed4e;
+        }
+        
+        .hall-of-fame-popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .hall-of-fame-popup-close:hover {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-popup-close {
+            color: #ccc;
+        }
+        
+        body[data-theme="dark"] .hall-of-fame-popup-close:hover {
+            color: #ff6666;
+            background: rgba(255, 68, 68, 0.2);
         }
         
         /* FAQ Popup */
@@ -1469,6 +2119,23 @@
         
         body[data-theme="dark"] .faq-answer {
             color: var(--text-dark);
+        }
+        body[data-theme="eagle"] .faq-popup {
+            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
+            color: var(--eagle-text);
+            border: 2px solid var(--eagle-sidebar-border);
+            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
+        }
+        body[data-theme="eagle"] .faq-answer {
+            color: var(--eagle-text);
+        }
+        body[data-theme="fall"] .faq-popup {
+            background: var(--fall-sidebar-bg);
+            color: var(--fall-text);
+            border-color: var(--fall-sidebar-border);
+        }
+        body[data-theme="fall"] .faq-answer {
+            color: var(--fall-text);
         }
         
         /* Games Section */
@@ -1560,6 +2227,48 @@
             color: var(--accent);
             opacity: 0.8;
         }
+        body[data-theme="eagle"] .games-search-bar {
+            background: 
+                linear-gradient(var(--eagle-sidebar-bg), var(--eagle-sidebar-active)) padding-box,
+                linear-gradient(90deg, var(--eagle-primary) 0%, var(--eagle-secondary) 25%, var(--eagle-accent) 50%, var(--eagle-primary) 75%, var(--eagle-secondary) 100%) border-box;
+            background-size: 100% 100%, 400% 100%;
+            color: var(--eagle-text);
+            box-shadow: 0 4px 15px rgba(65, 113, 55, 0.2);
+            animation: hubble-gradient-flow 12s linear infinite;
+        }
+        
+        body[data-theme="eagle"] .games-search-bar:focus {
+            background: 
+                linear-gradient(var(--eagle-sidebar-active), var(--eagle-primary)) padding-box,
+                linear-gradient(90deg, var(--eagle-primary) 0%, var(--eagle-secondary) 25%, var(--eagle-accent) 50%, var(--eagle-primary) 75%, var(--eagle-secondary) 100%) border-box;
+            box-shadow: 0 0 0 4px rgba(65, 113, 55, 0.3), 0 8px 25px rgba(90, 138, 74, 0.3);
+        }
+        
+        body[data-theme="eagle"] .games-search-bar::placeholder {
+            color: var(--eagle-accent);
+            opacity: 0.8;
+        }
+        body[data-theme="fall"] .games-search-bar {
+            background: 
+                linear-gradient(var(--fall-sidebar-bg), var(--fall-sidebar-active)) padding-box,
+                linear-gradient(90deg, var(--fall-primary) 0%, var(--fall-secondary) 25%, var(--fall-accent) 50%, var(--fall-primary) 75%, var(--fall-secondary) 100%) border-box;
+            background-size: 100% 100%, 400% 100%;
+            color: var(--fall-text);
+            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.2);
+            animation: hubble-gradient-flow 12s linear infinite;
+        }
+        
+        body[data-theme="fall"] .games-search-bar:focus {
+            background: 
+                linear-gradient(var(--fall-sidebar-active), var(--fall-primary)) padding-box,
+                linear-gradient(90deg, var(--fall-primary) 0%, var(--fall-secondary) 25%, var(--fall-accent) 50%, var(--fall-primary) 75%, var(--fall-secondary) 100%) border-box;
+            box-shadow: 0 0 0 4px rgba(210, 105, 30, 0.3), 0 8px 25px rgba(205, 133, 63, 0.3);
+        }
+        
+        body[data-theme="fall"] .games-search-bar::placeholder {
+            color: var(--fall-accent);
+            opacity: 0.8;
+        }
         
         /* Game Suggestion Button */
         .game-suggestion-btn {
@@ -1646,6 +2355,24 @@
         }
         
         body[data-theme="dark"] .game-card:hover {
+            box-shadow: none;
+        }
+        body[data-theme="eagle"] .game-card {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 16px;
+        }
+        body[data-theme="eagle"] .game-card:hover {
+            box-shadow: none;
+            transform: translateY(-3px);
+        }
+        body[data-theme="fall"] .game-card {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+        body[data-theme="fall"] .game-card:hover {
             box-shadow: none;
         }
         
@@ -1755,65 +2482,11 @@
         body[data-theme="dark"] .game-name {
             color: var(--text-dark);
         }
-        
-        /* Halloween games glow effect */
-        .game-name.halloween-glow {
-            color: #ff8c00 !important;
-            text-shadow: 
-                0 0 3px #ff8c00,
-                0 0 6px #ff8c00,
-                0 0 9px #ff8c00;
-            animation: halloween-pulse 3s ease-in-out infinite alternate;
+        body[data-theme="eagle"] .game-name {
+            color: var(--eagle-text);
         }
-        
-        .spooky-subtitle {
-    color: #ffffff !important;
-    text-shadow: 
-        0 0 5px #ffffff,
-        0 0 10px #ffffff,
-        0 0 15px #ffffff,
-        0 0 20px #ffffff;
-    animation: spooky-glow 2s ease-in-out infinite alternate;
-    font-size: 1rem;      /* slightly smaller than the name */
-    font-weight: bold;
-    text-align: center;
-
-    margin-top: 2px;      /* small gap below the game name */
-    line-height: 1.1;     /* keeps text tight */
-}
-
-
-        
-        @keyframes spooky-glow {
-            from {
-                text-shadow: 
-                    0 0 5px #ffffff,
-                    0 0 10px #ffffff,
-                    0 0 15px #ffffff,
-                    0 0 20px #ffffff;
-            }
-            to {
-                text-shadow: 
-                    0 0 10px #ffffff,
-                    0 0 20px #ffffff,
-                    0 0 30px #ffffff,
-                    0 0 40px #ffffff;
-            }
-        }
-        
-        @keyframes halloween-pulse {
-            from {
-                text-shadow: 
-                    0 0 3px #ff8c00,
-                    0 0 6px #ff8c00,
-                    0 0 9px #ff8c00;
-            }
-            to {
-                text-shadow: 
-                    0 0 2px #ff8c00,
-                    0 0 4px #ff8c00,
-                    0 0 6px #ff8c00;
-            }
+        body[data-theme="fall"] .game-name {
+            color: var(--fall-text);
         }
         /* Coming Soon Game Card */
 .game-card.coming-soon {
@@ -2074,6 +2747,7 @@
             }
             .theme-toggle { right: 1rem; bottom: 1rem; }
             .bug-button { left: 1rem; bottom: 1rem; }
+            .hall-of-fame-btn { left: 1rem; top: 5rem; }
         }
         
         /* Username Change Popup Styles */
@@ -2302,10 +2976,14 @@
             </div>
         </main>
     </div>
-    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">🌙</button>
+    <button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
     <button class="bug-button" id="bug-button" title="Report Bug">🐛</button>
     
-    <!-- Bug Report Popup -->
+    <!-- Falling leaves container for fall theme -->
+    <div class="falling-leaves" id="falling-leaves"></div>
+    <button class="hall-of-fame-btn" id="hall-of-fame-btn" title="Hall of Fame">🏆</button>
+    
+    <!-- Bug Report -->
     <div class="bug-popup-overlay" id="bug-popup-overlay">
         <div class="bug-popup">
             <h2 class="bug-popup-title">🐛 Report a Bug</h2>
@@ -2317,7 +2995,7 @@
         </div>
     </div>
     
-    <!-- Ticket Creation Popup -->
+    <!-- Ticket Creation -->
     <div class="ticket-popup-overlay" id="ticket-popup-overlay">
         <div class="ticket-popup">
             <h2 class="ticket-popup-title" id="ticket-popup-title">Create Support Ticket</h2>
@@ -2348,7 +3026,7 @@
         </div>
     </div>
     
-    <!-- Bug Ticket Creation Popup -->
+    <!-- Bug Ticket -->
     <div class="bug-ticket-popup-overlay" id="bug-ticket-popup-overlay">
         <div class="bug-ticket-popup">
             <h2 class="bug-ticket-popup-title" id="bug-ticket-popup-title">🐛 Report a Bug</h2>
@@ -2375,12 +3053,12 @@
         </div>
     </div>
     
-    <!-- FAQ Popup -->
+    <!-- FAQ -->
     <div class="faq-popup-overlay" id="faq-popup-overlay">
         <div class="faq-popup">
             <h2 class="faq-popup-title">Frequently Asked Questions</h2>
             
-            <!-- Not Getting Verification Email -->
+            <!-- Verification Email -->
             <div class="faq-item">
                 <div class="faq-question">I'm not receiving my verification email. What should I do?</div>
                 <div class="faq-answer">
@@ -2389,7 +3067,7 @@
                 </div>
             </div>
 
-            <!-- Username Being Used by Pending Account -->
+            <!-- Username Pending -->
             <div class="faq-item">
                 <div class="faq-question">Why does it say my username is being used by a pending account?</div>
                 <div class="faq-answer">
@@ -2406,7 +3084,7 @@
                 </div>
             </div>
 
-            <!-- Email Already Used -->
+            <!-- Email Used -->
             <div class="faq-item">
                 <div class="faq-question">Why does it say my email is already associated with another account?</div>
                 <div class="faq-answer">
@@ -2454,14 +3132,14 @@
                 <h3>If you have any other questions, please feel free to create a support ticket!</h3>
             </div>
 
-            <!-- Close Button -->
+            <!-- Close -->
             <div style="text-align: center; margin-top: 2rem;">
                 <button class="help-popup-close" onclick="closeFAQPopupAndReturnToHelp()">Close</button>
             </div>
         </div>
     </div>
     
-    <!-- Game Suggestion Popup -->
+    <!-- Game Suggestion -->
     <div class="game-suggestion-popup-overlay" id="game-suggestion-popup-overlay">
         <div class="game-suggestion-popup">
             <h2 class="game-suggestion-popup-title" id="game-suggestion-popup-title">💡 Suggest a Game</h2>
@@ -2492,7 +3170,61 @@
         </div>
     </div>
     
-    <!-- Game Fullscreen Container -->
+    <!-- Hall of Fame -->
+    <div class="hall-of-fame-popup-overlay" id="hall-of-fame-popup-overlay">
+        <div class="hall-of-fame-popup">
+            <h2 class="hall-of-fame-popup-title">🏆 Hall of Fame</h2>
+            <div class="hall-of-fame-content">
+                <div class="hall-of-fame-categories">
+                    <button class="category-btn active" data-category="top-players">Most Goated Users</button>
+                </div>
+                
+                <div class="hall-of-fame-list" id="hall-of-fame-list">
+                    <!-- Most Goated Users -->
+                    <div class="hof-section active" id="top-players">
+                        <div class="hof-item gold">
+                            <div class="hof-rank">🥇</div>
+                            <div class="hof-info">
+                                <div class="hof-name">Mally</div>
+                                <div class="hof-detail">Added all games</div>
+                            </div>
+                        </div>
+                        <div class="hof-item silver">
+                            <div class="hof-rank">🥈</div>
+                            <div class="hof-info">
+                                <div class="hof-name">exoflex6</div>
+                                <div class="hof-detail">Built the entire site</div>
+                            </div>
+                        </div>
+                        <div class="hof-item bronze">
+                            <div class="hof-rank">🥉</div>
+                            <div class="hof-info">
+                                <div class="hof-name">Untaken</div>
+                                <div class="hof-detail">Reason is super crazy...</div>
+                            </div>
+                        </div>
+                        <div class="hof-item">
+                            <div class="hof-rank">4</div>
+                            <div class="hof-info">
+                                <div class="hof-name">Untaken</div>
+                                <div class="hof-detail">Reason is super crazy...</div>
+                            </div>
+                        </div>
+                        <div class="hof-item">
+                            <div class="hof-rank">5</div>
+                            <div class="hof-info">
+                                <div class="hof-name">Untaken</div>
+                                <div class="hof-detail">Reason is super crazy...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="hall-of-fame-popup-close" onclick="closeHallOfFamePopup()">×</button>
+        </div>
+    </div>
+    
+    <!-- Game Fullscreen -->
     <div class="game-fullscreen" id="game-fullscreen">
         <iframe class="game-content" id="game-content" src=""></iframe>
     </div>
@@ -2511,11 +3243,11 @@
         </div>
     </div>
     
-    <!-- Confetti Container -->
+    <!-- Confetti -->
     <div class="confetti-container" id="confetti-container"></div>
     
     <script>
-        // Bug Report System Functions
+        // Bug Report Functions
         function showBugPopup() {
             const popup = document.getElementById('bug-popup-overlay');
             if (popup) {
@@ -2633,7 +3365,7 @@
             const email = document.getElementById('ticket-email').value.trim();
             const errorText = document.getElementById('ticket-error-text');
             
-            // Hide any previous error
+            // Clear error
             errorText.style.display = 'none';
             
             // Basic validation
@@ -2709,7 +3441,7 @@
             const description = document.getElementById('bug-ticket-description').value.trim();
             const errorText = document.getElementById('bug-ticket-error-text');
             
-            // Hide any previous error
+            // Clear error
             errorText.style.display = 'none';
             
             // Basic validation
@@ -2735,7 +3467,7 @@
                 
                 console.log('Firebase modules loaded, getting user data...');
                 
-                // Get user data from Firestore
+                // Get user data
                 const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
                 const userDocs = await getDocs(userQuery);
                 let username = 'User';
@@ -2829,9 +3561,10 @@
             closeTicketPopup();
             closeGameSuggestionPopup();
             closeFAQPopup();
+            closeHallOfFamePopup();
         }
         
-        // Game Suggestion Functions
+        // Game Suggestion
         function showGameSuggestionPopup() {
             const popup = document.getElementById('game-suggestion-popup-overlay');
             const formContent = document.getElementById('game-suggestion-form-content');
@@ -2872,7 +3605,7 @@
             const link = document.getElementById('game-suggestion-link').value.trim();
             const errorText = document.getElementById('game-suggestion-error-text');
             
-            // Hide any previous error
+            // Clear error
             errorText.style.display = 'none';
             
             // Basic validation - only title is required
@@ -2898,7 +3631,7 @@
                 
                 console.log('Firebase modules loaded, getting user data...');
                 
-                // Get user data from Firestore
+                // Get user data
                 const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
                 const userDocs = await getDocs(userQuery);
                 let username = 'User';
@@ -2955,7 +3688,46 @@
             }
         }
         
-        // Close popups when clicking outside
+        // Hall of Fame
+        function showHallOfFamePopup() {
+            const popup = document.getElementById('hall-of-fame-popup-overlay');
+            if (popup) {
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 10);
+            }
+        }
+        
+        function closeHallOfFamePopup() {
+            const popup = document.getElementById('hall-of-fame-popup-overlay');
+            if (popup) {
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
+            }
+        }
+        
+        function switchHallOfFameCategory(category) {
+            // Remove active class from all category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            
+            // Hide all sections
+            document.querySelectorAll('.hof-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(category).classList.add('active');
+        }
+        
+        // Close popups on outside click
         document.addEventListener('click', function(e) {
             // Bug popup
             const bugPopup = document.getElementById('bug-popup-overlay');
@@ -2989,13 +3761,19 @@
             if (ticketPopup && e.target === ticketPopup && sentContent.style.display === 'none') {
                 closeTicketPopup();
             }
+            
+            // Hall of Fame popup
+            const hallOfFamePopup = document.getElementById('hall-of-fame-popup-overlay');
+            if (hallOfFamePopup && e.target === hallOfFamePopup) {
+                closeHallOfFamePopup();
+            }
         });
         
-        // Authentication check and user display
+        // Authentication
         async function checkAuthAndLoadUser() {
             try {
                 const { getAuth, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
-                const { getFirestore, collection, query, where, getDocs, setDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
+                      const { getFirestore, collection, query, where, getDocs, setDoc, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
                 const { app } = await import('./firebase.js');
                 const auth = getAuth(app);
                 const db = getFirestore(app);
@@ -3007,10 +3785,41 @@
                       const snap = await getDocs(query(usersRef, where("email", "==", user.email)));
                 
                       if (!snap.empty) {
-                        // Profile exists → continue as before
+                        // Profile exists → check if it needs completion
                         currentUser = user;
                         const userData = snap.docs[0].data();
-                        const username = userData.username || 'User';
+                        const userDocRef = doc(db, "users", snap.docs[0].id);
+                        
+                        // Check if this is a failed/incomplete registration
+                        if (userData.registrationCompleted === false || !userData.username) {
+                          console.log('Found incomplete registration, completing it now...');
+                          
+                          // Complete the registration by updating the existing document
+                          const pending = JSON.parse(localStorage.getItem('pendingUserData') || '{}');
+                          const username = (pending && pending.username) || user.email.split('@')[0];
+                          const userId = generateRandomId(12);
+                          
+                          await updateDoc(userDocRef, {
+                            username: username,
+                            userId: userId,
+                            registrationCompleted: true,
+                            following: userData.following || [],
+                            followers: userData.followers || [],
+                            firstONEhundred: userData.firstONEhundred || false,
+                            gameTime: userData.gameTime || {},
+                            gameData: userData.gameData || {},
+                            uid: user.uid
+                          });
+                          
+                          console.log('Registration completed successfully for existing user');
+                          
+                          // Clear any pending data
+                          localStorage.removeItem('pendingUserData');
+                        }
+                        
+                        // Continue with normal flow
+                        const finalUserData = snap.docs[0].data();
+                        const username = finalUserData.username || 'User';
                         const profileLabel = document.getElementById('profile-label');
                         const profileIcon = document.getElementById('profile-icon');
                         if (profileLabel) profileLabel.textContent = username;
@@ -3022,7 +3831,7 @@
                         
                         // Process any pending game data/time
                         await processPendingData();
-                        // Check for onboarding after user is loaded
+                        // Check onboarding
                         setTimeout(() => {
                             checkAndStartOnboarding();
                         }, 1000);
@@ -3038,7 +3847,7 @@
                       }
                 
                       // NEW: finish registration now that they’re verified
-                      // Prefer saved sign-up data, otherwise fall back to an email-based username.
+                      // Use saved data or email-based username
                       const pending = JSON.parse(localStorage.getItem('pendingUserData') || '{}');
                       const username =
                         (pending && pending.username) || user.email.split('@')[0];
@@ -3056,7 +3865,7 @@
                         gameData: {}
                       });
 
-                      // Clear pending data so we don’t duplicate work
+                      // Clear pending data
                       localStorage.removeItem('pendingUserData');
 
                       // Continue with your normal "profile exists" path
@@ -3087,7 +3896,7 @@
                   }
                 });
                 
-                // Helper: simple ID generator (or reuse your existing one)
+                // ID generator
                 function generateRandomId(len = 12) {
                   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                   let out = '';
@@ -3127,7 +3936,7 @@
                 const userRef = doc(db, 'users', currentUser.uid);
                 const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
                 
-                // Get current user document
+                // Get user document
                 const userDoc = await getDoc(userRef);
                 const userData = userDoc.data();
                 
@@ -3297,7 +4106,7 @@
                 const userRef = doc(db, 'users', currentUser.uid);
                 const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
                 
-                // Get current user document to check if gameTime field exists
+                // Get user document to check if gameTime field exists
                 const userDoc = await getDoc(userRef);
                 const userData = userDoc.data();
                 
@@ -3370,7 +4179,7 @@
                 }
             });
             
-            // Change username functionality
+            // Change username
             changeUsernameBtn.addEventListener('click', () => {
                 profileDropdown.style.display = 'none'; // Close dropdown
                 showUsernameChange();
@@ -3398,9 +4207,27 @@
         async function setTheme(theme, saveToFirebase = true) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('hubble-theme', theme);
-            themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
             
-            // Save to Firebase if user is authenticated
+            // Update theme toggle button icon
+            const themeIcons = {
+                'light': '🌙',
+                'dark': '☀️',
+                'eagle': '🦅',
+                'fall': '🍂'
+            };
+            themeToggle.textContent = themeIcons[theme] || '🌙';
+            
+            // Handle falling leaves animation for fall theme
+            const fallingLeaves = document.getElementById('falling-leaves');
+            if (theme === 'fall') {
+                createFallingLeaves();
+            } else {
+                if (fallingLeaves) {
+                    fallingLeaves.innerHTML = '';
+                }
+            }
+            
+            // Save to Firebase
             if (saveToFirebase && currentUser) {
                 try {
                     const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
@@ -3446,9 +4273,37 @@
             return localTheme;
         }
         
+        // Create falling leaves animation
+        function createFallingLeaves() {
+            const fallingLeaves = document.getElementById('falling-leaves');
+            if (!fallingLeaves) return;
+            
+            fallingLeaves.innerHTML = '';
+            
+            // Create multiple leaves with different animations
+            for (let i = 0; i < 15; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                
+                // Random positioning and animation duration
+                const leftPosition = Math.random() * 100;
+                const animationDuration = 3 + Math.random() * 4; // 3-7 seconds
+                const animationDelay = Math.random() * 2; // 0-2 seconds delay
+                
+                leaf.style.left = leftPosition + '%';
+                leaf.style.animationDuration = animationDuration + 's';
+                leaf.style.animationDelay = animationDelay + 's';
+                
+                fallingLeaves.appendChild(leaf);
+            }
+        }
+        
         themeToggle.onclick = () => {
             const current = document.body.getAttribute('data-theme');
-            setTheme(current === 'light' ? 'dark' : 'light');
+            const themes = ['light', 'dark', 'eagle', 'fall'];
+            const currentIndex = themes.indexOf(current);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            setTheme(themes[nextIndex]);
         };
 
         // Games System
@@ -3573,15 +4428,10 @@
             { name: "Vex 8", image: "images/Vex-8.png", url: "./games/vex8/" },
             { name: "Solitaire", image: "images/Solitaire.png", url: "./games/solitaire/game.html" },
             { name: "Fruit Ninja", image: "images/Fruit-Ninja.png", url: "./games/fruit-ninja/" },
-         /* ADD LATER{ name: "Pixel Smash Duels", image: "images/Pixel-Smash-Duels.png", url: "./games/pixel-smash-duels" }, */
-             { name: "Slope 3d", image: "images/Slope3d.png", url: "./games/slope3d/" }, 
-             { name: "Halloween", image: "images/Halloween.png", url: "./games/Halloween.html" },
-             { name: "Trick or Treat", image: "images/Trick-or-Treat.png", url: "./games/Trick-or-Treat.html" },
-             { name: "Candy Clicker", image: "images/Candy-Clicker.png", url: "./games/Candy-Clicker.html" },
-             { name: "Halloween Run", image: "images/Halloween-Run.png", url: "./games/Halloween-Run.html" },
-             { name: "Create A Path", image: "images/Create-A-Path.png", url: "./games/create-a-path.html" },
-             { name: "Spooky Scary Skeletons", image: "images/Spooky-Scary-Skeletons.png", url: "./games/spooky-scary-skeletons.html" },
-            
+            { name: "Pixel Smash Duels", image: "images/Pixel-Smash-Duels.png", url: "./games/pixel-smash-duels", comingSoon: true  },
+            { name: "Slope 3d", image: "images/Slope3d.png", url: "./games/slope3d/", comingSoon: true  },
+            { name: "Create A Path", image: "images/Create-a-path.png", url: "./games/Creat-A-Path.html" },
+            { name: "A Chefs Chaos", image: "images/chefs-chaos.png", url: "./games/chefs-chaos.html" },
             
         ];
 
@@ -3590,7 +4440,7 @@
         let currentGame = null;
         
         function initGamesSection() {
-            // Initialize allGames here to avoid initialization order issues
+            // Initialize allGames
             allGames = [...gamesList];
             console.log('Initializing games section with', allGames.length, 'games');
             
@@ -3684,45 +4534,14 @@
                     clickHandler = ''; // No click handler for coming soon games
                 }
                 
-                // Check if this is a Halloween-related game
-                const isHalloweenGame = game.name.toLowerCase().includes('halloween') || 
-                                      game.name.toLowerCase().includes('trick') || 
-                                      game.name.toLowerCase().includes('treat') || 
-                                      game.name.toLowerCase().includes('candy') || 
-                                      game.name.toLowerCase().includes('spooky');
-                
-                const gameNameClass = isHalloweenGame ? 'game-name halloween-glow' : 'game-name';
-                
-                // Check if this specific game should have "Spooky" subtitle
-                const shouldHaveSpookySubtitle = game.name.toLowerCase().includes('halloween') || 
-                                      game.name.toLowerCase().includes('trick') || 
-                                      game.name.toLowerCase().includes('treat') || 
-                                      game.name.toLowerCase().includes('candy') || 
-                                     game.name.toLowerCase().includes('spooky');
-                
-                                     const spookySubtitle = shouldHaveSpookySubtitle 
-   ? '<span class="spooky-subtitle">Ｓｐｏｏｋｙ</span>' 
-    : '';
-
-                
-                // Debug log for Halloween games
-                if (isHalloweenGame) {
-                    console.log(`Halloween game: ${game.name}, Should have spooky: ${shouldHaveSpookySubtitle}`);
-                }
-                
                 return `
                 <div class="${cssClasses}" ${clickHandler}>
                     <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" 
                          onerror="showGamePlaceholder(this, '${abbreviation}', '${colorScheme.primary}', '${colorScheme.secondary}')">
-        <h3 class="${gameNameClass}">${game.name}</h3>
-${spookySubtitle}
-
-
-           
+                    <h3 class="game-name">${game.name}</h3>
                 </div>
                 `;
             }).join('');
-            
             
             console.log('Generated HTML for first game:', sortedGames[0] ? sortedGames[0].name : 'none');
             console.log('First game image path:', sortedGames[0] ? sortedGames[0].image : 'none');
@@ -3762,7 +4581,7 @@ ${spookySubtitle}
             const searchInput = document.getElementById('games-search');
             if (!searchInput) return;
             
-            // Add focus/blur event listeners for animation control
+            // Add focus/blur events
             searchInput.addEventListener('focus', function() {
                 this.classList.add('paused');
             });
@@ -4396,6 +5215,20 @@ ${spookySubtitle}
             if (gameSuggestionBtn) {
                 gameSuggestionBtn.addEventListener('click', showGameSuggestionPopup);
             }
+            
+            // Setup Hall of Fame button
+            const hallOfFameBtn = document.getElementById('hall-of-fame-btn');
+            if (hallOfFameBtn) {
+                hallOfFameBtn.addEventListener('click', showHallOfFamePopup);
+            }
+            
+            // Setup Hall of Fame category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const category = e.target.getAttribute('data-category');
+                    switchHallOfFameCategory(category);
+                });
+            });
         });
         
         

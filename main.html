@@ -27,16 +27,6 @@
             --unavailable-light: #FFC107;
             --unavailable-dark: #FF8F00;
             
-            /* Green Eagle Theme Variables */
-            --eagle-primary: #417137;
-            --eagle-secondary: #5a8a4a;
-            --eagle-accent: #2d5a2d;
-            --eagle-background: #2d4a2d;
-            --eagle-sidebar-bg: #3a5a3a;
-            --eagle-sidebar-border: #4a6a4a;
-            --eagle-sidebar-active: #4a7a4a;
-            --eagle-text: #e8f5e8;
-            --eagle-main-content: rgba(45, 74, 45, 0.1);
             
             /* Fall Theme Variables */
             --fall-primary: #d2691e;
@@ -48,6 +38,50 @@
             --fall-sidebar-active: #f0e68c;
             --fall-text: #8b4513;
             --fall-main-content: transparent;
+            
+            /* Winter Theme Variables */
+            --winter-primary: #4682b4;
+            --winter-secondary: #5f9ea0;
+            --winter-accent: #2e8b57;
+            --winter-background: #f0f8ff;
+            --winter-sidebar-bg: #e6f3ff;
+            --winter-sidebar-border: #87ceeb;
+            --winter-sidebar-active: #b0e0e6;
+            --winter-text: #2f4f4f;
+            --winter-main-content: transparent;
+            
+            /* Fall Dark Theme Variables */
+            --fall-dark-primary: #ff8c00;
+            --fall-dark-secondary: #ffa500;
+            --fall-dark-accent: #ff6347;
+            --fall-dark-background: #2d1b0e;
+            --fall-dark-sidebar-bg: #3d2815;
+            --fall-dark-sidebar-border: #8b4513;
+            --fall-dark-sidebar-active: #4a2c0f;
+            --fall-dark-text: #f4a460;
+            --fall-dark-main-content: transparent;
+            
+            /* Winter Dark Theme Variables */
+            --winter-dark-primary: #87ceeb;
+            --winter-dark-secondary: #b0e0e6;
+            --winter-dark-accent: #20b2aa;
+            --winter-dark-background: #0f1419;
+            --winter-dark-sidebar-bg: #1a2332;
+            --winter-dark-sidebar-border: #4682b4;
+            --winter-dark-sidebar-active: #2c3e50;
+            --winter-dark-text: #e0f6ff;
+            --winter-dark-main-content: transparent;
+            
+            /* Spring Dark Theme Variables */
+            --spring-dark-primary: #90ee90;
+            --spring-dark-secondary: #98fb98;
+            --spring-dark-accent: #32cd32;
+            --spring-dark-background: #0d1a0d;
+            --spring-dark-sidebar-bg: #1a2e1a;
+            --spring-dark-sidebar-border: #228b22;
+            --spring-dark-sidebar-active: #2d4a2d;
+            --spring-dark-text: #e0ffe0;
+            --spring-dark-main-content: transparent;
         }
         body {
             font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
@@ -65,13 +99,31 @@
             background: var(--background-dark);
             color: var(--text-dark);
         }
-        body[data-theme="eagle"] {
-            background: var(--eagle-background);
-            color: var(--eagle-text);
-        }
         body[data-theme="fall"] {
             background: var(--fall-background);
             color: var(--fall-text);
+        }
+        body[data-theme="winter"] {
+            background: var(--winter-background);
+            color: var(--winter-text);
+        }
+        
+        /* Fall Dark Theme */
+        body[data-theme="fall-dark"] {
+            background: var(--fall-dark-background);
+            color: var(--fall-dark-text);
+        }
+        
+        /* Winter Dark Theme */
+        body[data-theme="winter-dark"] {
+            background: var(--winter-dark-background);
+            color: var(--winter-dark-text);
+        }
+        
+        /* Spring Dark Theme */
+        body[data-theme="spring-dark"] {
+            background: var(--spring-dark-background);
+            color: var(--spring-dark-text);
         }
         body::before {
             content: '';
@@ -101,18 +153,51 @@
             opacity: 0.25;
         }
         
-        /* Eagle theme background */
-        body[data-theme="eagle"]::before {
+        /* Winter theme snow effect */
+        body[data-theme="winter"]::before {
             background: 
-                radial-gradient(circle at 80% 20%, rgba(65,113,55,0.3) 0 8vw, transparent 12vw),
-                radial-gradient(circle at 15% 80%, rgba(90,138,74,0.25) 0 5vw, transparent 8vw),
-                radial-gradient(circle at 50% 50%, rgba(45,74,45,0.2) 0 15vw, transparent 20vw),
-                repeating-radial-gradient(circle at 30% 30%, #4a6a4a 0 1px, transparent 2px 100px),
-                repeating-radial-gradient(circle at 50% 50%, #5a8a4a 0 1px, transparent 2px 100px),
-                repeating-radial-gradient(circle at 30% 30%, #3a5a3a 0 1px, transparent 2px 100px),
-                repeating-radial-gradient(circle at 50% 50%, rgba(90,138,74,0.15) 0 60px, transparent 62px 100vw);
-            opacity: 0.4;
+                radial-gradient(circle at 80% 20%, rgba(70,130,180,0.15) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(95,158,160,0.25) 0 5vw, transparent 8vw),
+                radial-gradient(circle at 50% 50%, rgba(46,139,87,0.2) 0 15vw, transparent 20vw),
+                repeating-radial-gradient(circle at 30% 30%, #e6f3ff 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(135,206,235,0.08) 0 60px, transparent 62px 100vw);
+            opacity: 0.3;
         }
+        
+        /* Fall dark theme background effect */
+        body[data-theme="fall-dark"]::before {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(255,140,0,0.15) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(255,165,0,0.12) 0 5vw, transparent 8vw),
+                repeating-radial-gradient(circle at 30% 30%, #8b4513 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, #ff6347 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 30% 30%, #2d1b0e 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(255,140,0,0.08) 0 60px, transparent 62px 100vw);
+            opacity: 0.25;
+        }
+        
+        /* Winter dark theme background effect */
+        body[data-theme="winter-dark"]::before {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(135,206,235,0.15) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(176,224,230,0.25) 0 5vw, transparent 8vw),
+                radial-gradient(circle at 50% 50%, rgba(32,178,170,0.2) 0 15vw, transparent 20vw),
+                repeating-radial-gradient(circle at 30% 30%, #1a2332 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(135,206,235,0.08) 0 60px, transparent 62px 100vw);
+            opacity: 0.3;
+        }
+        
+        /* Spring dark theme background effect */
+        body[data-theme="spring-dark"]::before {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(144,238,144,0.15) 0 8vw, transparent 12vw),
+                radial-gradient(circle at 15% 80%, rgba(152,251,152,0.25) 0 5vw, transparent 8vw),
+                radial-gradient(circle at 50% 50%, rgba(50,205,50,0.2) 0 15vw, transparent 20vw),
+                repeating-radial-gradient(circle at 30% 30%, #1a2e1a 0 1px, transparent 2px 100px),
+                repeating-radial-gradient(circle at 50% 50%, rgba(144,238,144,0.08) 0 60px, transparent 62px 100vw);
+            opacity: 0.3;
+        }
+        
         
         /* Falling leaves animation */
         .falling-leaves {
@@ -161,6 +246,42 @@
         body:not([data-theme="fall"]) .falling-leaves {
             display: none;
         }
+        
+        /* Snowflakes animation */
+        .snowflakes {
+            position: fixed;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .snowflake {
+            position: absolute;
+            color: #ffffff;
+            font-size: 1em;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Hide snowflakes for non-winter themes */
+        body:not([data-theme="winter"]) .snowflakes {
+            display: none;
+        }
         .topbar {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -176,11 +297,6 @@
         body[data-theme="dark"] .topbar {
             background: #20263a;
             box-shadow: 0 2px 12px rgba(0,0,0,0.13);
-        }
-        body[data-theme="eagle"] .topbar {
-            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-secondary));
-            box-shadow: 0 2px 12px rgba(65,113,55,0.3);
-            border-bottom: 2px solid var(--eagle-accent);
         }
         body[data-theme="fall"] .topbar {
             background: var(--fall-sidebar-bg);
@@ -238,17 +354,6 @@
         body[data-theme="dark"] .search-bar-custom:focus {
             background: #232a3a;
         }
-        body[data-theme="eagle"] .search-bar-custom {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
-        }
-        body[data-theme="eagle"] .search-bar-custom:focus {
-            background: linear-gradient(135deg, var(--eagle-sidebar-active), var(--eagle-primary));
-            border: 2px solid var(--eagle-primary);
-            box-shadow: 0 4px 15px rgba(65,113,55,0.3);
-        }
         body[data-theme="fall"] .search-bar-custom {
             background: var(--fall-sidebar-bg);
             color: var(--fall-text);
@@ -259,93 +364,7 @@
             border: 1.5px solid var(--fall-primary);
         }
         
-        /* Progress Bar Styles */
-        .registration-progress-bar {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 400px;
-            max-width: 40vw;
-            min-width: 200px;
-            height: 38px;
-            border-radius: 8px;
-            border: 1.5px solid var(--secondary);
-            background: #ffffff;
-            z-index: 10;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         
-        body[data-theme="dark"] .registration-progress-bar {
-            background: #232a3a;
-            border: 1.5px solid var(--sidebar-border-dark);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-        body[data-theme="eagle"] .registration-progress-bar {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            border: 1.5px solid var(--eagle-sidebar-border);
-            box-shadow: 0 2px 8px rgba(65,113,55,0.3);
-        }
-        body[data-theme="fall"] .registration-progress-bar {
-            background: linear-gradient(135deg, var(--fall-sidebar-bg), var(--fall-sidebar-active));
-            border: 1.5px solid var(--fall-sidebar-border);
-            box-shadow: 0 2px 8px rgba(210,105,30,0.3);
-        }
-        
-        .progress-bar-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .progress-bar-track {
-            width: 85%;
-            height: 8px;
-            background: rgba(160, 170, 255, 0.3);
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(160, 170, 255, 0.4);
-        }
-        
-        body[data-theme="dark"] .progress-bar-track {
-            background: rgba(160, 170, 255, 0.1);
-            border: 1px solid rgba(160, 170, 255, 0.2);
-        }
-        
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%);
-            background-size: 400% 100%;
-            border-radius: 4px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: hubble-gradient-flow 12s linear infinite;
-            position: relative;
-        }
-        
-        .progress-bar-fill.golden {
-            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 25%, #ffd700 50%, #ffed4e 75%, #ffd700 100%);
-            background-size: 400% 100%;
-            animation: golden-shine 2s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        
-        @keyframes golden-shine {
-            0%, 100% {
-                background: linear-gradient(90deg, #ffd700 0%, #ffed4e 25%, #ffd700 50%, #ffed4e 75%, #ffd700 100%);
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
-            }
-            50% {
-                background: linear-gradient(90deg, #ffed4e 0%, #ffd700 25%, #ffed4e 50%, #ffd700 75%, #ffed4e 100%);
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.5);
-            }
-        }
 
         /* Alpha Badge Styles */
         .alpha-badge {
@@ -388,98 +407,10 @@
         }
         
         
-        .progress-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-align: center;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 4px 10px;
-            border-radius: 6px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
         
-        body[data-theme="dark"] .progress-text {
-            color: var(--text-dark);
-            background: rgba(35, 42, 58, 0.95);
-            border: 1px solid rgba(160, 170, 255, 0.3);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        body[data-theme="eagle"] .progress-text {
-            color: var(--eagle-text);
-            background: rgba(58, 90, 58, 0.95);
-            border: 1px solid rgba(90, 138, 74, 0.3);
-            box-shadow: 0 2px 4px rgba(65, 113, 55, 0.3);
-        }
-        body[data-theme="fall"] .progress-text {
-            color: var(--fall-text);
-            background: rgba(245, 245, 220, 0.95);
-            border: 1px solid rgba(218, 165, 32, 0.3);
-            box-shadow: 0 2px 4px rgba(210, 105, 30, 0.3);
-        }
         
-        .gift-emoji {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.2rem;
-            animation: gift-bounce 2s ease-in-out infinite;
-            transition: opacity 0.5s ease;
-        }
         
-        .progress-bar-fill.golden ~ .gift-emoji {
-            opacity: 0;
-            pointer-events: none;
-        }
         
-        @keyframes gift-bounce {
-            0%, 100% { transform: translateY(-50%) scale(1); }
-            50% { transform: translateY(-60%) scale(1.1); }
-        }
-        
-        /* Onboarding Animation Styles */
-        .onboarding-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .onboarding-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .onboarding-gift {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 8rem;
-            z-index: 10001;
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: gift-bounce-onboarding 2s ease-in-out infinite;
-        }
-        
-        @keyframes gift-bounce-onboarding {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -60%) scale(1.1); }
-        }
         
         @keyframes hallOfFameGlow {
             0% { 
@@ -490,33 +421,7 @@
             }
         }
         
-        .onboarding-gift.shrinking {
-            font-size: 1.2rem;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: none;
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-        }
         
-        .onboarding-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: transparent;
-            z-index: 10002;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            max-width: 600px;
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            align-items: center;
-        }
         
         .confetti-container {
             position: fixed;
@@ -557,104 +462,14 @@
         }
         
         
-        .onboarding-container.show {
-            opacity: 1;
-            visibility: visible;
-        }
         
         
         
-        .onboarding-text {
-            text-align: center;
-            color: var(--text-light);
-            line-height: 1.6;
-            background: var(--background-light);
-            border: 2px solid var(--secondary);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            max-width: 500px;
-            width: 100%;
-        }
         
-        body[data-theme="dark"] .onboarding-text {
-            background: var(--sidebar-bg-dark);
-            border-color: var(--sidebar-border-dark);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            color: var(--text-dark);
-        }
         
-        .onboarding-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
         
-        .onboarding-description {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
         
-        .onboarding-text .hubble-gradient {
-            font-size: inherit;
-            font-weight: inherit;
-            margin: 0;
-            letter-spacing: normal;
-            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            display: inline;
-        }
         
-        .onboarding-proceed-btn {
-            background: linear-gradient(135deg, #009CFC, #0088e5);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 156, 252, 0.3);
-        }
-        
-        .onboarding-proceed-btn:hover {
-            background: linear-gradient(135deg, #0088e5, #0077d1);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 156, 252, 0.4);
-        }
-        
-        .onboarding-progress-bar {
-            position: relative;
-            width: 400px;
-            max-width: 40vw;
-            min-width: 200px;
-            height: 38px;
-            border-radius: 8px;
-            border: 1.5px solid var(--secondary);
-            background: #ffffff;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            opacity: 1;
-            visibility: visible;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        body[data-theme="dark"] .onboarding-progress-bar {
-            background: #232a3a;
-            border: 1.5px solid var(--sidebar-border-dark);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
         
         .onboarding-progress-container {
             width: 100%;
@@ -784,116 +599,6 @@
             font-size: 1.2rem;
             animation: gift-bounce 2s ease-in-out infinite;
         }
-        .profile-area {
-            display: flex;
-            align-items: center;
-            margin-right: 2.2rem;
-            gap: 0.7rem;
-            position: relative;
-            z-index: 10002;
-        }
-        .profile-label {
-            color: inherit;
-            font-size: 1.08rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .profile-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-            transition: transform 0.18s, box-shadow 0.18s;
-            position: relative;
-            cursor: pointer;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .profile-icon::before {
-            content: attr(data-initial);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .profile-icon:hover {
-            transform: scale(1.08) rotate(-8deg);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-        }
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: #ffffff;
-            border: 1px solid var(--secondary);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-width: 150px;
-            z-index: 10003;
-            display: none;
-            overflow: hidden;
-        }
-        body[data-theme="dark"] .profile-dropdown {
-            background: #232a3a;
-            border-color: #2c3550;
-        }
-        body[data-theme="eagle"] .profile-dropdown {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            border-color: var(--eagle-sidebar-border);
-            box-shadow: 0 8px 30px rgba(65, 113, 55, 0.3);
-        }
-        body[data-theme="fall"] .profile-dropdown {
-            background: linear-gradient(135deg, var(--fall-sidebar-bg), var(--fall-sidebar-active));
-            border-color: var(--fall-sidebar-border);
-            box-shadow: 0 8px 30px rgba(210, 105, 30, 0.3);
-        }
-        .dropdown-item {
-            padding: 0.8rem 1rem;
-            color: #222222;
-            cursor: pointer;
-            transition: background 0.2s;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            font-size: 0.95rem;
-        }
-        body[data-theme="dark"] .dropdown-item {
-            color: #f7f8fa;
-        }
-        body[data-theme="eagle"] .dropdown-item {
-            color: var(--eagle-text);
-        }
-        body[data-theme="fall"] .dropdown-item {
-            color: var(--fall-text);
-        }
-        .dropdown-item:hover {
-            background: rgba(0, 156, 252, 0.1);
-        }
-        .dropdown-item.logout {
-            color: #d32f2f;
-        }
-        .dropdown-item.logout:hover {
-            background: rgba(211, 47, 47, 0.1);
-        }
-        body[data-theme="dark"] .dropdown-item.logout {
-            color: #ff5252;
-        }
-        body[data-theme="dark"] .dropdown-item.logout:hover {
-            background: rgba(255, 82, 82, 0.1);
-        }
         .layout {
             display: flex;
             margin-top: 56px;
@@ -911,7 +616,7 @@
         body[data-theme="dark"] .main-content {
             background: var(--main-content-dark);
         }
-        body[data-theme="eagle"] .main-content {
+ .main-content {
             background: transparent;
             border-radius: 0;
             margin: 0;
@@ -926,7 +631,7 @@
             position: fixed;
             right: 2.2rem;
             bottom: 2.2rem;
-            z-index: 100;
+            z-index: 1000;
             background: #fff;
             color: #222;
             border: 2px solid var(--secondary);
@@ -941,6 +646,7 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: scale(1);
+            pointer-events: auto;
         }
         .theme-toggle:hover {
             background: var(--accent);
@@ -963,18 +669,6 @@
             transform: scale(1.1) rotate(15deg);
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
-        body[data-theme="eagle"] .theme-toggle {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
-        }
-        body[data-theme="eagle"] .theme-toggle:hover {
-            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-accent));
-            color: #fff;
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 4px 20px rgba(65,113,55,0.4);
-        }
         body[data-theme="fall"] .theme-toggle {
             background: var(--fall-sidebar-bg);
             color: var(--fall-text);
@@ -992,7 +686,7 @@
             position: fixed;
             left: 2.2rem;
             bottom: 2.2rem;
-            z-index: 100;
+            z-index: 1000;
             background: #fff;
             color: #222;
             border: 2px solid var(--secondary);
@@ -1007,6 +701,7 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: scale(1);
+            pointer-events: auto;
         }
         .bug-button:hover {
             background: var(--primary);
@@ -1029,18 +724,6 @@
             transform: scale(1.1) rotate(-15deg);
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
-        body[data-theme="eagle"] .bug-button {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
-        }
-        body[data-theme="eagle"] .bug-button:hover {
-            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-accent));
-            color: #fff;
-            transform: scale(1.1) rotate(-15deg);
-            box-shadow: 0 4px 20px rgba(65,113,55,0.4);
-        }
         body[data-theme="fall"] .bug-button {
             background: var(--fall-sidebar-bg);
             color: var(--fall-text);
@@ -1057,6 +740,14 @@
         .game-fullscreen .theme-toggle,
         .game-fullscreen .bug-button,
         .game-fullscreen .hall-of-fame-btn {
+            display: none;
+        }
+        
+        /* Hide theme toggle during seasonal themes */
+        body[data-theme="fall"] .theme-toggle,
+        body[data-theme="fall-dark"] .theme-toggle,
+        body[data-theme="winter"] .theme-toggle,
+        body[data-theme="winter-dark"] .theme-toggle {
             display: none;
         }
         
@@ -1130,15 +821,6 @@
         
         body[data-theme="dark"] .help-popup-text {
             color: var(--text-dark);
-        }
-        body[data-theme="eagle"] .help-popup {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
-        }
-        body[data-theme="eagle"] .help-popup-text {
-            color: var(--eagle-text);
         }
         body[data-theme="fall"] .help-popup {
             background: var(--fall-sidebar-bg);
@@ -1230,14 +912,6 @@
         
         body[data-theme="dark"] .bug-popup-text {
             color: var(--text-dark);
-        }
-        body[data-theme="eagle"] .bug-popup {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            border: 2px solid var(--eagle-primary);
-            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
-        }
-        body[data-theme="eagle"] .bug-popup-text {
-            color: var(--eagle-text);
         }
         body[data-theme="fall"] .bug-popup {
             background: var(--fall-sidebar-bg);
@@ -1581,22 +1255,6 @@
         body[data-theme="dark"] .ticket-form-label {
             color: var(--text-dark);
         }
-        body[data-theme="eagle"] .ticket-popup {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
-        }
-        body[data-theme="eagle"] .ticket-form-label {
-            color: var(--eagle-text);
-        }
-        body[data-theme="eagle"] .ticket-form-input,
-        body[data-theme="eagle"] .ticket-form-textarea {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 2px 10px rgba(65,113,55,0.2);
-        }
         body[data-theme="fall"] .ticket-popup {
             background: var(--fall-sidebar-bg);
             color: var(--fall-text);
@@ -1688,8 +1346,8 @@
         .hall-of-fame-btn {
             position: fixed;
             left: 2.2rem;
-            top: 6rem;
-            z-index: 100;
+            bottom: 2.2rem;
+            z-index: 1000;
             background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
             color: #333;
             border: 3px solid #ffd700;
@@ -1706,6 +1364,7 @@
             transform: scale(1);
             touch-action: manipulation;
             animation: hallOfFameGlow 3s ease-in-out infinite alternate;
+            pointer-events: auto;
         }
         
         .hall-of-fame-btn:hover {
@@ -1731,17 +1390,6 @@
             background: linear-gradient(135deg, #ffed4e, #ffd700, #ffed4e);
             transform: scale(1.2) rotate(20deg);
             box-shadow: 0 12px 35px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
-        }
-        body[data-theme="eagle"] .hall-of-fame-btn {
-            background: linear-gradient(135deg, var(--eagle-primary), var(--eagle-secondary), var(--eagle-primary));
-            color: #fff;
-            border: 3px solid var(--eagle-accent);
-            box-shadow: 0 8px 25px rgba(65, 113, 55, 0.6), 0 0 20px rgba(90, 138, 74, 0.4);
-        }
-        body[data-theme="eagle"] .hall-of-fame-btn:hover {
-            background: linear-gradient(135deg, var(--eagle-secondary), var(--eagle-primary), var(--eagle-secondary));
-            transform: scale(1.2) rotate(20deg);
-            box-shadow: 0 12px 35px rgba(65, 113, 55, 0.8), 0 0 30px rgba(90, 138, 74, 0.6);
         }
         body[data-theme="fall"] .hall-of-fame-btn {
             background: linear-gradient(135deg, var(--fall-primary), var(--fall-secondary), var(--fall-primary));
@@ -1799,11 +1447,6 @@
         body[data-theme="dark"] .hall-of-fame-popup {
             background: #2a2a2a;
             border: 1px solid #444;
-        }
-        body[data-theme="eagle"] .hall-of-fame-popup {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 20px 60px rgba(65, 113, 55, 0.3);
         }
         body[data-theme="fall"] .hall-of-fame-popup {
             background: linear-gradient(135deg, var(--fall-sidebar-bg), var(--fall-sidebar-active));
@@ -2120,15 +1763,6 @@
         body[data-theme="dark"] .faq-answer {
             color: var(--text-dark);
         }
-        body[data-theme="eagle"] .faq-popup {
-            background: linear-gradient(135deg, var(--eagle-sidebar-bg), var(--eagle-sidebar-active));
-            color: var(--eagle-text);
-            border: 2px solid var(--eagle-sidebar-border);
-            box-shadow: 0 8px 30px rgba(65,113,55,0.3);
-        }
-        body[data-theme="eagle"] .faq-answer {
-            color: var(--eagle-text);
-        }
         body[data-theme="fall"] .faq-popup {
             background: var(--fall-sidebar-bg);
             color: var(--fall-text);
@@ -2225,27 +1859,6 @@
         
         body[data-theme="dark"] .games-search-bar::placeholder {
             color: var(--accent);
-            opacity: 0.8;
-        }
-        body[data-theme="eagle"] .games-search-bar {
-            background: 
-                linear-gradient(var(--eagle-sidebar-bg), var(--eagle-sidebar-active)) padding-box,
-                linear-gradient(90deg, var(--eagle-primary) 0%, var(--eagle-secondary) 25%, var(--eagle-accent) 50%, var(--eagle-primary) 75%, var(--eagle-secondary) 100%) border-box;
-            background-size: 100% 100%, 400% 100%;
-            color: var(--eagle-text);
-            box-shadow: 0 4px 15px rgba(65, 113, 55, 0.2);
-            animation: hubble-gradient-flow 12s linear infinite;
-        }
-        
-        body[data-theme="eagle"] .games-search-bar:focus {
-            background: 
-                linear-gradient(var(--eagle-sidebar-active), var(--eagle-primary)) padding-box,
-                linear-gradient(90deg, var(--eagle-primary) 0%, var(--eagle-secondary) 25%, var(--eagle-accent) 50%, var(--eagle-primary) 75%, var(--eagle-secondary) 100%) border-box;
-            box-shadow: 0 0 0 4px rgba(65, 113, 55, 0.3), 0 8px 25px rgba(90, 138, 74, 0.3);
-        }
-        
-        body[data-theme="eagle"] .games-search-bar::placeholder {
-            color: var(--eagle-accent);
             opacity: 0.8;
         }
         body[data-theme="fall"] .games-search-bar {
@@ -2357,13 +1970,13 @@
         body[data-theme="dark"] .game-card:hover {
             box-shadow: none;
         }
-        body[data-theme="eagle"] .game-card {
+ .game-card {
             background: transparent;
             border: none;
             box-shadow: none;
             border-radius: 16px;
         }
-        body[data-theme="eagle"] .game-card:hover {
+ .game-card:hover {
             box-shadow: none;
             transform: translateY(-3px);
         }
@@ -2481,9 +2094,6 @@
         
         body[data-theme="dark"] .game-name {
             color: var(--text-dark);
-        }
-        body[data-theme="eagle"] .game-name {
-            color: var(--eagle-text);
         }
         body[data-theme="fall"] .game-name {
             color: var(--fall-text);
@@ -2621,10 +2231,27 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.13);
         }
         
-        .topbar.game-mode .profile-label,
-        .topbar.game-mode .profile-icon {
-            color: #f7f8fa;
+        /* Seasonal themes in game mode */
+        body[data-theme="fall"] .topbar.game-mode {
+            background: var(--fall-dark-sidebar-bg);
+            box-shadow: 0 2px 12px rgba(255,140,0,0.15);
         }
+        
+        body[data-theme="fall-dark"] .topbar.game-mode {
+            background: var(--fall-dark-sidebar-bg);
+            box-shadow: 0 2px 12px rgba(255,140,0,0.15);
+        }
+        
+        body[data-theme="winter"] .topbar.game-mode {
+            background: var(--winter-dark-sidebar-bg);
+            box-shadow: 0 2px 12px rgba(135,206,235,0.15);
+        }
+        
+        body[data-theme="winter-dark"] .topbar.game-mode {
+            background: var(--winter-dark-sidebar-bg);
+            box-shadow: 0 2px 12px rgba(135,206,235,0.15);
+        }
+        
         
         .game-controls {
             position: absolute;
@@ -2709,18 +2336,10 @@
                 margin-left: 1rem; 
                 font-size: 1.3rem; 
             }
-            .profile-area { 
-                margin-right: 1rem; 
-            }
             .games-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             .search-bar-custom {
-                width: 200px;
-                max-width: 35vw;
-                min-width: 100px;
-            }
-            .registration-progress-bar {
                 width: 200px;
                 max-width: 35vw;
                 min-width: 100px;
@@ -2740,14 +2359,9 @@
                 max-width: 30vw;
                 min-width: 80px;
             }
-            .registration-progress-bar {
-                width: 150px;
-                max-width: 30vw;
-                min-width: 80px;
-            }
             .theme-toggle { right: 1rem; bottom: 1rem; }
             .bug-button { left: 1rem; bottom: 1rem; }
-            .hall-of-fame-btn { left: 1rem; top: 5rem; }
+            .hall-of-fame-btn { left: 1rem; bottom: 1rem; }
         }
         
         /* Username Change Popup Styles */
@@ -2945,30 +2559,12 @@
 <body data-theme="light">
     <div class="topbar">
         <span class="hubble-gradient">Hubble<span class="alpha-badge" id="alpha-badge">Alpha</span></span>
-        <div id="registration-progress-bar" class="registration-progress-bar">
-            <div class="progress-bar-container">
-                <div class="progress-bar-track">
-                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
-                </div>
-                <div class="progress-text" id="progress-text">Loading...</div>
-                <div class="gift-emoji">🎁</div>
-            </div>
-        </div>
-        <span class="profile-area">
-            <span class="profile-label" id="profile-label">User</span>
-            <span class="profile-icon" id="profile-icon" data-initial="U"></span>
-            <div class="profile-dropdown" id="profile-dropdown">
-                <button class="dropdown-item" id="change-username-btn">Change Username</button>
-                <button class="dropdown-item logout" id="logout-btn">Logout</button>
-            </div>
-        </span>
     </div>
     <div class="layout">
         <main class="main-content" id="main-content">
             <div class="games-container">
                 <div class="games-search-section">
                     <input type="text" id="games-search" class="games-search-bar" placeholder="Search through our games..." autocomplete="off">
-                    <button class="game-suggestion-btn" id="game-suggestion-btn" title="Suggest a Game">💡</button>
                 </div>
                 <div class="games-grid" id="games-grid">
                     <div class="games-loading">Loading games...</div>
@@ -2977,81 +2573,16 @@
         </main>
     </div>
     <button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
-    <button class="bug-button" id="bug-button" title="Report Bug">🐛</button>
     
     <!-- Falling leaves container for fall theme -->
     <div class="falling-leaves" id="falling-leaves"></div>
+    
+    <!-- Snowflakes container for winter theme -->
+    <div class="snowflakes" id="snowflakes"></div>
     <button class="hall-of-fame-btn" id="hall-of-fame-btn" title="Hall of Fame">🏆</button>
     
-    <!-- Bug Report -->
-    <div class="bug-popup-overlay" id="bug-popup-overlay">
-        <div class="bug-popup">
-            <h2 class="bug-popup-title">🐛 Report a Bug</h2>
-            <p class="bug-popup-text">Click Create below to create a bug ticket. This will help us identify and fix issues in the system. Please provide as much detail as possible about the bug you encountered.</p>
-            <div class="bug-popup-buttons">
-                <button class="bug-popup-btn create" onclick="showBugTicketPopup()">Create Bug Ticket</button>
-            </div>
-            <button class="bug-popup-close" onclick="closeBugPopup()">×</button>
-        </div>
-    </div>
     
-    <!-- Ticket Creation -->
-    <div class="ticket-popup-overlay" id="ticket-popup-overlay">
-        <div class="ticket-popup">
-            <h2 class="ticket-popup-title" id="ticket-popup-title">Create Support Ticket</h2>
-            <div id="ticket-error-text" class="popup-error-text" style="display: none;"></div>
-            <div id="ticket-form-content">
-                <div class="ticket-form-group">
-                    <label for="ticket-subject" class="ticket-form-label">Subject</label>
-                    <input type="text" id="ticket-subject" class="ticket-form-input" placeholder="Brief description of your issue">
-                </div>
-                <div class="ticket-form-group">
-                    <label for="ticket-description" class="ticket-form-label">Describe the Issue</label>
-                    <textarea id="ticket-description" class="ticket-form-textarea" placeholder="Please provide detailed information about your issue..."></textarea>
-                </div>
-                <div class="ticket-form-group">
-                    <label for="ticket-email" class="ticket-form-label">Account Email</label>
-                    <input type="email" id="ticket-email" class="ticket-form-input" placeholder="1XXXXXX@lwsd.org">
-                </div>
-                <div class="ticket-form-buttons">
-                    <button class="ticket-form-btn cancel" onclick="closeTicketPopup()">Cancel</button>
-                    <button class="ticket-form-btn send" onclick="sendTicket()">Send</button>
-                </div>
-            </div>
-            <div id="ticket-sent-content" style="display: none; text-align: center;">
-                <h3 style="color: var(--primary); margin-bottom: 1rem;">Ticket Sent!</h3>
-                <p style="margin-bottom: 2rem;">Our support team will get to you shortly.</p>
-                <button class="ticket-form-btn send" onclick="closeAllPopups()">Close</button>
-            </div>
-        </div>
-    </div>
     
-    <!-- Bug Ticket -->
-    <div class="bug-ticket-popup-overlay" id="bug-ticket-popup-overlay">
-        <div class="bug-ticket-popup">
-            <h2 class="bug-ticket-popup-title" id="bug-ticket-popup-title">🐛 Report a Bug</h2>
-            <div id="bug-ticket-error-text" class="popup-error-text" style="display: none;"></div>
-            <div id="bug-ticket-form-content">
-                <div class="ticket-form-group">
-                    <label for="bug-ticket-subject" class="ticket-form-label">Bug Title</label>
-                    <input type="text" id="bug-ticket-subject" class="ticket-form-input" placeholder="Brief description of the bug">
-                </div>
-                <div class="ticket-form-group">
-                    <label for="bug-ticket-description" class="ticket-form-label">Bug Description</label>
-                    <textarea id="bug-ticket-description" class="ticket-form-textarea" placeholder="Please provide detailed information about the bug, including steps to reproduce it..."></textarea>
-                </div>
-                <div class="ticket-form-buttons">
-                    <button class="ticket-form-btn cancel" onclick="closeBugTicketPopup()">Cancel</button>
-                    <button class="ticket-form-btn send" onclick="sendBugTicket()">Send Bug Report</button>
-                </div>
-            </div>
-            <div id="bug-ticket-sent-content" style="display: none; text-align: center;">
-                <h3 style="color: #ff6b6b; margin-bottom: 1rem;">Bug Report Sent!</h3>
-                <p style="margin-bottom: 2rem;">Thank you for reporting this bug. Our development team will investigate and fix it.</p>
-                <button class="ticket-form-btn send" onclick="closeAllPopups()">Close</button>
-            </div>
-        </div>
-    </div>
     
     <!-- FAQ -->
     <div class="faq-popup-overlay" id="faq-popup-overlay">
@@ -3229,19 +2760,6 @@
         <iframe class="game-content" id="game-content" src=""></iframe>
     </div>
     
-    <!-- Onboarding Animation -->
-    <div class="onboarding-overlay" id="onboarding-overlay">
-        <div class="onboarding-gift" id="onboarding-gift">🎁</div>
-        <div class="onboarding-container" id="onboarding-container">
-            <div class="onboarding-text">
-                <h2 class="onboarding-title">Welcome to Hubble's Launch Event!</h2>
-                <p class="onboarding-description">
-                    This is the first event of <strong><span class="hubble-gradient">Hubble</span></strong>. Help us reach our goal of 100 registered users for the alpha! When we reach this milestone, every registered user will receive an exclusive prize when <strong><span class="hubble-gradient">Hubble</span></strong> officially launches!
-                </p>
-                <button class="onboarding-proceed-btn" id="onboarding-proceed-btn">Proceed</button>
-            </div>
-        </div>
-    </div>
     
     <!-- Confetti -->
     <div class="confetti-container" id="confetti-container"></div>
@@ -3769,146 +3287,6 @@
             }
         });
         
-        // Authentication
-        async function checkAuthAndLoadUser() {
-            try {
-                const { getAuth, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
-                      const { getFirestore, collection, query, where, getDocs, setDoc, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const auth = getAuth(app);
-                const db = getFirestore(app);
-                
-                onAuthStateChanged(auth, async (user) => {
-                  if (user) {
-                    try {
-                      const usersRef = collection(db, "users");
-                      const snap = await getDocs(query(usersRef, where("email", "==", user.email)));
-                
-                      if (!snap.empty) {
-                        // Profile exists → check if it needs completion
-                        currentUser = user;
-                        const userData = snap.docs[0].data();
-                        const userDocRef = doc(db, "users", snap.docs[0].id);
-                        
-                        // Check if this is a failed/incomplete registration
-                        if (userData.registrationCompleted === false || !userData.username) {
-                          console.log('Found incomplete registration, completing it now...');
-                          
-                          // Complete the registration by updating the existing document
-                          const pending = JSON.parse(localStorage.getItem('pendingUserData') || '{}');
-                          const username = (pending && pending.username) || user.email.split('@')[0];
-                          const userId = generateRandomId(12);
-                          
-                          await updateDoc(userDocRef, {
-                            username: username,
-                            userId: userId,
-                            registrationCompleted: true,
-                            following: userData.following || [],
-                            followers: userData.followers || [],
-                            firstONEhundred: userData.firstONEhundred || false,
-                            gameTime: userData.gameTime || {},
-                            gameData: userData.gameData || {},
-                            uid: user.uid
-                          });
-                          
-                          console.log('Registration completed successfully for existing user');
-                          
-                          // Clear any pending data
-                          localStorage.removeItem('pendingUserData');
-                        }
-                        
-                        // Continue with normal flow
-                        const finalUserData = snap.docs[0].data();
-                        const username = finalUserData.username || 'User';
-                        const profileLabel = document.getElementById('profile-label');
-                        const profileIcon = document.getElementById('profile-icon');
-                        if (profileLabel) profileLabel.textContent = username;
-                        if (profileIcon) {
-                          profileIcon.setAttribute('data-initial', username[0].toUpperCase());
-                          profileIcon.textContent = '';
-                        }
-                        await loadThemeFromFirebase(user);
-                        
-                        // Process any pending game data/time
-                        await processPendingData();
-                        // Check onboarding
-                        setTimeout(() => {
-                            checkAndStartOnboarding();
-                        }, 1000);
-                        return;
-                      }
-                
-                      // NEW: no profile doc yet
-                      if (!user.emailVerified) {
-                        // Gently block if they’re still unverified
-                        console.warn('User is not verified yet.');
-                        // Show a UI prompt to verify / resend if you have one
-                        return;
-                      }
-                
-                      // NEW: finish registration now that they’re verified
-                      // Use saved data or email-based username
-                      const pending = JSON.parse(localStorage.getItem('pendingUserData') || '{}');
-                      const username =
-                        (pending && pending.username) || user.email.split('@')[0];
-                      const userId = generateRandomId(12); // or your existing generator
-                
-                      await setDoc(doc(db, "users", user.uid), {
-                        email: user.email,
-                        username,
-                        userId,
-                        createdAt: Date.now(),
-                        following: [],
-                        followers: [],
-                        firstONEhundred: false,
-                        gameTime: {},
-                        gameData: {}
-                      });
-
-                      // Clear pending data
-                      localStorage.removeItem('pendingUserData');
-
-                      // Continue with your normal "profile exists" path
-                      currentUser = user;
-                      const profileLabel = document.getElementById('profile-label');
-                      const profileIcon = document.getElementById('profile-icon');
-                      if (profileLabel) profileLabel.textContent = username;
-                      if (profileIcon) {
-                        profileIcon.setAttribute('data-initial', username[0].toUpperCase());
-                        profileIcon.textContent = '';
-                      }
-                      await loadThemeFromFirebase(user);
-                      
-                      // Process any pending game data/time
-                      await processPendingData();
-                      // Check for onboarding after user is loaded
-                      setTimeout(() => {
-                          checkAndStartOnboarding();
-                      }, 1000);
-                
-                    } catch (error) {
-                      console.error('Error during post-verify setup:', error);
-                      // Optional: show UI notice to retry, or log out & prompt sign-in again
-                    }
-                  } else {
-                    currentUser = null;
-                    window.location.href = 'index.html';
-                  }
-                });
-                
-                // ID generator
-                function generateRandomId(len = 12) {
-                  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                  let out = '';
-                  for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random() * chars.length)];
-                  return out;
-                }
-
-            } catch (error) {
-                console.error('Auth check failed:', error);
-                window.location.href = 'index.html';
-            }
-        }
         
         // Theme toggle logic with Firebase saving
         const themeToggle = document.getElementById('theme-toggle');
@@ -3922,81 +3300,6 @@
         let currentGameData = null;
         let gameDataAutoSaveInterval = null;
         
-        // Game data storage functions
-        async function saveGameData(gameName, gameData) {
-            if (!currentUser) {
-                console.log('No user logged in, cannot save game data');
-                return;
-            }
-            
-            try {
-                const { doc, updateDoc, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { db } = await import('./firebase.js');
-                
-                const userRef = doc(db, 'users', currentUser.uid);
-                const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
-                
-                // Get user document
-                const userDoc = await getDoc(userRef);
-                const userData = userDoc.data();
-                
-                if (!userData) {
-                    console.error('User document not found for UID:', currentUser.uid);
-                    return;
-                }
-                
-                // Initialize gameData field if it doesn't exist
-                if (!userData.gameData) {
-                    console.log('Initializing gameData field for user:', currentUser.uid);
-                    await setDoc(userRef, { gameData: {} }, { merge: true });
-                }
-                
-                // Save the game data
-                await updateDoc(userRef, {
-                    [`gameData.${gameKey}`]: {
-                        data: gameData,
-                        lastSaved: Date.now(),
-                        gameName: gameName
-                    }
-                });
-                
-                console.log(`Successfully saved game data for: ${gameName} (key: ${gameKey})`);
-            } catch (error) {
-                console.error('Failed to save game data:', error);
-                console.error('Error details:', error.message);
-            }
-        }
-        
-        async function loadGameData(gameName) {
-            if (!currentUser) {
-                console.log('No user logged in, cannot load game data');
-                return null;
-            }
-            
-            try {
-                const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { db } = await import('./firebase.js');
-                
-                const userRef = doc(db, 'users', currentUser.uid);
-                const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
-                
-                const userDoc = await getDoc(userRef);
-                const userData = userDoc.data();
-                
-                if (!userData || !userData.gameData || !userData.gameData[gameKey]) {
-                    console.log(`No saved data found for game: ${gameName}`);
-                    return null;
-                }
-                
-                const gameData = userData.gameData[gameKey];
-                console.log(`Successfully loaded game data for: ${gameName}`);
-                return gameData.data;
-            } catch (error) {
-                console.error('Failed to load game data:', error);
-                console.error('Error details:', error.message);
-                return null;
-            }
-        }
         
         // Function to capture game data from localStorage and cookies
         function captureGameData(gameName) {
@@ -4094,132 +3397,125 @@
         }
         
         // Separate function to save game time
-        async function saveGameTime(gameName, timeSpentSeconds) {
-            if (!currentUser || !gameName || timeSpentSeconds <= 0) {
-                return;
-            }
-            
-            try {
-                const { doc, updateDoc, increment, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { db } = await import('./firebase.js');
-                
-                const userRef = doc(db, 'users', currentUser.uid);
-                const gameKey = gameName.replace(/[^a-zA-Z0-9]/g, '_');
-                
-                // Get user document to check if gameTime field exists
-                const userDoc = await getDoc(userRef);
-                const userData = userDoc.data();
-                
-                if (!userData) {
-                    console.error('User document not found for UID:', currentUser.uid);
-                    return;
-                }
-                
-                if (!userData.gameTime) {
-                    // Initialize gameTime field if it doesn't exist
-                    console.log('Initializing gameTime field for user:', currentUser.uid);
-                    await setDoc(userRef, { gameTime: {} }, { merge: true });
-                }
-                
-                // Increment the specific game time
-                await updateDoc(userRef, {
-                    [`gameTime.${gameKey}`]: increment(timeSpentSeconds)
-                });
-                
-                console.log(`Successfully tracked ${timeSpentSeconds} seconds for game: ${gameName} (key: ${gameKey}) in user document: ${currentUser.uid}`);
-            } catch (error) {
-                console.error('Failed to track game time:', error);
-                console.error('Error details:', error.message);
-            }
-        }
         
-        async function stopGameTimeTracking() {
-            if (!gameStartTime || !currentGameName || !currentUser) {
-                console.log('Game time tracking stopped - missing data:', { gameStartTime: !!gameStartTime, currentGameName, currentUser: !!currentUser });
-                return;
-            }
-            
-            const timeSpent = Date.now() - gameStartTime;
-            const timeSpentSeconds = Math.round(timeSpent / 1000); // Convert to seconds
-            
-            console.log(`Game time tracking: ${timeSpentSeconds} seconds for ${currentGameName}`);
-            
-            if (timeSpentSeconds > 0) { // Only track if at least 1 second was spent
-                await saveGameTime(currentGameName, timeSpentSeconds);
-            }
-            
-            // Clear auto-save interval
-            if (gameDataAutoSaveInterval) {
-                clearInterval(gameDataAutoSaveInterval);
-                gameDataAutoSaveInterval = null;
-            }
-            
-            // Reset tracking
-            gameStartTime = null;
-            currentGameName = null;
-        }
         
         // Profile dropdown functionality
-        function setupProfileDropdown() {
-            const profileIcon = document.getElementById('profile-icon');
-            const profileDropdown = document.getElementById('profile-dropdown');
-            const logoutBtn = document.getElementById('logout-btn');
-            const changeUsernameBtn = document.getElementById('change-username-btn');
+        
+        // Check if current date is during fall season (Sept 20 - Nov 12)
+        function isFallSeason() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth(); // 0-indexed: 0=Jan, 1=Feb, ..., 8=Sep, 9=Oct, 10=Nov
+            const currentDay = now.getDate();
             
-            // Toggle dropdown on profile icon click
-            profileIcon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            // Check if we're in September (month 8) and day is 20 or later
+            const isSeptemberFall = currentMonth === 8 && currentDay >= 20;
+            
+            // Check if we're in October (month 9)
+            const isOctober = currentMonth === 9;
+            
+            // Check if we're in November (month 10) and day is 12 or earlier
+            const isNovemberFall = currentMonth === 10 && currentDay <= 12;
+            
+            const isInFallSeason = isSeptemberFall || isOctober || isNovemberFall;
+            
+            // Debug logging
+            console.log('Fall Season Check:', {
+                currentDate: now.toDateString(),
+                currentMonth: currentMonth,
+                currentDay: currentDay,
+                isSeptemberFall: isSeptemberFall,
+                isOctober: isOctober,
+                isNovemberFall: isNovemberFall,
+                isInFallSeason: isInFallSeason
             });
             
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)) {
-                    profileDropdown.style.display = 'none';
-                }
-            });
+            // Additional debug for September 22nd specifically
+            if (currentMonth === 8 && currentDay === 22) {
+                console.log('SEPTEMBER 22ND DETECTED - Fall theme should be active!');
+            }
             
-            // Change username
-            changeUsernameBtn.addEventListener('click', () => {
-                profileDropdown.style.display = 'none'; // Close dropdown
-                showUsernameChange();
-            });
-            
-            // Logout functionality
-            logoutBtn.addEventListener('click', async () => {
-                try {
-                    // Stop any active game time tracking before logout
-                    await stopGameTimeTracking();
-                    
-                    const { auth } = await import('./firebase.js');
-                    const { signOut } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
-                    
-                    await signOut(auth);
-                    window.location.href = 'index.html';
-                } catch (error) {
-                    console.error('Logout failed:', error);
-                    // Still redirect even if logout fails
-                    window.location.href = 'index.html';
-                }
-            });
+            return isInFallSeason;
         }
         
-        async function setTheme(theme, saveToFirebase = true) {
+        // Check if current date is during winter season (Dec 21 - Mar 20)
+        function isWinterSeason() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth(); // 0-indexed: 0=Jan, 1=Feb, ..., 11=Dec
+            const currentDay = now.getDate();
+            
+            // Check if we're in December (month 11) and day is 21 or later
+            const isDecemberWinter = currentMonth === 11 && currentDay >= 21;
+            
+            // Check if we're in January (month 0) or February (month 1)
+            const isJanuaryFebruary = currentMonth === 0 || currentMonth === 1;
+            
+            // Check if we're in March (month 2) and day is 20 or earlier
+            const isMarchWinter = currentMonth === 2 && currentDay <= 20;
+            
+            const isInWinterSeason = isDecemberWinter || isJanuaryFebruary || isMarchWinter;
+            
+            // Debug logging
+            console.log('Winter Season Check:', {
+                currentDate: now.toDateString(),
+                currentMonth: currentMonth,
+                currentDay: currentDay,
+                isDecemberWinter: isDecemberWinter,
+                isJanuaryFebruary: isJanuaryFebruary,
+                isMarchWinter: isMarchWinter,
+                isInWinterSeason: isInWinterSeason
+            });
+            
+            return isInWinterSeason;
+        }
+        
+        function setTheme(theme) {
+            // During fall season, map light/dark to fall themes
+            if (isFallSeason()) {
+                if (theme === 'light') {
+                    theme = 'fall';
+                } else if (theme === 'dark') {
+                    theme = 'fall-dark';
+                }
+            }
+            // During winter season, map light/dark to winter themes
+            else if (isWinterSeason()) {
+                if (theme === 'light') {
+                    theme = 'winter';
+                } else if (theme === 'dark') {
+                    theme = 'winter-dark';
+                }
+            }
+            
             document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('hubble-theme', theme);
+            
+            // Store the base light/dark preference, not the seasonal theme
+            let baseTheme = theme;
+            if (theme === 'fall' || theme === 'fall-dark') {
+                baseTheme = theme === 'fall' ? 'light' : 'dark';
+            } else if (theme === 'winter' || theme === 'winter-dark') {
+                baseTheme = theme === 'winter' ? 'light' : 'dark';
+            } else if (theme === 'spring-dark') {
+                baseTheme = 'dark';
+            }
+            localStorage.setItem('hubble-theme', baseTheme);
             
             // Update theme toggle button icon
             const themeIcons = {
                 'light': '🌙',
                 'dark': '☀️',
-                'eagle': '🦅',
-                'fall': '🍂'
+                'fall': '🌙',
+                'fall-dark': '☀️',
+                'winter': '🌙',
+                'winter-dark': '☀️',
+                'spring-dark': '☀️'
             };
             themeToggle.textContent = themeIcons[theme] || '🌙';
             
-            // Handle falling leaves animation for fall theme
+            // Handle falling leaves animation for fall season (regardless of light/dark)
             const fallingLeaves = document.getElementById('falling-leaves');
-            if (theme === 'fall') {
+            if (isFallSeason()) {
                 createFallingLeaves();
             } else {
                 if (fallingLeaves) {
@@ -4227,51 +3523,17 @@
                 }
             }
             
-            // Save to Firebase
-            if (saveToFirebase && currentUser) {
-                try {
-                    const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                    const { app } = await import('./firebase.js');
-                    const db = getFirestore(app);
-                    
-                    const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
-                    const userDocs = await getDocs(userQuery);
-                    
-                    if (!userDocs.empty) {
-                        const userDocRef = doc(db, "users", userDocs.docs[0].id);
-                        await updateDoc(userDocRef, { theme: theme });
-                        console.log('Theme saved to Firebase:', theme);
-                    }
-                } catch (error) {
-                    console.error('Error saving theme to Firebase:', error);
+            // Handle snowflakes animation for winter season (regardless of light/dark)
+            const snowflakes = document.getElementById('snowflakes');
+            if (isWinterSeason()) {
+                createSnowflakes();
+            } else {
+                if (snowflakes) {
+                    snowflakes.innerHTML = '';
                 }
             }
         }
         
-        async function loadThemeFromFirebase(user) {
-            try {
-                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const db = getFirestore(app);
-                
-                const userQuery = query(collection(db, "users"), where("email", "==", user.email));
-                const userDocs = await getDocs(userQuery);
-                
-                if (!userDocs.empty) {
-                    const userData = userDocs.docs[0].data();
-                    const savedTheme = userData.theme || 'light'; // Default to light
-                    setTheme(savedTheme, false); // Don't save back to Firebase when loading
-                    return savedTheme;
-                }
-            } catch (error) {
-                console.error('Error loading theme from Firebase:', error);
-            }
-            
-            // Fallback to localStorage or default
-            const localTheme = localStorage.getItem('hubble-theme') || 'light';
-            setTheme(localTheme, false);
-            return localTheme;
-        }
         
         // Create falling leaves animation
         function createFallingLeaves() {
@@ -4298,12 +3560,49 @@
             }
         }
         
+        // Create snowflakes animation
+        function createSnowflakes() {
+            const snowflakes = document.getElementById('snowflakes');
+            if (!snowflakes) return;
+            
+            snowflakes.innerHTML = '';
+            
+            // Snowflake symbols
+            const snowflakeSymbols = ['❄', '❅', '❆'];
+            
+            // Create multiple snowflakes with different animations
+            for (let i = 0; i < 20; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                
+                // Random snowflake symbol
+                snowflake.textContent = snowflakeSymbols[Math.floor(Math.random() * snowflakeSymbols.length)];
+                
+                // Random positioning and animation duration
+                const leftPosition = Math.random() * 100;
+                const animationDuration = 4 + Math.random() * 6; // 4-10 seconds
+                const animationDelay = Math.random() * 3; // 0-3 seconds delay
+                const fontSize = 0.8 + Math.random() * 1.2; // 0.8-2.0em
+                
+                snowflake.style.left = leftPosition + '%';
+                snowflake.style.animationDuration = animationDuration + 's';
+                snowflake.style.animationDelay = animationDelay + 's';
+                snowflake.style.fontSize = fontSize + 'em';
+                
+                snowflakes.appendChild(snowflake);
+            }
+        }
+        
         themeToggle.onclick = () => {
             const current = document.body.getAttribute('data-theme');
-            const themes = ['light', 'dark', 'eagle', 'fall'];
-            const currentIndex = themes.indexOf(current);
-            const nextIndex = (currentIndex + 1) % themes.length;
-            setTheme(themes[nextIndex]);
+            
+            // Always toggle between light and dark, regardless of season
+            // The setTheme function will map these to the appropriate seasonal themes
+            if (current === 'light' || current === 'fall' || current === 'winter' || current === 'spring-dark') {
+                setTheme('dark');
+            } else {
+                setTheme('light');
+            }
         };
 
         // Games System
@@ -4651,18 +3950,8 @@
             });
         }
         
-        async function openGame(gameName, gameUrl) {
+        function openGame(gameName, gameUrl) {
             currentGame = { name: gameName, url: gameUrl };
-            
-            // Load saved game data before starting the game
-            console.log(`Loading saved data for game: ${gameName}`);
-            const savedGameData = await loadGameData(gameName);
-            if (savedGameData) {
-                restoreGameData(savedGameData);
-            }
-            
-            // Start tracking time for this game
-            startGameTimeTracking(gameName);
             
             const gameFullscreen = document.getElementById('game-fullscreen');
             const gameContent = document.getElementById('game-content');
@@ -4682,7 +3971,6 @@
         function enterGameMode(gameName) {
             const topbar = document.querySelector('.topbar');
             const hubbleTitle = document.querySelector('.hubble-gradient');
-            const progressBar = document.getElementById('registration-progress-bar');
             const alphaBadge = document.getElementById('alpha-badge');
             
             // Add game mode class
@@ -4696,19 +3984,16 @@
             // Change title to game name
             hubbleTitle.innerHTML = gameName;
             
-            // Hide progress bar and alpha badge, create game controls in header
-            if (progressBar) {
-                progressBar.style.display = 'none';
+            // Create game controls in header
                 createGameControlsInHeader();
-            }
+            
+            // Hide alpha badge
             if (alphaBadge) {
                 alphaBadge.classList.add('hidden');
             }
         }
         
         function createGameControlsInHeader() {
-            const progressBar = document.getElementById('registration-progress-bar');
-            
             // Remove existing controls if any
             removeGameControlsFromHeader();
             
@@ -4734,8 +4019,9 @@
             gameControls.appendChild(fullscreenBtn);
             gameControls.appendChild(exitBtn);
             
-            // Insert after progress bar
-            progressBar.parentNode.insertBefore(gameControls, progressBar.nextSibling);
+            // Insert into topbar
+            const topbar = document.querySelector('.topbar');
+            topbar.appendChild(gameControls);
         }
         
         function removeGameControlsFromHeader() {
@@ -4834,22 +4120,11 @@
             }
         }
         
-        async function exitGame() {
-            // Save game data before exiting
-            if (currentGame && currentGame.name) {
-                console.log(`Saving game data for: ${currentGame.name}`);
-                const gameData = captureGameData(currentGame.name);
-                await saveGameData(currentGame.name, gameData);
-            }
-            
-            // Stop tracking time for the current game
-            await stopGameTimeTracking();
-            
+        function exitGame() {
             const gameFullscreen = document.getElementById('game-fullscreen');
             const gameContent = document.getElementById('game-content');
             const topbar = document.querySelector('.topbar');
             const hubbleTitle = document.querySelector('.hubble-gradient');
-            const progressBar = document.getElementById('registration-progress-bar');
             
             // Exit true fullscreen if active
             if (isTrueFullscreen && document.fullscreenElement) {
@@ -4884,10 +4159,7 @@
             topbar.classList.remove('game-mode');
             hubbleTitle.innerHTML = topbar.dataset.originalTitle || 'Hubble<span class="alpha-badge" id="alpha-badge">Alpha</span>';
             
-            // Restore progress bar and alpha badge
-            if (progressBar) {
-                progressBar.style.display = 'flex';
-            }
+            // Restore alpha badge
             const alphaBadge = document.getElementById('alpha-badge');
             if (alphaBadge) {
                 alphaBadge.classList.remove('hidden');
@@ -4938,166 +4210,6 @@
         });
         
         
-        // Registration Progress Bar Functions
-        async function fetchRegisteredUserCount() {
-            try {
-                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const db = getFirestore(app);
-                
-                // Query users with registrationCompleted = true
-                const usersRef = collection(db, "users");
-                const q = query(usersRef, where("registrationCompleted", "==", true));
-                const querySnapshot = await getDocs(q);
-                
-                return querySnapshot.size;
-            } catch (error) {
-                console.error('Error fetching user count:', error);
-                return 0;
-            }
-        }
-        
-        function createMilestoneMarkers() {
-            // Milestones removed - no longer needed
-            return;
-        }
-        
-        // Function to update all users with firstONEhundred = true
-        async function updateAllUsersFirstOneHundred() {
-            try {
-                const { getFirestore, collection, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const db = getFirestore(app);
-                
-                console.log('Starting batch update for firstONEhundred...');
-                
-                // Get all users
-                const usersRef = collection(db, 'users');
-                const usersSnapshot = await getDocs(usersRef);
-                
-                // Update each user
-                const updatePromises = [];
-                usersSnapshot.forEach((userDoc) => {
-                    const updatePromise = updateDoc(doc(db, 'users', userDoc.id), {
-                        firstONEhundred: true
-                    });
-                    updatePromises.push(updatePromise);
-                });
-                
-                // Wait for all updates to complete
-                await Promise.all(updatePromises);
-                
-                console.log(`Successfully updated ${updatePromises.length} users with firstONEhundred = true`);
-                
-                // Store a flag to prevent repeated updates
-                localStorage.setItem('firstONEhundredUpdated', 'true');
-                
-            } catch (error) {
-                console.error('Error updating users with firstONEhundred:', error);
-            }
-        }
-
-        async function updateProgressBar() {
-            try {
-                const userCount = await fetchRegisteredUserCount();
-                
-                // Calculate progress toward 100 for the bar fill
-                const maxUsers = 100;
-                const percentage = Math.min((userCount / maxUsers) * 100, 100);
-                
-                const progressFill = document.getElementById('progress-bar-fill');
-                const progressText = document.getElementById('progress-text');
-                
-                if (progressFill) {
-                    progressFill.style.width = `${percentage}%`;
-                    
-                    // Add golden class when reaching 100 users
-                    if (userCount >= 100) {
-                        progressFill.classList.add('golden');
-                        
-                        // Update all users with firstONEhundred = true (only once)
-                        const alreadyUpdated = localStorage.getItem('firstONEhundredUpdated');
-                        if (!alreadyUpdated) {
-                            await updateAllUsersFirstOneHundred();
-                        }
-                    } else {
-                        progressFill.classList.remove('golden');
-                    }
-                }
-                
-                if (progressText) {
-                    if (userCount >= 100) {
-                        progressText.textContent = '100+ Users';
-                    } else {
-                        progressText.textContent = `${userCount} / 100 Users`;
-                    }
-                }
-                
-                console.log(`Progress bar updated: ${userCount} registered users (${percentage.toFixed(1)}% toward 100)`);
-            } catch (error) {
-                console.error('Error updating progress bar:', error);
-                const progressText = document.getElementById('progress-text');
-                if (progressText) {
-                    progressText.textContent = 'Error loading data';
-                }
-            }
-        }
-        
-        // Initialize progress bar
-        function initProgressBar() {
-            createMilestoneMarkers();
-            updateProgressBar();
-            
-            // Update every 30 seconds
-            setInterval(updateProgressBar, 30000);
-        }
-        
-        // Onboarding Animation Functions
-        async function checkAndStartOnboarding() {
-            try {
-                const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const db = getFirestore(app);
-                
-                if (!currentUser) return;
-                
-                // Check if user has eventReady field
-                const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
-                const userDocs = await getDocs(userQuery);
-                
-                if (!userDocs.empty) {
-                    const userData = userDocs.docs[0].data();
-                    
-                    // If eventReady doesn't exist, start onboarding
-                    if (userData.eventReady === undefined) {
-                        startOnboardingAnimation();
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking onboarding status:', error);
-            }
-        }
-        
-        async function setEventReady() {
-            try {
-                const { getFirestore, collection, query, where, getDocs, updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const db = getFirestore(app);
-                
-                if (!currentUser) return;
-                
-                const userQuery = query(collection(db, "users"), where("email", "==", currentUser.email));
-                const userDocs = await getDocs(userQuery);
-                
-                if (!userDocs.empty) {
-                    const userDocRef = doc(db, "users", userDocs.docs[0].id);
-                    await updateDoc(userDocRef, { eventReady: true });
-                    console.log('Event ready status set to true');
-                }
-            } catch (error) {
-                console.error('Error setting event ready status:', error);
-            }
-        }
         
         function createConfetti() {
             const confettiContainer = document.getElementById('confetti-container');
@@ -5135,74 +4247,25 @@
             }
         }
         
-        function startOnboardingAnimation() {
-            const overlay = document.getElementById('onboarding-overlay');
-            const gift = document.getElementById('onboarding-gift');
-            const container = document.getElementById('onboarding-container');
-            const proceedBtn = document.getElementById('onboarding-proceed-btn');
-            const realProgressBar = document.getElementById('registration-progress-bar');
+        
+        // Initialize games section on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme based on saved preference
+            const savedTheme = localStorage.getItem('hubble-theme');
+            let initialTheme = savedTheme || 'light';
             
-            // Hide the real progress bar initially
-            if (realProgressBar) {
-                realProgressBar.style.display = 'none';
+            // If saved theme is a seasonal theme, convert it back to light/dark
+            if (savedTheme === 'fall' || savedTheme === 'fall-dark') {
+                initialTheme = savedTheme === 'fall' ? 'light' : 'dark';
+            } else if (savedTheme === 'winter' || savedTheme === 'winter-dark') {
+                initialTheme = savedTheme === 'winter' ? 'light' : 'dark';
+            } else if (savedTheme === 'spring-dark') {
+                initialTheme = 'dark';
             }
             
-            // Show overlay and gift
-            overlay.classList.add('show');
+            setTheme(initialTheme);
             
-            // Start confetti immediately
-            startConfetti();
-            
-            // After 2 seconds, shrink gift to center
-            setTimeout(() => {
-                gift.classList.add('shrinking');
-                
-                // After gift shrinks, show container with text
-                setTimeout(() => {
-                    container.classList.add('show');
-                }, 1200);
-            }, 2000);
-            
-            // Setup proceed button
-            proceedBtn.addEventListener('click', () => {
-                // Fade out overlay (but keep confetti running)
-                overlay.classList.remove('show');
-                
-                // Show real progress bar
-                if (realProgressBar) {
-                    realProgressBar.style.display = 'flex';
-                }
-                
-                // Stop generating new confetti
-                stopConfetti();
-                
-                // Set eventReady in Firebase
-                setEventReady();
-                
-                // Remove onboarding elements after fade out completes
-                setTimeout(() => {
-                    // Remove the entire onboarding overlay
-                    if (overlay && overlay.parentNode) {
-                        overlay.parentNode.removeChild(overlay);
-                    }
-                }, 800); // Wait for CSS transition to complete (0.8s)
-                
-                // Remove confetti container after all confetti has fallen (5 seconds + buffer)
-                setTimeout(() => {
-                    const confettiContainer = document.getElementById('confetti-container');
-                    if (confettiContainer && confettiContainer.parentNode) {
-                        confettiContainer.parentNode.removeChild(confettiContainer);
-                    }
-                }, 6000); // 5 seconds for confetti to fall + 1 second buffer
-            });
-        }
-        
-        // Initialize games section and auth on load
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthAndLoadUser();
             initGamesSection();
-            setupProfileDropdown();
-            initProgressBar();
             
             // Setup bug button
             const bugButton = document.getElementById('bug-button');
@@ -5221,6 +4284,7 @@
             if (hallOfFameBtn) {
                 hallOfFameBtn.addEventListener('click', showHallOfFamePopup);
             }
+            
             
             // Setup Hall of Fame category buttons
             document.querySelectorAll('.category-btn').forEach(btn => {
@@ -5484,173 +4548,6 @@
             });
         }
         
-        async function showUsernameChange() {
-            const currentUsername = document.getElementById('profile-label').textContent;
-            
-            // Create username change popup
-            const popup = document.createElement('div');
-            popup.className = 'customization-popup';
-            popup.innerHTML = `
-                <div class="customization-popup-bg"></div>
-                <div class="customization-popup-content">
-                    <h3>Change Username</h3>
-                    <div class="popup-input-group">
-                        <label>New Username</label>
-                        <input type="text" id="new-username" value="${currentUsername}" maxlength="75" minlength="3">
-                    </div>
-                    <div class="popup-buttons">
-                        <button class="popup-btn secondary" onclick="closeCustomizationPopup()">Cancel</button>
-                        <button class="popup-btn primary" onclick="confirmUsernameChange()">Change</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(popup);
-            
-            // Add click handler for background to close popup
-            const bg = popup.querySelector('.customization-popup-bg');
-            bg.addEventListener('click', closeCustomizationPopup);
-            
-            // Trigger animation
-            setTimeout(() => {
-                popup.classList.add('show');
-            }, 10);
-            
-            // Focus on input after animation starts
-            setTimeout(() => {
-                const input = document.getElementById('new-username');
-                input.focus();
-                input.select();
-            }, 200);
-        }
-        
-        async function confirmUsernameChange() {
-            const newUsername = document.getElementById('new-username').value.trim();
-            const currentUsername = document.getElementById('profile-label').textContent;
-            
-            if (newUsername === currentUsername) {
-                showCustomizationError('New username must be different from current username.');
-                return;
-            }
-            
-            if (newUsername.length < 3 || newUsername.length > 75) {
-                showCustomizationError('Username must be 3-75 characters long.');
-                return;
-            }
-            
-            // Check if username is available
-            try {
-                const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                const db = getFirestore(app);
-                const q = query(collection(db, 'users'), where('username', '==', newUsername));
-                const snap = await getDocs(q);
-                if (!snap.empty) {
-                    showCustomizationError('That username is already taken.');
-                    return;
-                }
-            } catch (err) {
-                showCustomizationError('Could not check username availability. Try again.');
-                return;
-            }
-            
-            // Show final confirmation popup
-            showFinalUsernameConfirmation(newUsername);
-        }
-        
-        function showFinalUsernameConfirmation(newUsername) {
-            const popup = document.createElement('div');
-            popup.className = 'customization-popup';
-            popup.innerHTML = `
-                <div class="customization-popup-bg"></div>
-                <div class="customization-popup-content">
-                    <h3>⚠️ Final Confirmation</h3>
-                    <div class="confirmation-message">
-                        <p><strong>Are you absolutely sure?</strong></p>
-                        <p>If you change your username to "${newUsername}", another user can claim your old username "${document.getElementById('profile-label').textContent}" and it will become unavailable.</p>
-                        <p>This action cannot be undone.</p>
-                    </div>
-                    <div class="popup-buttons">
-                        <button class="popup-btn secondary" onclick="closeCustomizationPopup()">Cancel</button>
-                        <button class="popup-btn primary disabled" id="final-change-btn" onclick="executeUsernameChange('${newUsername}')">
-                            <span class="timer-circle">
-                                <svg class="timer-svg" viewBox="0 0 36 36">
-                                    <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                    <path class="timer-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                </svg>
-                                <span class="timer-text">3</span>
-                            </span>
-                            Change Username
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(popup);
-            
-            // Add click handler for background to close popup
-            const bg = popup.querySelector('.customization-popup-bg');
-            bg.addEventListener('click', closeCustomizationPopup);
-            
-            // Trigger animation
-            setTimeout(() => {
-                popup.classList.add('show');
-            }, 10);
-            
-            // Start 3-second timer after animation
-            let timeLeft = 3;
-            const timerText = popup.querySelector('.timer-text');
-            const timerProgress = popup.querySelector('.timer-progress');
-            const finalBtn = document.getElementById('final-change-btn');
-            
-            const timer = setInterval(() => {
-                timeLeft--;
-                timerText.textContent = timeLeft;
-                
-                const progress = (3 - timeLeft) / 3;
-                timerProgress.style.strokeDasharray = `${progress * 100} 100`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    finalBtn.classList.remove('disabled');
-                    finalBtn.disabled = false;
-                    // Remove the timer circle from the button text
-                    const timerCircle = finalBtn.querySelector('.timer-circle');
-                    if (timerCircle) {
-                        timerCircle.remove();
-                    }
-                }
-            }, 1000);
-        }
-        
-        async function executeUsernameChange(newUsername) {
-            try {
-                const { getAuth } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
-                const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js');
-                const { app } = await import('./firebase.js');
-                
-                const auth = getAuth(app);
-                const db = getFirestore(app);
-                
-                await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-                    username: newUsername
-                });
-                
-                // Update UI
-                document.getElementById('profile-label').textContent = newUsername;
-                document.getElementById('profile-icon').setAttribute('data-initial', newUsername[0].toUpperCase());
-                
-                // Close popup with animation
-                closeCustomizationPopup();
-                
-                // Show success message after popup starts closing
-                setTimeout(() => {
-                    showCustomizationSuccess('Username changed successfully!');
-                }, 150);
-                
-            } catch (err) {
-                showCustomizationError('Failed to change username. Please try again.');
-                console.error('Username change error:', err);
-            }
-        }
     </script>
     
     <!-- Version Checker -->

@@ -199,42 +199,50 @@
         }
         
         
-        /* Falling leaves animation */
+        /* New Falling Leaves Animation */
         .falling-leaves {
             position: fixed;
-            top: -100px;
+            top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
             pointer-events: none;
-            z-index: -1;
+            z-index: 1;
             overflow: hidden;
         }
         
-        .leaf {
+        .falling-leaf {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(45deg, #d2691e, #cd853f, #b8860b);
+            width: 15px;
+            height: 15px;
+            background: #d2691e;
             border-radius: 0 100% 0 100%;
-            animation: fall linear infinite;
-            opacity: 0.8;
+            animation: leafFall 4s linear infinite;
+            opacity: 0.7;
         }
         
-        .leaf:nth-child(odd) {
-            background: linear-gradient(45deg, #8b4513, #a0522d, #cd853f);
-            transform: scale(0.8);
+        .falling-leaf:nth-child(odd) {
+            background: #8b4513;
+            width: 12px;
+            height: 12px;
         }
         
-        .leaf:nth-child(3n) {
-            background: linear-gradient(45deg, #daa520, #b8860b, #d2691e);
-            transform: scale(1.2);
+        .falling-leaf:nth-child(3n) {
+            background: #daa520;
+            width: 18px;
+            height: 18px;
         }
         
-        @keyframes fall {
+        @keyframes leafFall {
             0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
             }
             100% {
                 transform: translateY(100vh) rotate(360deg);
@@ -245,6 +253,11 @@
         /* Hide falling leaves for non-fall themes */
         body:not([data-theme="fall"]) .falling-leaves {
             display: none;
+        }
+        
+        /* Ensure falling leaves are visible during fall season */
+        body[data-theme="fall"] .falling-leaves {
+            display: block;
         }
         
         /* Snowflakes animation */
@@ -3471,13 +3484,9 @@
         }
         
         function setTheme(theme) {
-            // During fall season, map light/dark to fall themes
+            // During fall season, always use light fall theme
             if (isFallSeason()) {
-                if (theme === 'light') {
-                    theme = 'fall';
-                } else if (theme === 'dark') {
-                    theme = 'fall-dark';
-                }
+                theme = 'fall';
             }
             // During winter season, map light/dark to winter themes
             else if (isWinterSeason()) {
@@ -3492,8 +3501,10 @@
             
             // Store the base light/dark preference, not the seasonal theme
             let baseTheme = theme;
-            if (theme === 'fall' || theme === 'fall-dark') {
-                baseTheme = theme === 'fall' ? 'light' : 'dark';
+            if (theme === 'fall') {
+                // During fall season, we always use light fall, but don't change the stored preference
+                // The stored preference will be used when fall season ends
+                return; // Don't update localStorage during fall season
             } else if (theme === 'winter' || theme === 'winter-dark') {
                 baseTheme = theme === 'winter' ? 'light' : 'dark';
             } else if (theme === 'spring-dark') {
@@ -3514,13 +3525,12 @@
             themeToggle.textContent = themeIcons[theme] || '🌙';
             
             // Handle falling leaves animation for fall season (regardless of light/dark)
-            const fallingLeaves = document.getElementById('falling-leaves');
-            if (isFallSeason()) {
+            const isFall = isFallSeason();
+            console.log('Fall season check:', isFall);
+            if (isFall) {
                 createFallingLeaves();
             } else {
-                if (fallingLeaves) {
-                    fallingLeaves.innerHTML = '';
-                }
+                stopFallingLeaves();
             }
             
             // Handle snowflakes animation for winter season (regardless of light/dark)
@@ -3535,28 +3545,71 @@
         }
         
         
+        let leafInterval = null;
+        
         // Create falling leaves animation
         function createFallingLeaves() {
             const fallingLeaves = document.getElementById('falling-leaves');
-            if (!fallingLeaves) return;
+            if (!fallingLeaves) {
+                console.warn('Falling leaves container not found');
+                return;
+            }
             
+            console.log('Creating new falling leaves animation');
             fallingLeaves.innerHTML = '';
             
-            // Create multiple leaves with different animations
-            for (let i = 0; i < 15; i++) {
+            // Clear any existing interval
+            if (leafInterval) {
+                clearInterval(leafInterval);
+            }
+            
+            // Create initial batch of leaves
+            createLeafBatch();
+            
+            // Create new leaves every 2 seconds
+            leafInterval = setInterval(createLeafBatch, 2000);
+            
+            console.log('Started continuous falling leaves animation');
+        }
+        
+        function createLeafBatch() {
+            const fallingLeaves = document.getElementById('falling-leaves');
+            if (!fallingLeaves) return;
+            
+            // Create 3-5 leaves per batch
+            const leafCount = 3 + Math.floor(Math.random() * 3);
+            
+            for (let i = 0; i < leafCount; i++) {
                 const leaf = document.createElement('div');
-                leaf.className = 'leaf';
+                leaf.className = 'falling-leaf';
                 
-                // Random positioning and animation duration
+                // Random horizontal position
                 const leftPosition = Math.random() * 100;
-                const animationDuration = 3 + Math.random() * 4; // 3-7 seconds
-                const animationDelay = Math.random() * 2; // 0-2 seconds delay
-                
                 leaf.style.left = leftPosition + '%';
-                leaf.style.animationDuration = animationDuration + 's';
-                leaf.style.animationDelay = animationDelay + 's';
+                
+                // Random animation duration
+                const duration = 3 + Math.random() * 2; // 3-5 seconds
+                leaf.style.animationDuration = duration + 's';
                 
                 fallingLeaves.appendChild(leaf);
+                
+                // Remove leaf after animation completes
+                setTimeout(() => {
+                    if (leaf.parentNode) {
+                        leaf.parentNode.removeChild(leaf);
+                    }
+                }, duration * 1000);
+            }
+        }
+        
+        function stopFallingLeaves() {
+            if (leafInterval) {
+                clearInterval(leafInterval);
+                leafInterval = null;
+            }
+            const fallingLeaves = document.getElementById('falling-leaves');
+            if (fallingLeaves) {
+                fallingLeaves.innerHTML = '';
             }
         }
         
@@ -3596,9 +3649,15 @@
         themeToggle.onclick = () => {
             const current = document.body.getAttribute('data-theme');
             
+            // During fall season, theme toggle is hidden, so this shouldn't be called
+            // But if it is, just return without doing anything
+            if (isFallSeason()) {
+                return;
+            }
+            
             // Always toggle between light and dark, regardless of season
             // The setTheme function will map these to the appropriate seasonal themes
-            if (current === 'light' || current === 'fall' || current === 'winter' || current === 'spring-dark') {
+            if (current === 'light' || current === 'winter' || current === 'spring-dark') {
                 setTheme('dark');
             } else {
                 setTheme('light');
@@ -3731,17 +3790,46 @@
             { name: "Slope 3d", image: "images/Slope3d.png", url: "./games/slope3d/", comingSoon: true  },
             { name: "Create A Path", image: "images/Create-a-path.png", url: "./games/Creat-A-Path.html" },
             { name: "A Chefs Chaos", image: "images/chefs-chaos.png", url: "./games/chefs-chaos.html" },
-            
+            { name: "New Game Coming Soon", image: "images/placeholder.png", comingSoon: true },
+            { name: "Trick Or Treat", image: "images/Trick-Or-Treat.png.png", url: "./games/Trick-Or-Treat.html", releaseDate: "10/01/2025" },
         ];
 
         
         let allGames = [];
         let currentGame = null;
         
+        // Function to check if a game should be shown based on release date
+        function isGameReleased(game) {
+            // If game has comingSoon: true, it should be shown but marked as coming soon
+            if (game.comingSoon) {
+                return true;
+            }
+            
+            if (!game.releaseDate) {
+                return true; // No release date means it's always available
+            }
+            
+            // Parse release date (format: mmddyyyy)
+            const releaseDateStr = game.releaseDate.toString();
+            if (releaseDateStr.length !== 8) {
+                console.warn('Invalid release date format for', game.name, ':', game.releaseDate);
+                return true; // Show if invalid format
+            }
+            
+            const month = parseInt(releaseDateStr.substring(0, 2));
+            const day = parseInt(releaseDateStr.substring(2, 4));
+            const year = parseInt(releaseDateStr.substring(4, 8));
+            
+            const releaseDate = new Date(year, month - 1, day); // month is 0-indexed
+            const currentDate = new Date();
+            
+            return currentDate >= releaseDate;
+        }
+
         function initGamesSection() {
-            // Initialize allGames
-            allGames = [...gamesList];
-            console.log('Initializing games section with', allGames.length, 'games');
+            // Initialize allGames and filter by release date
+            allGames = gamesList.filter(game => isGameReleased(game));
+            console.log('Initializing games section with', allGames.length, 'games (filtered from', gamesList.length, 'total)');
             
             // Update search placeholder with game count
             const searchInput = document.getElementById('games-search');
@@ -3828,7 +3916,10 @@
                 let cssClasses = 'game-card';
                 let clickHandler = `onclick="openGame('${game.name}', '${game.url}')"`;
                 
-                if (game.comingSoon) {
+                // Check if game should be marked as coming soon
+                const isComingSoon = game.comingSoon || (game.releaseDate && !isGameReleased(game));
+                
+                if (isComingSoon) {
                     cssClasses += ' coming-soon';
                     clickHandler = ''; // No click handler for coming soon games
                 }
@@ -4261,6 +4352,11 @@
                 initialTheme = savedTheme === 'winter' ? 'light' : 'dark';
             } else if (savedTheme === 'spring-dark') {
                 initialTheme = 'dark';
+            }
+            
+            // During fall season, always use light fall theme regardless of preference
+            if (isFallSeason()) {
+                initialTheme = 'light'; // This will be mapped to 'fall' in setTheme
             }
             
             setTheme(initialTheme);

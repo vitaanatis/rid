@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hubble | Alpha</title>
+    <title>Hubble | Beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
         :root {
@@ -383,7 +383,7 @@
         .alpha-badge {
             display: inline-block;
             margin-left: 1rem;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7);
+            background: linear-gradient(45deg, #4CAF50, #9C27B0, #FF9800, #4CAF50, #9C27B0);
             background-size: 400% 400%;
             color: white !important;
             -webkit-text-fill-color: white !important;
@@ -620,68 +620,82 @@
         
         /* Sidebar Styles */
         .sidebar {
-            width: 250px;
+            width: 210px;
             background: var(--sidebar-bg-light);
-            border-right: 2px solid var(--sidebar-border-light);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-            z-index: 10;
+            border-right: 1.5px solid var(--sidebar-border-light);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 2.2rem;
+            z-index: 50;
+            position: relative;
+            min-width: 170px;
+            box-sizing: border-box;
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .sidebar-content {
-            padding: 1.5rem 0;
+        .sidebar .nav-item {
+            width: 100%;
+            padding: 0.9rem 2.2rem;
+            color: var(--primary);
+            font-size: 1.13rem;
+            font-weight: 500;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 0 20px 20px 0;
+            margin-bottom: 0.3rem;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
         }
         
-        .nav-item {
+        .sidebar .nav-item.active, .sidebar .nav-item:hover {
+            background: var(--sidebar-active-light);
+            color: var(--accent);
+            transform: translateX(6px) scale(1.04);
+        }
+        
+        .sidebar .hall-of-fame-block {
+            margin-top: auto;
+            width: 100%;
+            padding: 1.1rem 2.2rem;
+            border-top: 1.5px solid var(--sidebar-border-light);
             display: flex;
             align-items: center;
-            padding: 1rem 1.5rem;
+            color: var(--primary);
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 4px solid transparent;
-            margin: 0.25rem 0;
+            background: none;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+            box-sizing: border-box;
         }
         
-        .nav-item:hover {
+        .sidebar .hall-of-fame-block:hover {
             background: var(--sidebar-active-light);
-            transform: translateX(4px);
-        }
-        
-        .nav-item.active {
-            background: var(--sidebar-active-light);
-            border-left-color: var(--primary);
-            transform: translateX(4px);
-        }
-        
-        .nav-icon {
-            font-size: 1.5rem;
-            margin-right: 1rem;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .nav-text {
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-light);
+            color: var(--accent);
+            transform: translateX(6px) scale(1.04);
+            border-radius: 0 20px 20px 0;
         }
         
         /* Dark theme sidebar */
         body[data-theme="dark"] .sidebar {
             background: var(--sidebar-bg-dark);
-            border-right-color: var(--sidebar-border-dark);
+            border-right: 1.5px solid var(--sidebar-border-dark);
         }
         
-        body[data-theme="dark"] .nav-item:hover {
+        body[data-theme="dark"] .sidebar .nav-item.active,
+        body[data-theme="dark"] .sidebar .nav-item:hover {
+            background: #2c3550;
+            color: #C97FFD;
+        }
+        
+        body[data-theme="dark"] .sidebar .hall-of-fame-block {
+            border-top: 1.5px solid var(--sidebar-border-dark);
+        }
+        
+        body[data-theme="dark"] .sidebar .hall-of-fame-block:hover {
             background: var(--sidebar-active-dark);
-        }
-        
-        body[data-theme="dark"] .nav-item.active {
-            background: var(--sidebar-active-dark);
-        }
-        
-        body[data-theme="dark"] .nav-text {
-            color: var(--text-dark);
+            color: var(--accent);
         }
         
         /* Fall theme sidebar */
@@ -2271,98 +2285,6 @@
         }
         
         /* FAQ Popup */
-        .faq-popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10007;
-            backdrop-filter: blur(5px);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .faq-popup-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        body[data-theme="dark"] .faq-popup-overlay {
-            backdrop-filter: blur(2px);
-        }
-        
-        .faq-popup {
-            background: var(--background-light);
-            color: var(--text-light);
-            padding: 2.5rem;
-            border-radius: 16px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            border: 2px solid var(--secondary);
-            transition: all 0.3s ease;
-            transform: scale(0.8) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .faq-popup-overlay.show .faq-popup {
-            transform: scale(1) translateY(0);
-        }
-        
-        body[data-theme="dark"] .faq-popup {
-            background: var(--sidebar-bg-dark);
-            color: var(--text-dark);
-            border-color: var(--sidebar-border-dark);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        
-        .faq-popup-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 50%, #C97FFD 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .faq-item {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        
-        .faq-question {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-        
-        .faq-answer {
-            font-size: 1rem;
-            line-height: 1.5;
-            color: var(--text-light);
-            padding-left: 1rem;
-        }
-        
-        body[data-theme="dark"] .faq-answer {
-            color: var(--text-dark);
-        }
-        body[data-theme="fall"] .faq-popup {
-            background: var(--fall-sidebar-bg);
-            color: var(--fall-text);
-            border-color: var(--fall-sidebar-border);
-        }
-        body[data-theme="fall"] .faq-answer {
-            color: var(--fall-text);
-        }
         
         /* Games Section */
         .games-container {
@@ -2920,6 +2842,203 @@
             }
         }
         
+        /* Hall of Fame List Styling */
+        .people-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Hacks Section Styling */
+        .hacks-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hacks-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hacks-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hacks-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+        
+        body[data-theme="dark"] .hacks-subtitle {
+            color: var(--text-dark);
+        }
+        
+        .hacks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .hack-item {
+            background: var(--sidebar-bg-light);
+            border: 2px solid var(--sidebar-border-light);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hack-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        body[data-theme="dark"] .hack-item {
+            background: var(--sidebar-bg-dark);
+            border-color: var(--sidebar-border-dark);
+        }
+        
+        body[data-theme="dark"] .hack-item:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hack-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .hack-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        body[data-theme="dark"] .hack-description {
+            color: var(--text-dark);
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 156, 252, 0.4);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
+        }
+        
+        .download-btn.disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .download-btn.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .person-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--sidebar-bg-light);
+            border: 1px solid var(--sidebar-border-light);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .person-item:hover {
+            background: var(--sidebar-active-light);
+            transform: translateX(5px);
+        }
+        
+        .person-avatar {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .person-info {
+            flex: 1;
+        }
+        
+        .person-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+        
+        .person-role {
+            font-size: 1rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .person-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        /* Dark theme adjustments */
+        body[data-theme="dark"] .person-item {
+            background: var(--sidebar-bg-dark);
+            border-color: var(--sidebar-border-dark);
+        }
+        
+        body[data-theme="dark"] .person-item:hover {
+            background: var(--sidebar-active-dark);
+        }
+        
+        body[data-theme="dark"] .person-description {
+            color: #ccc;
+        }
+        
         @media (max-width: 900px) {
             .main-content { 
                 padding: 1.2rem 0.7rem; 
@@ -3150,20 +3269,14 @@
 </head>
 <body data-theme="light">
     <div class="topbar">
-        <span class="hubble-gradient">Hubble<span class="alpha-badge" id="alpha-badge">Alpha</span></span>
+        <span class="hubble-gradient">Hubble<span class="alpha-badge" id="alpha-badge">Beta</span></span>
     </div>
     <div class="layout">
         <nav class="sidebar" id="sidebar">
-            <div class="sidebar-content">
-                <div class="nav-item active" data-section="games">
-                    <span class="nav-icon">🎮</span>
-                    <span class="nav-text">Games</span>
-                </div>
-                <div class="nav-item" data-section="music">
-                    <span class="nav-icon">🎵</span>
-                    <span class="nav-text">Music</span>
-                </div>
-            </div>
+            <button class="nav-item active" data-section="games">Games</button>
+            <button class="nav-item" data-section="music">Music</button>
+            <button class="nav-item" data-section="hacks">Hacks</button>
+            <button class="nav-item" data-section="hall-of-fame">Hall of Fame</button>
         </nav>
         <main class="main-content" id="main-content">
             <div class="games-container">
@@ -3227,6 +3340,86 @@
                 
                 <audio id="audio-player" preload="none"></audio>
             </div>
+            
+            <!-- Hall of Fame Section -->
+            <div class="hall-of-fame-container" id="hall-of-fame-container" style="display: none;">
+                <div class="hall-of-fame-header">
+                    <h2 class="hall-of-fame-title">🏆 Hall of Fame</h2>
+                    <p class="hall-of-fame-subtitle">People we appreciate and admire</p>
+                </div>
+                
+                <div class="hall-of-fame-content">
+                    <div class="people-list">
+                        <div class="person-item">
+                            <div class="person-avatar">👨‍💻</div>
+                            <div class="person-info">
+                                <div class="person-name">Issy & Mally</div>
+                                <div class="person-role">The brilliant minds behind Hubble</div>
+                            </div>
+                        </div>
+                        
+                        <div class="person-item">
+                            <div class="person-avatar">☄️</div>
+                            <div class="person-info">
+                                <div class="person-name">Alpha Testers</div>
+                                <div class="person-role">The dedicated testers who help us improve Hubble with their valuable feedback and bug reports.</div>
+                            </div>
+                        </div>
+
+                        <div class="person-item">
+                            <div class="person-avatar">👤</div>
+                            <div class="person-info">
+                                <div class="person-name">You</div>
+                                <div class="person-role">You could be here...just ask...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hacks Section -->
+            <div class="hacks-container" id="hacks-container" style="display: none;">
+                <div class="hacks-header">
+                    <h2 class="hacks-title">Hacks</h2>
+                    <p class="hacks-subtitle">Educational tools and utilities</p>
+                </div>
+                <div class="hacks-content">
+                    <div class="hacks-grid">
+                        <!-- Kitty-Tools -->
+                        <div class="hack-item">
+                            <div class="hack-info">
+                                <h3 class="hack-name">Kitty-Tools</h3>
+                                <p class="hack-description">A Kahoot hack that actually works. Requires quiz ID to use.</p>
+                            </div>
+                            <button class="download-btn" onclick="downloadKittyTools()">
+                                Download
+                            </button>
+                        </div>
+                        
+                        <!-- Blooket Hacks -->
+                        <div class="hack-item">
+                            <div class="hack-info">
+                                <h3 class="hack-name">Blooket Hacks</h3>
+                                <p class="hack-description">Bookmark-based hacks for Blooket games.</p>
+                            </div>
+                            <button class="download-btn" onclick="downloadBlooketHacks()">
+                                Download
+                            </button>
+                        </div>
+                        
+                        <!-- Coming Soon -->
+                        <div class="hack-item">
+                            <div class="hack-info">
+                                <h3 class="hack-name">Coming Soon</h3>
+                                <p class="hack-description">More tools and hacks coming soon!</p>
+                            </div>
+                            <button class="download-btn disabled" disabled>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
     <button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
@@ -3236,96 +3429,10 @@
     
     <!-- Snowflakes container for winter theme -->
     <div class="snowflakes" id="snowflakes"></div>
-    <button class="hall-of-fame-btn" id="hall-of-fame-btn" title="Hall of Fame">🏆</button>
     
     
     
     
-    <!-- FAQ -->
-    <div class="faq-popup-overlay" id="faq-popup-overlay">
-        <div class="faq-popup">
-            <h2 class="faq-popup-title">Frequently Asked Questions</h2>
-            
-            <!-- Verification Email -->
-            <div class="faq-item">
-                <div class="faq-question">I'm not receiving my verification email. What should I do?</div>
-                <div class="faq-answer">
-                    Please wait a few minutes, as the email may take some time to arrive. 
-                    If you still haven't received it, click the "Resend Email" button on the verification page.
-                </div>
-            </div>
-
-            <!-- Username Pending -->
-            <div class="faq-item">
-                <div class="faq-question">Why does it say my username is being used by a pending account?</div>
-                <div class="faq-answer">
-                    This happens when someone started creating an account with that username but didn't complete the verification process. 
-                    The system automatically cleans up abandoned registrations after 2 hours.
-                    <br><br>
-                    <strong>Solutions:</strong>
-                    <br>• Wait 2 hours and try again
-                    <br>• Try a different username
-                    <br>• Clear your browser's site data and refresh the page
-                    <br>• If you see "failed registration during cleanup" - this is normal and the system will still work
-                    <br><br>
-                    If the issue persists after 2 hours, please report it through our <strong>Create Ticket</strong> section.
-                </div>
-            </div>
-
-            <!-- Email Used -->
-            <div class="faq-item">
-                <div class="faq-question">Why does it say my email is already associated with another account?</div>
-                <div class="faq-answer">
-                    This can happen if you previously started creating an account but didn't complete email verification. 
-                    The system now automatically handles abandoned unverified accounts.
-                    <br><br>
-                    <strong>Solutions:</strong>
-                    <br>• Try creating your account again - the system will automatically clean up any abandoned accounts
-                    <br>• If you remember creating an account before, try signing in instead
-                    <br>• If the issue persists, create a support ticket with your email address
-                    <br><br>
-                    The system automatically removes abandoned unverified accounts to prevent this issue.
-                </div>
-            </div>
-
-            <!-- Forgot Password -->
-            <div class="faq-item">
-                <div class="faq-question">I forgot my password. What should I do?</div>
-                <div class="faq-answer">
-                    Click "Forgot password?" on the login page and enter your LWSD email address. 
-                    You'll receive a password reset link in your email.
-                </div>
-            </div>
-
-            <!-- Change Theme -->
-            <div class="faq-item">
-                <div class="faq-question">How do I change my theme (light/dark mode)?</div>
-                <div class="faq-answer">
-                    Click the theme toggle button in the bottom right corner of the screen to switch between light and dark modes.
-                </div>
-            </div>
-
-            <!-- Fullscreen Games -->
-            <div class="faq-item">
-                <div class="faq-question">Can I play games in fullscreen?</div>
-                <div class="faq-answer">
-                    Yes, but only the webpage itself will go fullscreen.  
-                    When you open a game, you'll see a "Fullscreen" button in the top bar.  
-                    You can press the <strong>Escape</strong> key to exit fullscreen mode.
-                </div>
-            </div>
-
-            <!-- Final Note -->
-            <div class="faq-final-note" style="margin-top: 2rem; text-align: center;">
-                <h3>If you have any other questions, please feel free to create a support ticket!</h3>
-            </div>
-
-            <!-- Close -->
-            <div style="text-align: center; margin-top: 2rem;">
-                <button class="help-popup-close" onclick="closeFAQPopupAndReturnToHelp()">Close</button>
-            </div>
-        </div>
-    </div>
     
     <!-- Game Suggestion -->
     <div class="game-suggestion-popup-overlay" id="game-suggestion-popup-overlay">
@@ -3440,30 +3547,6 @@
                 setTimeout(() => {
                     popup.style.display = 'none';
                 }, 300);
-            }
-        }
-        
-        function showBugTicketPopup() {
-            closeBugPopup();
-            const popup = document.getElementById('bug-ticket-popup-overlay');
-            const formContent = document.getElementById('bug-ticket-form-content');
-            const sentContent = document.getElementById('bug-ticket-sent-content');
-            const errorText = document.getElementById('bug-ticket-error-text');
-            
-            if (popup) {
-                // Reset form and hide error
-                document.getElementById('bug-ticket-subject').value = '';
-                document.getElementById('bug-ticket-description').value = '';
-                errorText.style.display = 'none';
-                
-                // Show form, hide sent message
-                formContent.style.display = 'block';
-                sentContent.style.display = 'none';
-                
-                popup.style.display = 'flex';
-                setTimeout(() => {
-                    popup.classList.add('show');
-                }, 10);
             }
         }
         
@@ -3699,43 +3782,12 @@
             }
         }
 
-        function showFAQPopup() {
-            closeBugPopup();
-            const popup = document.getElementById('faq-popup-overlay');
-            if (popup) {
-                popup.style.display = 'flex';
-                setTimeout(() => {
-                    popup.classList.add('show');
-                }, 10);
-            }
-        }
-        
-        function closeFAQPopup() {
-            const popup = document.getElementById('faq-popup-overlay');
-            if (popup) {
-                popup.classList.remove('show');
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                }, 300);
-            }
-        }
-        
-        function closeFAQPopupAndReturnToHelp() {
-            const popup = document.getElementById('faq-popup-overlay');
-            if (popup) {
-                popup.classList.remove('show');
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                }, 300);
-            }
-        }
         
         function closeAllPopups() {
             closeBugPopup();
             closeBugTicketPopup();
             closeTicketPopup();
             closeGameSuggestionPopup();
-            closeFAQPopup();
             closeHallOfFamePopup();
         }
         
@@ -3924,11 +3976,6 @@
                 closeGameSuggestionPopup();
             }
             
-            // FAQ popup
-            const faqPopup = document.getElementById('faq-popup-overlay');
-            if (faqPopup && e.target === faqPopup) {
-                closeFAQPopupAndReturnToHelp();
-            }
             
             // Ticket popup
             const ticketPopup = document.getElementById('ticket-popup-overlay');
@@ -4190,6 +4237,21 @@
         
         
         let leafInterval = null;
+        
+        // Function to check if it's fall season
+        function isFallSeason() {
+            const now = new Date();
+            const month = now.getMonth() + 1; // 1-12
+            const day = now.getDate();
+            
+            // Fall season: September 1st to November 30th
+            if (month === 9) return true; // September
+            if (month === 10) return true; // October  
+            if (month === 11) return true; // November
+            
+            return false;
+        }
+        
         
         // Create falling leaves animation
         function createFallingLeaves() {
@@ -4897,7 +4959,7 @@
             
             // Restore header
             topbar.classList.remove('game-mode');
-            hubbleTitle.innerHTML = topbar.dataset.originalTitle || 'Hubble<span class="alpha-badge" id="alpha-badge">Alpha</span>';
+            hubbleTitle.innerHTML = topbar.dataset.originalTitle || 'Hubble<span class="alpha-badge" id="alpha-badge">Beta</span>';
             
             // Restore alpha badge
             const alphaBadge = document.getElementById('alpha-badge');
@@ -5029,6 +5091,7 @@
             if (hallOfFameBtn) {
                 hallOfFameBtn.addEventListener('click', showHallOfFamePopup);
             }
+            
             
             
             // Setup Hall of Fame category buttons
@@ -5298,6 +5361,8 @@
             const navItems = document.querySelectorAll('.nav-item');
             const gamesContainer = document.querySelector('.games-container');
             const musicContainer = document.querySelector('.music-container');
+            const hallOfFameContainer = document.querySelector('.hall-of-fame-container');
+            const hacksContainer = document.querySelector('.hacks-container');
             
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
@@ -5312,13 +5377,75 @@
                     if (section === 'games') {
                         gamesContainer.style.display = 'block';
                         musicContainer.style.display = 'none';
+                        hallOfFameContainer.style.display = 'none';
+                        hacksContainer.style.display = 'none';
                     } else if (section === 'music') {
                         gamesContainer.style.display = 'none';
                         musicContainer.style.display = 'block';
+                        hallOfFameContainer.style.display = 'none';
+                        hacksContainer.style.display = 'none';
+                    } else if (section === 'hall-of-fame') {
+                        gamesContainer.style.display = 'none';
+                        musicContainer.style.display = 'none';
+                        hallOfFameContainer.style.display = 'block';
+                        hacksContainer.style.display = 'none';
+                    } else if (section === 'hacks') {
+                        gamesContainer.style.display = 'none';
+                        musicContainer.style.display = 'none';
+                        hallOfFameContainer.style.display = 'none';
+                        hacksContainer.style.display = 'block';
                     }
                 });
             });
         });
+        
+        // Hacks Download Functions
+        function downloadKittyTools() {
+            // Create a download link for the Kitty-Tools.zip file
+            const a = document.createElement('a');
+            a.href = 'downloads/Kitty-Tools.zip';
+            a.download = 'Kitty-Tools.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        
+        function downloadBlooketHacks() {
+            // Open popup with bookmark instructions
+            const popup = window.open('', '_blank', 'width=600,height=500,scrollbars=yes,resizable=yes');
+            
+            // YOUR BLOOKET HACK CODE GOES HERE
+            // Replace this with your actual Blooket hack JavaScript code
+            const bookmarkCode = 'YOUR_BLOOKET_HACK_CODE_HERE';
+            
+            // Simple popup with instructions
+            popup.document.write(`
+                <html>
+                <head><title>Blooket Hacks</title></head>
+                <body style="font-family: Arial; padding: 20px; text-align: center;">
+                    <h1>🎮 Blooket Hacks</h1>
+                    <p>Press <strong>Ctrl + Shift + B</strong> to show your bookmarks bar</p>
+                    <p>Drag the bookmark below to your bookmarks bar:</p>
+                    <div id="bookmark" style="background: #667eea; color: white; padding: 15px; border-radius: 10px; cursor: grab; display: inline-block; margin: 20px 0;" draggable="true">🎮 Blooket Hacks</div>
+                    <p><strong>⚠️ Use responsibly and follow your school's policies!</strong></p>
+                    <script>
+                        const bookmark = document.getElementById("bookmark");
+                        const bookmarkCode = "javascript:(function(){alert('Blooket hacks loaded! Use responsibly.');})();";
+                        bookmark.addEventListener("dragstart", function(e) {
+                            e.dataTransfer.setData("text/uri-list", bookmarkCode);
+                            e.dataTransfer.setData("text/plain", bookmarkCode);
+                        });
+                        bookmark.addEventListener("click", function() {
+                            navigator.clipboard.writeText(bookmarkCode).then(() => {
+                                alert("Bookmark code copied to clipboard!");
+                            });
+                        });
+                    <\/script>
+                </body>
+                </html>
+            `);
+            popup.document.close();
+        }
         
         // Music Player Functionality
         document.addEventListener('DOMContentLoaded', function() {
@@ -5671,11 +5798,9 @@
         });
         
     </script>
-    
-    <!-- Version Checker -->
-    <script type="module" src="./version-check.js"></script>
-    
+
     <!-- Watermark Component -->
     <script type="module" src="./watermark.js"></script>
+    
 </body>
 </html>

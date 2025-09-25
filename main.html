@@ -4456,16 +4456,18 @@
                 return true; // No release date means it's always available
             }
             
-            // Parse release date (format: mmddyyyy)
+            // Parse release date (format: MM/DD/YYYY)
             const releaseDateStr = game.releaseDate.toString();
-            if (releaseDateStr.length !== 8) {
+            const dateParts = releaseDateStr.split('/');
+            
+            if (dateParts.length !== 3) {
                 console.warn('Invalid release date format for', game.name, ':', game.releaseDate);
                 return true; // Show if invalid format
             }
             
-            const month = parseInt(releaseDateStr.substring(0, 2));
-            const day = parseInt(releaseDateStr.substring(2, 4));
-            const year = parseInt(releaseDateStr.substring(4, 8));
+            const month = parseInt(dateParts[0]);
+            const day = parseInt(dateParts[1]);
+            const year = parseInt(dateParts[2]);
             
             const releaseDate = new Date(year, month - 1, day); // month is 0-indexed
             const currentDate = new Date();

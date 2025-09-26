@@ -2973,6 +2973,7 @@
             box-shadow: none;
         }
         
+        
         .person-item {
             display: flex;
             align-items: center;
@@ -5410,43 +5411,137 @@
             document.body.removeChild(a);
         }
         
-        function downloadBlooketHacks() {
-            // Open popup with bookmark instructions
-            const popup = window.open('', '_blank', 'width=600,height=500,scrollbars=yes,resizable=yes');
+        async function downloadBlooketHacks() {
+            // Fetch the actual blookethack.js file contents first
+            let bookmarkCode;
+            try {
+                const response = await fetch('./downloads/blookethack.js');
+                const jsContent = await response.text();
+                // Properly format the bookmarklet
+                bookmarkCode = `javascript:(function(){${jsContent}})();`;
+            } catch (error) {
+                console.error('Failed to load blookethack.js:', error);
+                bookmarkCode = "javascript:(function(){alert('Failed to load hack file. Please try again.');})();";
+            }
             
-            // YOUR BLOOKET HACK CODE GOES HERE
-            // Replace this with your actual Blooket hack JavaScript code
-            const bookmarkCode = 'YOUR_BLOOKET_HACK_CODE_HERE';
+            // Open about:blank tab in same window with bookmark instructions
+            const newTab = window.open('about:blank', '_blank');
             
-            // Simple popup with instructions
-            popup.document.write(`
+            // Create the content for the new tab
+            newTab.document.write(`
+                <!DOCTYPE html>
                 <html>
-                <head><title>Blooket Hacks</title></head>
-                <body style="font-family: Arial; padding: 20px; text-align: center;">
-                    <h1>🎮 Blooket Hacks</h1>
-                    <p>Press <strong>Ctrl + Shift + B</strong> to show your bookmarks bar</p>
-                    <p>Drag the bookmark below to your bookmarks bar:</p>
-                    <div id="bookmark" style="background: #667eea; color: white; padding: 15px; border-radius: 10px; cursor: grab; display: inline-block; margin: 20px 0;" draggable="true">🎮 Blooket Hacks</div>
-                    <p><strong>⚠️ Use responsibly and follow your school's policies!</strong></p>
+                <head>
+                    <title>Blooket Hacks</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background: linear-gradient(90deg, #009CFC 0%, #A0AAFF 25%, #C97FFD 50%, #009CFC 75%, #A0AAFF 100%);
+                            background-size: 400% 100%;
+                            animation: hubbleGradient 8s ease-in-out infinite;
+                            margin: 0;
+                            padding: 20px;
+                            min-height: 100vh;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        @keyframes hubbleGradient {
+                            0%, 100% { background-position: 0% 50%; }
+                            50% { background-position: 100% 50%; }
+                        }
+                        .container {
+                            background: white;
+                            border-radius: 20px;
+                            padding: 40px;
+                            text-align: center;
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                            max-width: 500px;
+                            width: 90%;
+                        }
+                        h1 {
+                            color: #333;
+                            margin-bottom: 30px;
+                        }
+                        .directions {
+                            margin: 20px 0;
+                            line-height: 1.6;
+                            color: #555;
+                        }
+                        .directions ol {
+                            text-align: left;
+                            margin: 15px 0;
+                            padding-left: 20px;
+                        }
+                        .directions li {
+                            margin: 8px 0;
+                        }
+                        .bookmark-draggable {
+                            background: linear-gradient(135deg, #667eea, #764ba2);
+                            color: white;
+                            padding: 20px;
+                            border-radius: 15px;
+                            cursor: grab;
+                            display: inline-block;
+                            margin: 20px 0;
+                            font-size: 1.1rem;
+                            font-weight: 600;
+                            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+                            transition: all 0.3s ease;
+                            user-select: none;
+                            border: 2px solid transparent;
+                        }
+                        .bookmark-draggable:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+                            border-color: rgba(255, 255, 255, 0.3);
+                        }
+                        .bookmark-draggable:active {
+                            cursor: grabbing;
+                            transform: scale(0.95);
+                        }
+                        .warning {
+                            color: #e74c3c;
+                            font-weight: bold;
+                            margin-top: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Blooket Hacks</h1>
+                        <div class="directions">
+                            <p><strong>Follow these steps to install the hack:</strong></p>
+                            <ol>
+                                <li>Press <strong>Ctrl + Shift + B</strong> (or <strong>Cmd + Shift + B</strong> on Mac) to show your bookmarks bar</li>
+                                <li>Drag the bookmark below to your bookmarks bar</li>
+                                <li>Go to any Blooket game</li>
+                                <li>Click the bookmark in your bookmarks bar to activate the hack</li>
+                            </ol>
+                        </div>
+                        <div id="bookmark" class="bookmark-draggable" draggable="true">Blooket Hacks</div>
+                        <p class="warning">⚠️ Use responsibly and follow your school's policies!</p>
+                    </div>
                     <script>
                         const bookmark = document.getElementById("bookmark");
-                        const bookmarkCode = "javascript:(function(){alert('Blooket hacks loaded! Use responsibly.');})();";
+                        const bookmarkCode = \`${bookmarkCode}\`;
+                        
                         bookmark.addEventListener("dragstart", function(e) {
                             e.dataTransfer.setData("text/uri-list", bookmarkCode);
                             e.dataTransfer.setData("text/plain", bookmarkCode);
-                        });
-                        bookmark.addEventListener("click", function() {
-                            navigator.clipboard.writeText(bookmarkCode).then(() => {
-                                alert("Bookmark code copied to clipboard!");
-                            });
+                            e.dataTransfer.setData("text/html", '<a href="' + bookmarkCode + '">Blooket Hacks</a>');
+                            e.dataTransfer.setData("text/x-moz-url", bookmarkCode + " Blooket Hacks");
+                            e.dataTransfer.effectAllowed = "copy";
                         });
                     <\/script>
                 </body>
                 </html>
             `);
-            popup.document.close();
+            newTab.document.close();
         }
         
+        
+
         // Music Player Functionality
         document.addEventListener('DOMContentLoaded', function() {
             const audioPlayer = document.getElementById('audio-player');
@@ -5807,6 +5902,7 @@
 
     <!-- Watermark Component -->
     <script type="module" src="./watermark.js"></script>
+    
     
 </body>
 </html>

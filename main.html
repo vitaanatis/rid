@@ -2851,19 +2851,19 @@
             margin: 0 auto;
         }
         
-        /* Hacks Section Styling */
+        /* Cheats Section Styling */
         .hacks-container {
             padding: 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
         
-        .hacks-header {
+        .cheats-header {
             text-align: center;
             margin-bottom: 3rem;
         }
         
-        .hacks-title {
+        .cheats-title {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
@@ -2873,17 +2873,17 @@
             background-clip: text;
         }
         
-        .hacks-subtitle {
+        .cheats-subtitle {
             font-size: 1.2rem;
             color: var(--text-light);
             margin-bottom: 0;
         }
         
-        body[data-theme="dark"] .hacks-subtitle {
+        body[data-theme="dark"] .cheats-subtitle {
             color: var(--text-dark);
         }
         
-        .hacks-grid {
+        .cheats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
@@ -3276,7 +3276,7 @@
         <nav class="sidebar" id="sidebar">
             <button class="nav-item active" data-section="games">Games</button>
             <button class="nav-item" data-section="music">Music</button>
-            <button class="nav-item" data-section="hacks">Hacks</button>
+            <button class="nav-item" data-section="hacks">Cheats</button>
             <button class="nav-item" data-section="hall-of-fame">Hall of Fame</button>
         </nav>
         <main class="main-content" id="main-content">
@@ -3378,14 +3378,14 @@
                 </div>
             </div>
             
-            <!-- Hacks Section -->
+            <!-- Cheats Section -->
             <div class="hacks-container" id="hacks-container" style="display: none;">
-                <div class="hacks-header">
-                    <h2 class="hacks-title">Hacks</h2>
-                    <p class="hacks-subtitle">Educational tools and utilities</p>
+                <div class="cheats-header">
+                    <h2 class="cheats-title">Cheats</h2>
+                    <p class="cheats-subtitle">Educational tools and utilities</p>
                 </div>
                 <div class="hacks-content">
-                    <div class="hacks-grid">
+                    <div class="cheats-grid">
                         <!-- Kitty-Tools -->
                         <div class="hack-item">
                             <div class="hack-info">
@@ -3397,13 +3397,13 @@
                             </button>
                         </div>
                         
-                        <!-- Blooket Hacks -->
+                        <!-- Blooket Cheats -->
                         <div class="hack-item">
                             <div class="hack-info">
-                                <h3 class="hack-name">Blooket Hacks</h3>
-                                <p class="hack-description">Bookmark-based hacks for Blooket games.</p>
+                                <h3 class="hack-name">Blooket Cheats</h3>
+                                <p class="hack-description">Bookmark-based cheats for Blooket games.</p>
                             </div>
-                            <button class="download-btn" onclick="downloadBlooketHacks()">
+                            <button class="download-btn" onclick="downloadBlooketCheats()">
                                 Download
                             </button>
                         </div>
@@ -3412,7 +3412,7 @@
                         <div class="hack-item">
                             <div class="hack-info">
                                 <h3 class="hack-name">Coming Soon</h3>
-                                <p class="hack-description">More tools and hacks coming soon!</p>
+                                <p class="hack-description">More tools and cheats coming soon!</p>
                             </div>
                             <button class="download-btn disabled" disabled>
                                 Download
@@ -5400,7 +5400,7 @@
             });
         });
         
-        // Hacks Download Functions
+        // Cheats Download Functions
         function downloadKittyTools() {
             // Create a download link for the Kitty-Tools.zip file
             const a = document.createElement('a');
@@ -5411,7 +5411,7 @@
             document.body.removeChild(a);
         }
         
-        async function downloadBlooketHacks() {
+        async function downloadBlooketCheats() {
             // Fetch the actual blookethack.js file contents first
             let bookmarkCode;
             try {
@@ -5432,7 +5432,7 @@
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Blooket Hacks</title>
+                    <title>Blooket Cheats</title>
                     <style>
                         body {
                             font-family: Arial, sans-serif;
@@ -5517,7 +5517,7 @@
                 </head>
                 <body>
                     <div class="container">
-                        <h1>Blooket Hacks</h1>
+                        <h1>Blooket Cheats</h1>
                         <div class="directions">
                             <p><strong>Follow these steps to install the hack:</strong></p>
                             <ol>
@@ -5527,7 +5527,7 @@
                                 <li>Click the bookmark in your bookmarks bar to activate the hack</li>
                             </ol>
                         </div>
-                        <a id="bookmark" class="bookmark-draggable" draggable="true" href="${bookmarkCode}" ondragstart="event.dataTransfer.effectAllowed='copy'">Blooket Hacks</a>
+                        <a id="bookmark" class="bookmark-draggable" draggable="true" href="${bookmarkCode}" ondragstart="event.dataTransfer.effectAllowed='copy'">Blooket Cheats</a>
                         <p class="warning">⚠️ Use responsibly and follow your school's policies!</p>
                     </div>
                     <script>
@@ -5541,14 +5541,14 @@
                             // Set the bookmark URL and name with proper formats
                             e.dataTransfer.setData("text/uri-list", bookmarkCode);
                             e.dataTransfer.setData("text/plain", bookmarkCode);
-                            e.dataTransfer.setData("text/html", '<a href="' + bookmarkCode + '">Blooket Hacks</a>');
-                            e.dataTransfer.setData("text/x-moz-url", bookmarkCode + "\nBlooket Hacks");
+                            e.dataTransfer.setData("text/html", '<a href="' + bookmarkCode + '">Blooket Cheats</a>');
+                            e.dataTransfer.setData("text/x-moz-url", bookmarkCode + "\nBlooket Cheats");
                             e.dataTransfer.setData("text/url", bookmarkCode);
                             e.dataTransfer.setData("DownloadURL", bookmarkCode);
                             
                             // Try to set the bookmark name directly
                             try {
-                                e.dataTransfer.setData("text/plain", bookmarkCode + "\nBlooket Hacks");
+                                e.dataTransfer.setData("text/plain", bookmarkCode + "\nBlooket Cheats");
                             } catch (err) {
                                 console.log("Could not set bookmark name:", err);
                             }

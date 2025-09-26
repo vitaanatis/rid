@@ -2448,6 +2448,25 @@
             min-height: 200px;
         }
         
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem 0;
+            text-align: center;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .favorites-section {
+            margin-bottom: 3rem;
+        }
+        
+        .all-games-section {
+            margin-bottom: 2rem;
+        }
+        
         .games-loading {
             grid-column: 1 / -1;
             text-align: center;
@@ -3284,8 +3303,21 @@
                 <div class="games-search-section">
                     <input type="text" id="games-search" class="games-search-bar" placeholder="Search through our games..." autocomplete="off">
                 </div>
-                <div class="games-grid" id="games-grid">
-                    <div class="games-loading">Loading games...</div>
+                
+                <!-- Our Favorites Section -->
+                <div class="favorites-section" id="favorites-section">
+                    <h2 class="section-title">Our Favorites</h2>
+                    <div class="games-grid" id="favorites-grid">
+                        <div class="games-loading">Loading favorites...</div>
+                    </div>
+                </div>
+                
+                <!-- All Games Section -->
+                <div class="all-games-section" id="all-games-section">
+                    <h2 class="section-title">All Games</h2>
+                    <div class="games-grid" id="games-grid">
+                        <div class="games-loading">Loading games...</div>
+                    </div>
                 </div>
             </div>
             
@@ -4372,20 +4404,21 @@
         };
 
         // Games System
+        // Note: The favorites system is purely for display organization and does not affect game saves, localStorage, or cookies
         const gamesList = [
-            { name: "Doodle Jump", image: "images/Doodle-Jump.png", url: "./games/Doodle_jump.html" },
-            { name: "Getting Over It", image: "images/Getting-Over-It.png", url: "./games/gettingoverit.html" },
-            { name: "Retro Bowl", image: "images/Retro-Bowl.png", url: "./games/retro-bowl/" },
-            { name: "Slope", image: "images/Slope.png", url: "./games/slope.html" },
+            { name: "Doodle Jump", image: "images/Doodle-Jump.png", url: "./games/Doodle_jump.html", favorite: true },
+            { name: "Getting Over It", image: "images/Getting-Over-It.png", url: "./games/gettingoverit.html", favorite: true },
+            { name: "Retro Bowl", image: "images/Retro-Bowl.png", url: "./games/retro-bowl/", favorite: true },
+            { name: "Slope", image: "images/Slope.png", url: "./games/slope.html", favorite: true },
             { name: "Snow Rider 3D", image: "images/Snow-Rider-3d.png", url: "./games/Snow Rider 3D.html" },
-            { name: "Tetris", image: "images/Tetris.png", url: "./games/Tetris.html" },
+            { name: "Tetris", image: "images/Tetris.png", url: "./games/Tetris.html", favorite: true },
             { name: "Appel",image: "images/Appel.png", url: "./games/Appel.html"},
             { name: "Arena", image: "images/Arena.png", url: "./games/Arena.html" },
             { name: "Space Huggers", image: "images/Space-Huggers.png", url: "./games/spacehuggers.html" },
             { name: "Stack", image: "images/Stack.png", url: "./games/stack.html" },
-            { name: "Suika Watermelon", image: "images/Suika-Watermelon.png", url: "./games/Suika-watermelon.html" },
+            { name: "Suika Watermelon", image: "images/Suika-Watermelon.png", url: "./games/Suika-watermelon.html", favorite: true },
             { name: "60 Seconds Burger Run", image: "images/60-Seconds-Burger-Run.png", url: "./games/60second_burger_run.html" },
-            { name: "Eaglercraft", image: "images/Eaglercraft.png", url: "./games/EaglercraftX_1.8_u45_Offline_Signed (1).html" },
+            { name: "Eaglercraft", image: "images/Eaglercraft.png", url: "./games/EaglercraftX_1.8_u45_Offline_Signed (1).html", favorite: true },
             { name: "1v1.LOL", image: "images/1v1-lol.png", url: "./games/1v1.lol/index.html" },
             { name: "Ball Blast", image: "images/Ball-Blast.png", url: "./games/ball-blast.html" },
             { name: "Multiplayer Appel", image: "images/Appel-Multiplayer.png", comingSoon: true },
@@ -4467,7 +4500,7 @@
             { name: "Justfall", image: "images/Justfall.png", url: "./games/justfall/"  },
             { name: "Eggy Car", image: "images/Eggy-Car.png", url: "./games/eggy-car/"  },
             { name: "Particle Clicker", image: "images/Particle-Clicker.png", url: "./games/particleclicker/"  },
-            { name: "Escape Road", image: "images/Escape-Road.png", url: "./games/escape-road/"  },
+            { name: "Escape Road", image: "images/Escape-Road.png", url: "./games/escape-road/", favorite: true  },
             { name: "Escape Road 2", image: "images/Escape-Road-2.png", url: "./games/escape-road-2/"  },
             { name: "Escape Road City", image: "images/Escape-Road-City.png", url: "./games/escape-road-city/" },
             { name: "Escape Road City 2",  image: "images/Escape-Road-City-2.png", url: "./games/escape-road-city-2/" },
@@ -4552,6 +4585,7 @@
             // Add a delay to ensure DOM is ready
             setTimeout(() => {
                 console.log('Populating games grid...');
+                populateFavoritesGrid();
                 populateGamesGrid();
                 setupGamesSearch();
             }, 200);
@@ -4594,6 +4628,56 @@
             return colors[Math.floor(Math.random() * colors.length)];
         }
         
+        function populateFavoritesGrid() {
+            const favoritesGrid = document.getElementById('favorites-grid');
+            
+            if (!favoritesGrid) {
+                console.error('Favorites grid element not found');
+                return;
+            }
+            
+            // Get only favorite games (ensure we don't modify the original game objects)
+            const favoriteGames = allGames.filter(game => game.favorite === true);
+            
+            if (favoriteGames.length === 0) {
+                console.log('No favorite games to display');
+                favoritesGrid.innerHTML = '<div class="games-loading">No favorites found</div>';
+                return;
+            }
+            
+            console.log('Populating favorites grid with', favoriteGames.length, 'games');
+            
+            // Sort favorites alphabetically
+            const sortedFavorites = [...favoriteGames].sort((a, b) => a.name.localeCompare(b.name));
+            
+            const favoritesHTML = sortedFavorites.map((game, index) => {
+                const abbreviation = generateGameAbbreviation(game.name);
+                const colorScheme = getRandomPlaceholderColor();
+                
+                // Determine CSS classes and click behavior
+                let cssClasses = 'game-card';
+                let clickHandler = `onclick="openGame('${game.name}', '${game.url}')"`;
+                
+                // Check if game should be marked as coming soon
+                const isComingSoon = game.comingSoon || (game.releaseDate && !isGameReleased(game));
+                
+                if (isComingSoon) {
+                    cssClasses += ' coming-soon';
+                    clickHandler = ''; // No click handler for coming soon games
+                }
+                
+                return `
+                <div class="${cssClasses}" ${clickHandler}>
+                    <img src="${game.image}" alt="${game.name}" class="game-image" loading="lazy" 
+                         onerror="showGamePlaceholder(this, '${abbreviation}', '${colorScheme.primary}', '${colorScheme.secondary}')">
+                    <h3 class="game-name">${game.name}</h3>
+                </div>
+                `;
+            }).join('');
+            
+            favoritesGrid.innerHTML = favoritesHTML;
+        }
+
         function populateGamesGrid() {
             const gamesGrid = document.getElementById('games-grid');
             
@@ -4602,22 +4686,34 @@
                 return;
             }
             
-            if (allGames.length === 0) {
+            // Check if we're in search mode (games have scores) or normal mode
+            const isSearchMode = allGames[0] && allGames[0].hasOwnProperty('score');
+            
+            let gamesToShow;
+            if (isSearchMode) {
+                // In search mode, show ALL games (including favorites)
+                gamesToShow = allGames;
+                console.log('Populating grid with', gamesToShow.length, 'games (search mode - including favorites)');
+            } else {
+                // In normal mode, exclude favorites from main collection
+                gamesToShow = allGames.filter(game => game.favorite !== true);
+                console.log('Populating grid with', gamesToShow.length, 'games (normal mode - excluding favorites)');
+            }
+            
+            if (gamesToShow.length === 0) {
                 console.log('No games to display');
                 gamesGrid.innerHTML = '<div class="games-loading">No games found</div>';
                 return;
             }
             
-            console.log('Populating grid with', allGames.length, 'games');
-            
             // Check if games have scores (from search) or sort alphabetically
             let sortedGames;
-            if (allGames[0] && allGames[0].hasOwnProperty('score')) {
+            if (isSearchMode) {
                 // Games are already sorted by score from search
-                sortedGames = allGames;
+                sortedGames = gamesToShow;
             } else {
                 // Sort games alphabetically for default view
-                sortedGames = [...allGames].sort((a, b) => a.name.localeCompare(b.name));
+                sortedGames = [...gamesToShow].sort((a, b) => a.name.localeCompare(b.name));
             }
             
             const gamesHTML = sortedGames.map((game, index) => {
@@ -4694,14 +4790,31 @@
             
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase().trim();
+                const favoritesSection = document.getElementById('favorites-section');
+                const allGamesSection = document.getElementById('all-games-section');
                 
                 if (!searchTerm) {
                     // Reset to original games list without scores
                     allGames = [...gamesList];
+                    // Show favorites section when not searching
+                    if (favoritesSection) favoritesSection.style.display = 'block';
+                    if (allGamesSection) allGamesSection.style.display = 'block';
+                    // Show the "All Games" title when not searching
+                    const allGamesTitle = document.querySelector('#all-games-section .section-title');
+                    if (allGamesTitle) allGamesTitle.style.display = 'block';
+                    // Repopulate favorites grid
+                    populateFavoritesGrid();
                 } else {
-                    // Advanced relevance scoring
+                    // Hide favorites section when searching
+                    if (favoritesSection) favoritesSection.style.display = 'none';
+                    // Hide the "All Games" title when searching
+                    const allGamesTitle = document.querySelector('#all-games-section .section-title');
+                    if (allGamesTitle) allGamesTitle.style.display = 'none';
+                    if (allGamesSection) allGamesSection.style.display = 'block';
+                    
+                    // Advanced relevance scoring - include ALL games (including favorites) in search
                     allGames = gamesList.filter(game => 
-                        game.name.toLowerCase().includes(searchTerm)
+game.name.toLowerCase().includes(searchTerm)
                     ).map(game => {
                         const gameName = game.name.toLowerCase();
                         let score = 0;

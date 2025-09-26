@@ -5417,8 +5417,8 @@
             try {
                 const response = await fetch('./downloads/blookethack.js');
                 const jsContent = await response.text();
-                // Properly format the bookmarklet
-                bookmarkCode = `javascript:(function(){${jsContent}})();`;
+                // Create a shorter bookmarklet that loads the full code
+                bookmarkCode = `javascript:(function(){fetch('./downloads/blookethack.js').then(r=>r.text()).then(code=>eval(code));})();`;
             } catch (error) {
                 console.error('Failed to load blookethack.js:', error);
                 bookmarkCode = "javascript:(function(){alert('Failed to load hack file. Please try again.');})();";
@@ -5428,7 +5428,7 @@
             const newTab = window.open('about:blank', '_blank');
             
             // Create the content for the new tab
-            newTab.document.write(`
+            const htmlContent = `
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -5490,6 +5490,9 @@
                             transition: all 0.3s ease;
                             user-select: none;
                             border: 2px solid transparent;
+                            -webkit-user-drag: element;
+                            -moz-user-select: none;
+                            -webkit-user-select: none;
                         }
                         .bookmark-draggable:hover {
                             transform: translateY(-2px);
@@ -5498,6 +5501,11 @@
                         }
                         .bookmark-draggable:active {
                             cursor: grabbing;
+                            transform: scale(0.95);
+                        }
+                        
+                        .bookmark-draggable[dragging] {
+                            opacity: 0.7;
                             transform: scale(0.95);
                         }
                         .warning {
@@ -5519,24 +5527,55 @@
                                 <li>Click the bookmark in your bookmarks bar to activate the hack</li>
                             </ol>
                         </div>
-                        <div id="bookmark" class="bookmark-draggable" draggable="true">Blooket Hacks</div>
+                        <a id="bookmark" class="bookmark-draggable" draggable="true" href="${bookmarkCode}" ondragstart="event.dataTransfer.effectAllowed='copy'">Blooket Hacks</a>
                         <p class="warning">⚠️ Use responsibly and follow your school's policies!</p>
                     </div>
                     <script>
                         const bookmark = document.getElementById("bookmark");
-                        const bookmarkCode = \`${bookmarkCode}\`;
+                        const bookmarkCode = '${bookmarkCode.replace(/'/g, "\\'")}';
                         
                         bookmark.addEventListener("dragstart", function(e) {
+                            // Set the drag effect
+                            e.dataTransfer.effectAllowed = "copy";
+                            
+                            // Set the bookmark URL and name with proper formats
                             e.dataTransfer.setData("text/uri-list", bookmarkCode);
                             e.dataTransfer.setData("text/plain", bookmarkCode);
                             e.dataTransfer.setData("text/html", '<a href="' + bookmarkCode + '">Blooket Hacks</a>');
-                            e.dataTransfer.setData("text/x-moz-url", bookmarkCode + " Blooket Hacks");
-                            e.dataTransfer.effectAllowed = "copy";
+                            e.dataTransfer.setData("text/x-moz-url", bookmarkCode + "\nBlooket Hacks");
+                            e.dataTransfer.setData("text/url", bookmarkCode);
+                            e.dataTransfer.setData("DownloadURL", bookmarkCode);
+                            
+                            // Try to set the bookmark name directly
+                            try {
+                                e.dataTransfer.setData("text/plain", bookmarkCode + "\nBlooket Hacks");
+                            } catch (err) {
+                                console.log("Could not set bookmark name:", err);
+                            }
+                            
+                            // Visual feedback
+                            bookmark.style.opacity = "0.7";
+                            bookmark.setAttribute("dragging", "true");
                         });
+                        
+                        bookmark.addEventListener("dragend", function(e) {
+                            // Reset visual feedback
+                            bookmark.style.opacity = "1";
+                            bookmark.removeAttribute("dragging");
+                        });
+                        
+                        // Prevent default drag behavior that might interfere
+                        bookmark.addEventListener("drag", function(e) {
+                            e.preventDefault();
+                        });
+                        
+                        // Ensure the element is properly draggable
+                        bookmark.setAttribute("draggable", "true");
                     <\/script>
                 </body>
                 </html>
-            `);
+            `;
+            newTab.document.write(htmlContent);
             newTab.document.close();
         }
         

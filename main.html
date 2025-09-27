@@ -199,7 +199,7 @@
         }
         
         
-        /* New Falling Leaves Animation */
+        /* Fresh Falling Leaves Animation */
         .falling-leaves {
             position: fixed;
             top: 0;
@@ -207,45 +207,51 @@
             width: 100%;
             height: 100vh;
             pointer-events: none;
-            z-index: 1;
+            z-index: 1000;
             overflow: hidden;
         }
         
-        .falling-leaf {
+        .leaf {
             position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b35;
+            border-radius: 0 100% 0 100%;
+            animation: fall 4s linear forwards;
+            opacity: 0.9;
+        }
+        
+        .leaf:nth-child(2n) {
+            background: #ff8c42;
             width: 15px;
             height: 15px;
-            background: #d2691e;
-            border-radius: 0 100% 0 100%;
-            animation: leafFall 4s linear infinite;
-            opacity: 0.7;
         }
         
-        .falling-leaf:nth-child(odd) {
-            background: #8b4513;
-            width: 12px;
-            height: 12px;
+        .leaf:nth-child(3n) {
+            background: #ffa726;
+            width: 25px;
+            height: 25px;
         }
         
-        .falling-leaf:nth-child(3n) {
-            background: #daa520;
+        .leaf:nth-child(4n) {
+            background: #ff7043;
             width: 18px;
             height: 18px;
         }
         
-        @keyframes leafFall {
+        @keyframes fall {
             0% {
-                transform: translateY(-50px) rotate(0deg);
+                transform: translateY(-20px) rotate(0deg);
                 opacity: 0;
             }
-            10% {
-                opacity: 0.7;
+            5% {
+                opacity: 0.9;
             }
-            90% {
-                opacity: 0.7;
+            95% {
+                opacity: 0.9;
             }
             100% {
-                transform: translateY(100vh) rotate(360deg);
+                transform: translateY(calc(100vh + 20px)) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -4152,42 +4158,6 @@
         
         // Profile dropdown functionality
         
-        // Check if current date is during fall season (Sept 20 - Nov 12)
-        function isFallSeason() {
-            const now = new Date();
-            const currentYear = now.getFullYear();
-            const currentMonth = now.getMonth(); // 0-indexed: 0=Jan, 1=Feb, ..., 8=Sep, 9=Oct, 10=Nov
-            const currentDay = now.getDate();
-            
-            // Check if we're in September (month 8) and day is 20 or later
-            const isSeptemberFall = currentMonth === 8 && currentDay >= 20;
-            
-            // Check if we're in October (month 9)
-            const isOctober = currentMonth === 9;
-            
-            // Check if we're in November (month 10) and day is 12 or earlier
-            const isNovemberFall = currentMonth === 10 && currentDay <= 12;
-            
-            const isInFallSeason = isSeptemberFall || isOctober || isNovemberFall;
-            
-            // Debug logging
-            console.log('Fall Season Check:', {
-                currentDate: now.toDateString(),
-                currentMonth: currentMonth,
-                currentDay: currentDay,
-                isSeptemberFall: isSeptemberFall,
-                isOctober: isOctober,
-                isNovemberFall: isNovemberFall,
-                isInFallSeason: isInFallSeason
-            });
-            
-            // Additional debug for September 22nd specifically
-            if (currentMonth === 8 && currentDay === 22) {
-                console.log('SEPTEMBER 22ND DETECTED - Fall theme should be active!');
-            }
-            
-            return isInFallSeason;
-        }
         
         // Check if current date is during winter season (Dec 21 - Mar 20)
         function isWinterSeason() {
@@ -4266,9 +4236,9 @@
             const isFall = isFallSeason();
             console.log('Fall season check:', isFall);
             if (isFall) {
-                createFallingLeaves();
+                startLeaves();
             } else {
-                stopFallingLeaves();
+                stopLeaves();
             }
             
             // Handle snowflakes animation for winter season (regardless of light/dark)
@@ -4283,7 +4253,6 @@
         }
         
         
-        let leafInterval = null;
         
         // Function to check if it's fall season
         function isFallSeason() {
@@ -4300,71 +4269,76 @@
         }
         
         
-        // Create falling leaves animation
-        function createFallingLeaves() {
-            const fallingLeaves = document.getElementById('falling-leaves');
-            if (!fallingLeaves) {
-                console.warn('Falling leaves container not found');
+        // Fresh Falling Leaves System
+        let leafTimer = null;
+        
+        function startLeaves() {
+            console.log('Starting fresh leaves system');
+            const container = document.getElementById('falling-leaves');
+            if (!container) {
+                console.error('Leaves container not found');
                 return;
             }
             
-            console.log('Creating new falling leaves animation');
-            fallingLeaves.innerHTML = '';
+            // Clear existing leaves
+            container.innerHTML = '';
             
-            // Clear any existing interval
-            if (leafInterval) {
-                clearInterval(leafInterval);
+            // Stop any existing timer
+            if (leafTimer) {
+                clearInterval(leafTimer);
             }
             
-            // Create initial batch of leaves
-            createLeafBatch();
+            // Create leaves every 1.5 seconds
+            leafTimer = setInterval(createLeaf, 1500);
             
-            // Create new leaves every 2 seconds
-            leafInterval = setInterval(createLeafBatch, 2000);
-            
-            console.log('Started continuous falling leaves animation');
-        }
-        
-        function createLeafBatch() {
-            const fallingLeaves = document.getElementById('falling-leaves');
-            if (!fallingLeaves) return;
-            
-            // Create 3-5 leaves per batch
-            const leafCount = 3 + Math.floor(Math.random() * 3);
-            
-            for (let i = 0; i < leafCount; i++) {
-                const leaf = document.createElement('div');
-                leaf.className = 'falling-leaf';
-                
-                // Random horizontal position
-                const leftPosition = Math.random() * 100;
-                leaf.style.left = leftPosition + '%';
-                
-                // Random animation duration
-                const duration = 3 + Math.random() * 2; // 3-5 seconds
-                leaf.style.animationDuration = duration + 's';
-                
-                fallingLeaves.appendChild(leaf);
-                
-                // Remove leaf after animation completes
-                setTimeout(() => {
-                    if (leaf.parentNode) {
-                        leaf.parentNode.removeChild(leaf);
-                    }
-                }, duration * 1000);
+            // Create initial leaves
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => createLeaf(), i * 500);
             }
         }
         
-        function stopFallingLeaves() {
-            if (leafInterval) {
-                clearInterval(leafInterval);
-                leafInterval = null;
+        function createLeaf() {
+            const container = document.getElementById('falling-leaves');
+            if (!container) return;
+            
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            
+            // Random position across screen
+            leaf.style.left = Math.random() * 100 + '%';
+            
+            // Random animation duration
+            const duration = 3 + Math.random() * 2;
+            leaf.style.animationDuration = duration + 's';
+            
+            container.appendChild(leaf);
+            
+            // Remove leaf after animation
+            setTimeout(() => {
+                if (leaf.parentNode) {
+                    leaf.parentNode.removeChild(leaf);
+                }
+            }, duration * 1000);
+        }
+        
+        function stopLeaves() {
+            if (leafTimer) {
+                clearInterval(leafTimer);
+                leafTimer = null;
             }
-            const fallingLeaves = document.getElementById('falling-leaves');
-            if (fallingLeaves) {
-                fallingLeaves.innerHTML = '';
+            const container = document.getElementById('falling-leaves');
+            if (container) {
+                container.innerHTML = '';
             }
         }
+        
+        // Test function
+        function testLeaves() {
+            document.body.setAttribute('data-theme', 'fall');
+            startLeaves();
+        }
+        
+        window.testLeaves = testLeaves;
         
         // Create snowflakes animation
         function createSnowflakes() {
